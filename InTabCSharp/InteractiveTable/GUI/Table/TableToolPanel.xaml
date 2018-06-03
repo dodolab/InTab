@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="InteractiveTable.GUI.Table.TableToolPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             HorizontalAlignment="Stretch"
+             Height="39">
+    <StackPanel Orientation="Horizontal">
+        <Image Name="generatorRockImage" 
+               ToolTip="Generátor"
+               Source="/InteractiveTable;component/Template/images/tableIcons/rock_generator.png"
+               Margin="5,2,0,2"
+               Width="32"
+               Height="32"></Image>
+        <Image Name="gravityRockImage" 
+               ToolTip="Graviton"
+               Source="/InteractiveTable;component/Template/images/tableIcons/rock_graviton.png" 
+               Margin="5,2,0,2"
+               Width="32"
+               Height="32"
+               ></Image>
+        <Image Name="magnetonRockImage" 
+               ToolTip="Magneton"
+               Source="/InteractiveTable;component/Template/images/tableIcons/rock_magneton.png"
+               Margin="5,2,0,2"
+               Width="32"
+               Height="32"></Image>
+        <Image Name="blackHoleRockImage" 
+               ToolTip="Černá díra"
+               Source="/InteractiveTable;component/Template/images/tableIcons/rock_blackHole.png"
+               Margin="5,2,0,2"
+               Width="32"
+               Height="32"></Image>
+        <Image Name="thrashImage" 
+               ToolTip="Koš"
+               Source="/InteractiveTable;component/Template/images/tableIcons/thrash.png"
+               Margin="5,2,0,2"
+               Width="32"
+               Height="32"></Image>
+    </StackPanel>
+    <UserControl.Background>
+        <ImageBrush ImageSource="/InteractiveTable;component/Template/images/tableIcons/rockPanel_test.png" Stretch="Fill" TileMode="None" />
+    </UserControl.Background>
+</UserControl>

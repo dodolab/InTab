@@ -1,0 +1,16 @@
+﻿<Window x:Class="InteractiveTable.GUI.Other.InteractiveWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:rc="clr-namespace:Emgu.CV.UI;assembly=Emgu.CV.UI"
+        Title="Interaktivní okno" Height="300" Width="400"
+      ResizeMode="NoResize">
+    <Grid Name="mainGrid">
+        <WindowsFormsHost 
+             VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch">
+            <rc:ImageBox x:Name="captureBox"
+                         FunctionalMode="Minimum"/>
+        </WindowsFormsHost>
+    </Grid>
+</Window>

@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="InteractiveTable.GUI.Other.Menu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             HorizontalAlignment="Stretch"
+             Height="23">
+    <Menu Name="menu" DataContext="{Binding}">
+        <MenuItem Name="fileItem" Header="Soubor">
+            <MenuItem Name="systemLoad" Header="Načíst soustavu" />
+            <MenuItem Name="systemSave" Header="Uložit soustavu" />
+            <MenuItem Name="endApp" Header="Konec" />
+        </MenuItem>
+        <MenuItem Name="tableItem" Header="Stůl">
+            <MenuItem Name="openGLItem" Header="Výstupní okno"/>
+        </MenuItem>
+        <MenuItem Name="settingItem" Header="Nastavení">
+            <MenuItem Name="userSettingsItem" Header="Nastavení uživatele" />
+            <MenuItem Name="tableCalibrationItem" Header="Kalibrace stolu"/>
+            <MenuItem Name="letterCalibrationItem" Header="Kalibrace stolu pro dopis"/>
+            <MenuItem Name="contourSubItem" Header="Nastavení kontur" />
+        </MenuItem>
+        <MenuItem Name="help" Header="Nápověda">
+        </MenuItem>
+    </Menu>
+</UserControl>

@@ -1,0 +1,58 @@
+﻿<Window x:Class="InteractiveTable.GUI.Other.TableCalibrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Kalibrace stolu" Height="730" Width="670"
+        Loaded="Window_Loaded" Closing="Window_Closing">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+
+            
+            <Button Name="resetBut"
+                    ToolTip="Resetovat nastavení"
+                    Margin="10,0,0,0"
+                    Width="70"
+                    Height="30" Click="resetBut_Click">RESET</Button>
+            <Button Name="frameBut"
+                    ToolTip="Nahrát nový obrázek"
+                    Margin="10,0,0,0"
+                    Width="70"
+                    Height="30" Click="frameBut_Click">ZACHYTIT</Button>
+            <Button Name="rotateBut3"
+                    Margin="10,0,0,0"
+                    ToolTip="Otočit o 3°"
+                    Width="80"
+                    Height="30" Click="rotateBut3_Click">OTOČIT O 3°</Button>
+            <Button Name="rotateBut30"
+                    Margin="10,0,0,0"
+                    ToolTip="Otočit o 30°"
+                    Width="80"
+                    Height="30" Click="rotateBut30_Click">OTOČIT O 30°</Button>
+            <Button Name="OKBut"
+                    ToolTip="Potvrdit"
+                    Margin="10,0,0,0"
+                    Width="70"
+                    Height="30" Click="OKBut_Click">OK</Button>
+            <StackPanel Orientation="Vertical">
+                <RadioButton Name="rectangleRadio"
+                             ToolTip="Obdélníkový stůl"
+                             IsChecked="True"
+                             Checked="rectangleRadio_Checked"
+                             Margin="5,2,0,0">Obdélník</RadioButton>
+                <RadioButton Name="perspectiveRadio"
+                             ToolTip="Perspektivní zkreslení"
+                             Checked="perspectiveRadio_Checked"
+                             Margin="5,2,0,0">Perspektiva</RadioButton>
+            </StackPanel>
+        </StackPanel>
+        
+        <Grid Name="imageBox"
+              Width="640"
+              Height="640"
+              Grid.Row="1">
+        </Grid>
+    </Grid>
+</Window>

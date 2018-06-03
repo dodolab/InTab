@@ -1,0 +1,240 @@
+﻿<Window x:Class="InteractiveTable.GUI.Other.RockEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         Title="Editor kamenů" Width="300" SizeToContent="Height"
+         ResizeMode="NoResize">
+
+        <Grid>
+            <StackPanel Orientation="Vertical">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                <TextBlock Margin="6">Editor kamenů:</TextBlock>
+            </Grid>
+            <GroupBox Header="Obecné nastavení:"
+                      Name="usualGroup">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <CheckBox Name="baseSetChck"
+                              Grid.Row="0"
+                              Grid.Column="0">Použít obecné nast.</CheckBox>
+                    <CheckBox Name="pulsarChck"
+                              Grid.Row="0"
+                              Grid.Column="1">Pulsar</CheckBox>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Černá díra:"
+                      Name="blackHoleGroup">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Margin="5">Váha</TextBlock>
+                    <Slider Name="BHweighSlider"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Minimum="1"
+                            Maximum="100" SmallChange="1" IsSnapToTickEnabled="True"></Slider>
+                    <TextBlock Name="BHweighTb"
+                               Grid.Row="0"
+                               Grid.Column="1"
+                               Margin="60,20,0,0">0</TextBlock>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Generátor:"
+                      Name="generatorGroup">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="1"
+                               Margin="5"
+                               Grid.Column="0">Rychlost generování:</TextBlock>
+                    <Slider Name="GgenerSpeedSlider"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Minimum="1"
+                            Maximum="30" SmallChange="1" IsSnapToTickEnabled="True"></Slider>
+                    <TextBlock Name="GgenerSpeedTb"
+                               Grid.Row="1"
+                               Grid.Column="1"
+                               Margin="60,20,0,0">0</TextBlock>
+
+                    <TextBlock Grid.Row="2"
+                               Margin="5"
+                               Grid.Column="0">Offset úhlu:</TextBlock>
+                    <Slider Name="GangleOffSlider"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Minimum="0"
+                            Maximum="360" IsSnapToTickEnabled="True" SmallChange="1"></Slider>
+                    <TextBlock Name="GangleOffTb"
+                               Grid.Row="2"
+                               Grid.Column="1"
+                               Margin="60,20,0,0">0</TextBlock>
+
+                    <TextBlock Grid.Row="3"
+                               Margin="5"
+                               Grid.Column="0">Maximální úhel:</TextBlock>
+                    <Slider Name="GangleMaxSlider"
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Minimum="0"
+                            Maximum="360" SmallChange="1" IsSnapToTickEnabled="True"></Slider>
+                    <TextBlock Name="GangleMaxTb"
+                               Grid.Row="3"
+                               Grid.Column="1"
+                               Margin="60,20,0,0">0</TextBlock>
+
+                    <TextBlock Grid.Row="4"
+                               Margin="5"
+                               Grid.Column="0">Min. rychlost částic:</TextBlock>
+                    <Slider Name="GminPartVelocitySlider"
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Minimum="1"
+                            Maximum="20" IsSnapToTickEnabled="True" SmallChange="1"></Slider>
+                    <TextBlock Name="GminPartVelocityTb"
+                               Grid.Row="4"
+                               Grid.Column="1"
+                               Margin="60,20,0,0">0</TextBlock>
+
+                    <TextBlock Grid.Row="5"
+                               Margin="5"
+                               Grid.Column="0">Max. rychlost částic:</TextBlock>
+                    <Slider Name="GmaxPartVelocitySlider"
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            Minimum="1"
+                            Maximum="50" SmallChange="1" IsSnapToTickEnabled="True"></Slider>
+                    <TextBlock Name="GmaxPartVelocityTb"
+                               Grid.Row="5"
+                               Grid.Column="1"
+                               Margin="60,20,0,0">0</TextBlock>
+
+                    <TextBlock Grid.Row="6"
+                               Margin="6"
+                               Grid.Column="0">Min. velikost částic:</TextBlock>
+                    <Slider Name="GminPartSizeSlider"
+                            Grid.Row="6"
+                            Grid.Column="1"
+                            Minimum="1"
+                            Maximum="25" SmallChange="1" IsSnapToTickEnabled="True"></Slider>
+                    <TextBlock Name="GminPartSizeTb"
+                               Grid.Row="6"
+                               Grid.Column="1"
+                               Margin="60,20,0,0">0</TextBlock>
+
+                    <TextBlock Grid.Row="7"
+                               Margin="6"
+                               Grid.Column="0">Max. velikost částic:</TextBlock>
+                    <Slider Name="GmaxPartSizeSlider"
+                            Grid.Row="7"
+                            Grid.Column="1"
+                            Minimum="1"
+                            Maximum="50" IsSnapToTickEnabled="True" SmallChange="1"></Slider>
+                    <TextBlock Name="GmaxPartSizeTb"
+                               Grid.Row="7"
+                               Grid.Column="1"
+                               Margin="60,20,0,0">0</TextBlock>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Graviton:"
+                      Name="gravitonGroup">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Margin="5"
+                               Grid.Column="0">Váha:</TextBlock>
+                    <Slider Name="GravWeighSlider"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Minimum="5"
+                            Maximum="150" SmallChange="1" IsSnapToTickEnabled="True"></Slider>
+                    <TextBlock Name="GravWeighTb"
+                               Grid.Row="0"
+                               Grid.Column="1"
+                               Margin="60,20,0,0">0</TextBlock>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Magneton:"
+                      Name="magnetonGroup">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Margin="5"
+                               Grid.Column="0">Síla:</TextBlock>
+                    <Slider Name="MagForceSlider"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Minimum="5"
+                            Maximum="150" IsSnapToTickEnabled="True" SmallChange="1"></Slider>
+                    <TextBlock Name="MagForceTb"
+                               Grid.Row="0"
+                               Grid.Column="1"
+                               Margin="60,20,0,0">0</TextBlock>
+                </Grid>
+            </GroupBox>
+            <StackPanel Orientation="Vertical"
+                        HorizontalAlignment="Center">
+                <Button Name="loadDefButton"
+                        ToolTip="Načíst defaultní hodnoty"
+                     Margin="5"
+                    Width="80" Click="loadDefButton_Click">Defaultní</Button>
+                <Button Name="okButton"
+                    Margin="5"
+                    Width="80" Click="okButton_Click">OK</Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

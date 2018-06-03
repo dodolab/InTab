@@ -1,0 +1,403 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{68FE2F73-A654-4CB4-8746-8529161566E8}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>InteractiveTable</RootNamespace>
+    <AssemblyName>InteractiveTable</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\InteractiveTable.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\InteractiveTable.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Apex">
+      <HintPath>C:\Users\Adam Švec\Downloads\SHARP_GL\SharpGL_2.0_Binaries\SharpGL Binaries\Debug\Apex.dll</HintPath>
+    </Reference>
+    <Reference Include="DirectShowLib-2005">
+      <HintPath>Binaries\DirectShowLib-2005.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.CV, Version=2.4.9.1847, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Binaries\Emgu.CV.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.CV.UI, Version=2.4.9.1847, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Binaries\Emgu.CV.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.Util, Version=2.4.9.1847, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Binaries\Emgu.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Accessories\Complex.cs" />
+    <Compile Include="Accessories\FPoint.cs" />
+    <Compile Include="Accessories\FVector.cs" />
+    <Compile Include="Accessories\PointHelper.cs" />
+    <Compile Include="Controls\CaptureSetController.cs" />
+    <Compile Include="Controls\MainMenuController.cs" />
+    <Compile Include="Controls\TableSettingsController.cs" />
+    <Compile Include="Controls\TableController.cs" />
+    <Compile Include="Core\Capture\ContourRock.cs" />
+    <Compile Include="Core\Capture\FoundRock.cs" />
+    <Compile Include="Core\Capture\RockDesc.cs" />
+    <Compile Include="Core\Capture\FoundTemplateDesc.cs" />
+    <Compile Include="Core\ClientServer\RockList.cs" />
+    <Compile Include="Core\ClientServer\ServerSender.cs" />
+    <Compile Include="Core\ClientServer\TcpServer.cs" />
+    <Compile Include="Core\TableObjects\FunctionObjects\A_Rock.cs" />
+    <Compile Include="Core\TableObjects\FunctionObjects\BlackHole.cs" />
+    <Compile Include="Core\TableObjects\FunctionObjects\Magneton.cs" />
+    <Compile Include="Core\TableObjects\SettingsObjects\A_TableObjectSettings.cs" />
+    <Compile Include="Core\TableObjects\SettingsObjects\BlackHoleSettings.cs" />
+    <Compile Include="Core\TableObjects\SettingsObjects\GeneratorSettings.cs" />
+    <Compile Include="Core\TableObjects\SettingsObjects\GravitonSettings.cs" />
+    <Compile Include="Core\TableObjects\SettingsObjects\MagnetonSettings.cs" />
+    <Compile Include="Core\TableObjects\SettingsObjects\ParticleSettings.cs" />
+    <Compile Include="Core\TableObjects\SettingsObjects\A_RockSettings.cs" />
+    <Compile Include="Core\TableObjects\SettingsObjects\TableSettings.cs" />
+    <Compile Include="Core\Physics\PhysicsLogic.cs" />
+    <Compile Include="Core\Physics\PhysicsSettings.cs" />
+    <Compile Include="GUI\CaptureSet\ContourSetWindow.xaml.cs">
+      <DependentUpon>ContourSetWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\CaptureSet\TemplateEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\CaptureSet\TemplateEditor.Designer.cs">
+      <DependentUpon>TemplateEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\CaptureSet\TemplateViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\CaptureSet\TemplateViewer.Designer.cs">
+      <DependentUpon>TemplateViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Other\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Other\InteractiveWindow.xaml.cs">
+      <DependentUpon>InteractiveWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Other\LetterCalibrationWindow.xaml.cs">
+      <DependentUpon>LetterCalibrationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Other\Loading.xaml.cs">
+      <DependentUpon>Loading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Other\Menu.xaml.cs">
+      <DependentUpon>Menu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Other\ParticleColorSetWindow.xaml.cs">
+      <DependentUpon>ParticleColorSetWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Other\RockEditorWindow.xaml.cs">
+      <DependentUpon>RockEditorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Other\TableCalibrationWindow.xaml.cs">
+      <DependentUpon>TableCalibrationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Table\TableOutput.xaml.cs">
+      <DependentUpon>TableOutput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Managers\CameraManager.cs" />
+    <Compile Include="Managers\CaptureSetManager.cs" />
+    <Compile Include="Managers\CommonAttribService.cs" />
+    <Compile Include="Managers\InputManager.cs" />
+    <Compile Include="Core\Capture\Contour.cs" />
+    <Compile Include="Core\Capture\Template.cs" />
+    <Compile Include="Core\Physics\TableDepositor.cs" />
+    <Compile Include="Core\TableObjects\FunctionObjects\A_TableObject.cs" />
+    <Compile Include="Core\TableObjects\FunctionObjects\Generator.cs" />
+    <Compile Include="Core\TableObjects\FunctionObjects\Particle.cs" />
+    <Compile Include="Core\TableObjects\FunctionObjects\Graviton.cs" />
+    <Compile Include="Core\TableObjects\FunctionObjects\Table.cs" />
+    <Compile Include="Core\TableObjects\Shapes\A_Shape.cs" />
+    <Compile Include="Core\TableObjects\Shapes\FCircle.cs" />
+    <Compile Include="Core\TableObjects\Shapes\FRectangle.cs" />
+    <Compile Include="Core\Capture\ContourFilter.cs" />
+    <Compile Include="Core\Capture\TemplateFinder.cs" />
+    <Compile Include="Managers\RealTableManager.cs" />
+    <Compile Include="Managers\TableDrawingManager.cs" />
+    <Compile Include="Managers\TableManager.cs" />
+    <Compile Include="GUI\CaptureSet\CaptureWindow.xaml.cs">
+      <DependentUpon>CaptureWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Managers\WindowManager.cs" />
+    <Compile Include="GUI\Other\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Table\SettingsPanel.xaml.cs">
+      <DependentUpon>SettingsPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Table\TableAreaPanel.xaml.cs">
+      <DependentUpon>TableAreaPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Table\TablePanel.xaml.cs">
+      <DependentUpon>TablePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Table\TableToolPanel.xaml.cs">
+      <DependentUpon>TableToolPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\CalibrationSettings.cs" />
+    <Compile Include="Settings\CaptureSettings.cs" />
+    <Compile Include="Settings\GraphicsSettings.cs" />
+    <Compile Include="Settings\PhysicSettings.cs" />
+    <Page Include="GUI\CaptureSet\CaptureWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\CaptureSet\ContourSetWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Other\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Other\InteractiveWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Other\LetterCalibrationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Other\Loading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Other\Menu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Other\ParticleColorSetWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Other\RockEditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Other\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Other\TableCalibrationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Table\TableOutput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GUI\Table\SettingsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Table\TableAreaPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Table\TablePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Table\TableToolPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="GUI\CaptureSet\TemplateEditor.resx">
+      <DependentUpon>TemplateEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\CaptureSet\TemplateViewer.resx">
+      <DependentUpon>TemplateViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Help.chm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="Template\Help.chm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Binaries\Apex.dll" />
+    <Content Include="Binaries\Emgu.CV.dll" />
+    <Content Include="Binaries\Emgu.CV.UI.dll" />
+    <Content Include="Binaries\Emgu.Util.dll" />
+    <Content Include="opencv_core220.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="opencv_highgui220.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="opencv_imgproc220.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Template\images\tableIcons\pl_server.png" />
+    <Resource Include="Template\images\tableIcons\pl_server_active.png" />
+    <Resource Include="Template\images\tableIcons\pl_output.png" />
+    <Resource Include="Template\images\tableIcons\pl_output_active.png" />
+    <Resource Include="Template\images\tableIcons\pl_simulation.png" />
+    <Resource Include="Template\images\tableIcons\pl_simulation_active.png" />
+    <Resource Include="Template\images\tableIcons\play_record_running_test.png" />
+    <Resource Include="Template\images\captureSet\setContours.png" />
+    <Resource Include="Template\images\tableIcons\rockPanel_test.png" />
+    <Resource Include="Template\images\tableIcons\play_camera_gaussian.png" />
+    <Resource Include="Template\images\tableIcons\play_options_gaussian.png" />
+    <Resource Include="Template\images\tableIcons\play_options.png" />
+    <Resource Include="Template\images\tableIcons\play_camera_test.png" />
+    <Resource Include="Template\images\tableIcons\play_options_test.png" />
+    <Resource Include="Template\images\tableIcons\play_play_test.png" />
+    <Resource Include="Template\images\tableIcons\play_record_test.png" />
+    <Resource Include="Template\images\tableIcons\rock_blackHole.png" />
+    <Resource Include="Template\images\tableIcons\rock_magneton.png" />
+    <Resource Include="Template\images\tableIcons\thrash.png" />
+    <Resource Include="Template\images\tableIcons\particle.png" />
+    <Resource Include="Template\images\tableIcons\playPanel.png" />
+    <Resource Include="Template\images\tableIcons\play_camera.png" />
+    <Resource Include="Template\images\tableIcons\play_pause.png" />
+    <Resource Include="Template\images\tableIcons\play_play.png" />
+    <Resource Include="Template\images\tableIcons\play_record.png" />
+    <Resource Include="Template\images\tableIcons\play_stop.png" />
+    <Resource Include="Template\images\tableIcons\rockPanel.png" />
+    <Resource Include="Template\images\tableIcons\rock_generator.png" />
+    <Resource Include="Template\images\tableIcons\rock_graviton.png" />
+    <Resource Include="Template\images\tableIcons\texture.png" />
+    <Resource Include="Template\images\others\loading.png" />
+    <Resource Include="Template\images\captureSet\loadImage.png" />
+    <Resource Include="Template\images\captureSet\editTemplate.png" />
+    <Resource Include="Template\images\captureSet\newTemplate.png" />
+    <Resource Include="Template\images\captureSet\openFile.png" />
+    <Resource Include="Template\images\captureSet\saveFile.png" />
+    <Resource Include="Template\images\captureSet\newFile.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,102 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using InteractiveTable.Accessories;
+using InteractiveTable.Settings;
+
+namespace InteractiveTable.Core.Data.TableObjects.SettingsObjects
+{
+    /// <summary>
+    /// Obecne nastaveni pro stul
+    /// </summary>
+     [Serializable]
+    public class TableSettings : A_TableObjectSettings
+    {
+         /// <summary>
+         /// Pokud true, budou se objekty od stolu odrazet
+         /// </summary>
+        public  Boolean interaction;
+         /// <summary>
+         /// Pokud true, bude povolena gravitace
+         /// </summary>
+        public  Boolean gravity_allowed; 
+         /// <summary>
+         /// Gravitace stolu
+         /// </summary>
+        public  FVector gravity; 
+         /// <summary>
+         /// Rychlost ztraty energie
+         /// </summary>
+        public double energy_loosing_speed = -1; 
+         /// <summary>
+         /// Pokud true, bude ztracet energii
+         /// </summary>
+        public Boolean energy_loosing = false;
+        /// <summary>
+        /// Obecne nastaveni pro cernou diru
+        /// </summary>
+        public BlackHoleSettings blackHoleSettings;
+         /// <summary>
+         /// Obecne nastaveni pro generatory
+         /// </summary>
+        public GeneratorSettings generatorSettings;
+         /// <summary>
+         /// Obecne nastaveni pro gravitony
+         /// </summary>
+        public GravitonSettings gravitonSettings;
+         /// <summary>
+         /// Obecne nastaveni pro magnetony
+         /// </summary>
+        public MagnetonSettings magnetonSettings;
+         /// <summary>
+         /// Obecne nastaveni pro castice
+         /// </summary>
+        public ParticleSettings particleSettings;
+
+         /// <summary>
+         /// Konstruktor, nacte vsechny defaultni atributy
+         /// </summary>
+        public TableSettings()
+        {
+            energy_loosing = PhysicSettings.Instance().DEFAULT_ENERGY_TABLE_LOOSING;
+            energy_loosing_speed = PhysicSettings.Instance().DEFAULT_ENERGY_TABLE_LOOSING_SPEED;
+
+            gravity_allowed = PhysicSettings.Instance().DEFAULT_TABLE_GRAVITY;
+            gravity = PhysicSettings.Instance().DEFAULT_TABLE_GRAVITY_VECTOR;
+            interaction = PhysicSettings.Instance().DEFAULT_INTERACTION_ALLOWED;
+
+            blackHoleSettings = new BlackHoleSettings();
+            blackHoleSettings.capacity = PhysicSettings.Instance().DEFAULT_BLACKHOLE_CAPACITY;
+            blackHoleSettings.weigh = PhysicSettings.Instance().DEFAULT_BLACKHOLE_WEIGH;
+            blackHoleSettings.enabled = PhysicSettings.Instance().DEFAULT_BLACKHOLE_ENABLED;
+
+            generatorSettings = new GeneratorSettings();
+            generatorSettings.angle_maximum = PhysicSettings.Instance().DEFAULT_GENERATOR_ANGLE_MAX;
+            generatorSettings.angle_offset = PhysicSettings.Instance().DEFAULT_GENERATOR_ANGLE_OFFSET;
+            generatorSettings.generatingSpeed = PhysicSettings.Instance().DEFAULT_GENERATING_SPEED;
+            generatorSettings.particle_maximum_speed = PhysicSettings.Instance().DEFAULT_MAX_GENERATING_VELOCITY;
+            generatorSettings.particle_minimum_speed = PhysicSettings.Instance().DEFAULT_MIN_GENERATING_VELOCITY;
+            generatorSettings.Regular_generating = PhysicSettings.Instance().DEFAULT_GENERATING_REGULAR;
+            generatorSettings.enabled = PhysicSettings.Instance().DEFAULT_GENERATOR_ENABLED;
+
+            gravitonSettings = new GravitonSettings();
+            gravitonSettings.Energy_pulse_speed = PhysicSettings.Instance().DEFAULT_ENERGY_GRAVITON_PULSING_SPEED;
+            gravitonSettings.Energy_pulsing = PhysicSettings.Instance().DEFAULT_ENERGY_GRAVITON_PULSING;
+            gravitonSettings.weigh = PhysicSettings.Instance().DEFAULT_GRAVITON_WEIGH;
+            gravitonSettings.enabled = PhysicSettings.Instance().DEFAULT_GRAVITON_ENABLED;
+
+            magnetonSettings = new MagnetonSettings();
+            magnetonSettings.Energy_pulse_speed = PhysicSettings.Instance().DEFAULT_ENERGY_MAGNETON_PULSING_SPEED;
+            magnetonSettings.Energy_pulsing = PhysicSettings.Instance().DEFAULT_ENERGY_MAGNETON_PULSING;
+            magnetonSettings.force = PhysicSettings.Instance().DEFAULT_MAGNETON_FORCE;
+            magnetonSettings.enabled = PhysicSettings.Instance().DEFAULT_MAGNETON_ENABLED;
+
+            particleSettings = new ParticleSettings();
+            particleSettings.weigh = PhysicSettings.Instance().DEFAULT_PARTICLE_WEIGH;
+            particleSettings.enabled = PhysicSettings.Instance().DEFAULT_PARTICLE_ENABLED;
+            particleSettings.size = PhysicSettings.Instance().DEFAULT_PARTICLE_SIZE;
+        }
+    }
+}

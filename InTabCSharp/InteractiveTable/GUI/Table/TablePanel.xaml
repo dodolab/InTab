@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="InteractiveTable.GUI.Table.TablePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:rc="clr-namespace:InteractiveTable.GUI.Table"
+             mc:Ignorable="d">
+    <Grid Name="mainGrid">
+    <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Vertical">
+        <rc:TableAreaPanel x:Name="tableAreaPanel" 
+                           VerticalAlignment="Top"
+                           HorizontalAlignment="Left"></rc:TableAreaPanel>
+        <rc:TableToolPanel x:Name="tableToolPanel"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Top"></rc:TableToolPanel>
+        </StackPanel>
+        <rc:SettingsPanel x:Name="tableSettingsPanel"
+                          HorizontalAlignment="Left"></rc:SettingsPanel>
+    </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,283 @@
+﻿<Window x:Class="InteractiveTable.GUI.CaptureSet.CaptureWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:rc="clr-namespace:Emgu.CV.UI;assembly=Emgu.CV.UI"
+        Title="Nastavení kontur" ResizeMode="NoResize" UseLayoutRounding="True" 
+        mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        Height="520" 
+        Width="938" SizeToContent="WidthAndHeight"
+        >
+        <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Vertical">
+                        <Image Name="newTemplateImage"
+                               Margin="3"
+                               Height="36"
+                               Width="36"
+                               Source="/InteractiveTable;component/Template/images/captureSet/newFile.png" ToolTip="Nová šablona"/>
+                        <Image Name="openTemplateImage"
+                               Margin="3"
+                               Height="36"
+                               Width="36"
+                               Source="/InteractiveTable;component/Template/images/captureSet/openFile.png" ToolTip="Otevřít šablonu"/>
+                        <Image Name="saveTemplateImage"
+                               Margin="3"
+                               Height="36"
+                               Width="36"
+                               Source="/InteractiveTable;component/Template/images/captureSet/saveFile.png"  ToolTip="Uložit šablonu"/>
+                        <Image Name="addTemplateImage"
+                               Margin="3"
+                               Height="36"
+                               Width="36"
+                               Source="/InteractiveTable;component/Template/images/captureSet/newTemplate.png" ToolTip="Přidat konturu"/>
+                        <Image Name="editTemplateImage"
+                               Margin="3"
+                               Height="36"
+                               Width="36"
+                               Source="/InteractiveTable;component/Template/images/captureSet/editTemplate.png" ToolTip="Správce kontur"/>
+                        <Image Name="loadImageImage"
+                               Margin="3"
+                               Height="36"
+                               Width="36"
+                               Source="/InteractiveTable;component/Template/images/captureSet/loadImage.png" ToolTip="Načíst obrázek"/>
+                        <Image Name="setContourImage"
+                               Margin="3"
+                               Height="36"
+                               Width="36"
+                               Source="/InteractiveTable;component/Template/images/captureSet/setContours.png" ToolTip="Přiřadit kámen konturám"/>
+
+
+        </StackPanel>
+            <WindowsFormsHost Width="640"
+                              Height="480"
+                              VerticalAlignment="Top">
+                <rc:ImageBox x:Name="captureBox"
+                             Paint="captureBox_Paint"/>
+            </WindowsFormsHost>
+            
+        <ScrollViewer  VerticalAlignment="Top"
+                       Height="480">
+            <StackPanel VerticalAlignment="Top"
+                        Width="215">
+                <Grid>
+                <Label>Restart nastavení:</Label>
+                <Button Name="resetButton"
+                          Width="80"
+                          HorizontalAlignment="Right"
+                        Margin="5"
+                        Content="RESET"></Button>
+                </Grid>
+                <GroupBox  Header="Zachytávání"
+                           BorderBrush="Black"
+                           Margin="2,5">
+                    <StackPanel Orientation="Vertical">
+                <Grid>
+                <Label>Rozlišení kamery</Label>
+                <ComboBox Name="resolutionComboBox"
+                          Width="100"
+                          HorizontalAlignment="Right"></ComboBox>
+                </Grid>
+                        
+                <Grid>
+                    <Label>Práh bloků</Label>
+                    <Slider Name="blockLevelSlider"
+                            Width="100"
+                            HorizontalAlignment="Right" Value="4" Minimum="1" Maximum="80"></Slider>
+                    <Grid HorizontalAlignment="Right"
+                          Margin="0,10"
+                          Width="100">
+                    <Label  Name="blockLevelLabel"
+                            IsHitTestVisible="False"
+                            HorizontalAlignment="Center">0</Label>
+                    </Grid>
+                </Grid>
+
+                <Grid>
+                    <Label>Dilatace</Label>
+                    <Slider Name="dilatationSlider"
+                            Width="100"
+                            HorizontalAlignment="Right"></Slider>
+                    <Grid HorizontalAlignment="Right"
+                          Margin="0,10"
+                          Width="100">
+                        <Label  Name="dilatationLabel"
+                                IsHitTestVisible="False"
+                            HorizontalAlignment="Center">0</Label>
+                    </Grid>
+                </Grid>
+
+                <Grid>
+                    <Label>Eroze</Label>
+                    <Slider Name="erodeSlider"
+                            Width="100"
+                            HorizontalAlignment="Right"></Slider>
+                    <Grid HorizontalAlignment="Right"
+                          Margin="0,10"
+                          Width="100">
+                        <Label  Name="erodeLabel"
+                                IsHitTestVisible="False"
+                            HorizontalAlignment="Center">0</Label>
+                    </Grid>
+                </Grid>
+
+                <Grid>
+                    <Label>Gamma</Label>
+                    <Slider Name="gammaSlider"
+                            Width="100"
+                            HorizontalAlignment="Right" Value="1" Maximum="5" SmallChange="0.01"></Slider>
+                    <Grid HorizontalAlignment="Right"
+                          Margin="0,10"
+                          Width="100">
+                        <Label  Name="gammaLabel"
+                                IsHitTestVisible="False"
+                            HorizontalAlignment="Center">0</Label>
+                    </Grid>
+                </Grid>
+
+             
+
+                <Grid Margin="10,2">
+                    <CheckBox Name="invertCheck">Invertovat</CheckBox>
+                    <CheckBox Name="normalizeCheck"
+                              HorizontalAlignment="Right"
+                              Width="90">Vyrovnat</CheckBox>
+                </Grid>
+
+                <Grid Margin="10,2">
+                    <CheckBox Name="blurCheck">Blur efekt</CheckBox>
+                    <CheckBox Name="adaptiveNoiseCheck"
+                              HorizontalAlignment="Right"
+                              Width="90">Adaptivní šum</CheckBox>
+                </Grid>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Vyhledávání"
+                          BorderBrush="Black"
+                          Margin="2,5">
+                    <StackPanel Orientation="Vertical">
+                        
+                <Grid>
+                    <Label>Min. délka kontur</Label>
+                    <Slider Name="contourMinLengthSlider"
+                            Width="100"
+                            HorizontalAlignment="Right" Maximum="100" Value="15"></Slider>
+                    <Grid HorizontalAlignment="Right"
+                          Margin="0,10"
+                          Width="100">
+                        <Label  Name="contourMinLengthLabel"
+                                IsHitTestVisible="False"
+                            HorizontalAlignment="Center">0</Label>
+                    </Grid>
+                </Grid>
+
+                <Grid>
+                    <Label>Min. oblast kontur</Label>
+                    <Slider Name="contourMinAreaSlider"
+                            Width="100"
+                            HorizontalAlignment="Right" Value="10" Maximum="300"></Slider>
+                    <Grid HorizontalAlignment="Right"
+                          Margin="0,10"
+                          Width="100">
+                        <Label  Name="contourMinAreaLabel"
+                                IsHitTestVisible="False"
+                            HorizontalAlignment="Center">0</Label>
+                    </Grid>
+                </Grid>
+
+                <Grid>
+                    <Label>Šumový filtr</Label>
+                    <Slider Name="noiseSlider"
+                            Width="100"
+                            HorizontalAlignment="Right" Maximum="100" Value="0"></Slider>
+                    <Grid HorizontalAlignment="Right"
+                          Margin="0,10"
+                          Width="100">
+                        <Label  Name="noiseLabel"
+                                IsHitTestVisible="False"
+                            HorizontalAlignment="Center">0</Label>
+                    </Grid>
+                </Grid>
+
+                <Grid Margin="10,2">
+                    <CheckBox Name="showContourCheck">Ukaž kontury</CheckBox>
+                    <CheckBox Name="showBinaryCheck"
+                              HorizontalAlignment="Right"
+                              Width="90">Ukaž binární</CheckBox>
+                </Grid>
+
+                <Grid Margin="10,2">
+                    <CheckBox Name="showAngleCheck">Ukaž úhly</CheckBox>
+                    <CheckBox Name="showBlackWhiteCheck"
+                              HorizontalAlignment="Right"
+                              Width="90">Černobílé</CheckBox>
+                </Grid>
+                    </StackPanel>
+                </GroupBox>
+                
+                <GroupBox Header="Porovnávání"
+                          BorderBrush="Black"
+                          Margin="2,5">
+                    <StackPanel Orientation="Vertical">
+                <Grid>
+                    <Label>Max. ACF průměr</Label>
+                    <Slider Name="maxACFAverSlider"
+                            Width="100"
+                            HorizontalAlignment="Right" Value="4" Maximum="50"></Slider>
+                    <Grid HorizontalAlignment="Right"
+                          Margin="0,10"
+                          Width="100">
+                        <Label  Name="maxACFAverLabel"
+                                IsHitTestVisible="False"
+                            HorizontalAlignment="Center">0</Label>
+                    </Grid>
+                </Grid>
+
+                <Grid>
+                    <Label>Minimální ACF</Label>
+                    <Slider Name="minACFSlider"
+                            Width="100"
+                            HorizontalAlignment="Right" Maximum="1" SmallChange="0.01" Value="0.96"></Slider>
+                    <Grid HorizontalAlignment="Right"
+                          Margin="0,10"
+                          Width="100">
+                        <Label  Name="minACFLabel"
+                                IsHitTestVisible="False"
+                            HorizontalAlignment="Center">0</Label>
+                    </Grid>
+                </Grid>
+
+                <Grid>
+                    <Label>Minimální ICF</Label>
+                    <Slider Name="minICFSlider"
+                            Width="100"
+                            HorizontalAlignment="Right" SmallChange="0.01" Value="0.85" Maximum="1"></Slider>
+                    <Grid HorizontalAlignment="Right"
+                          Margin="0,10"
+                          Width="100">
+                        <Label  Name="minICFLabel"
+                                IsHitTestVisible="False"
+                            HorizontalAlignment="Center">0</Label>
+                    </Grid>
+                </Grid>
+
+                <Grid>
+                    <Label>Porovnávací úhel</Label>
+                    <Slider Name="angleSlider"
+                            Width="100"
+                            HorizontalAlignment="Right" Value="45" Maximum="180"></Slider>
+                    <Grid HorizontalAlignment="Right"
+                          Margin="0,10"
+                          Width="100">
+                        <Label  Name="angleLabel"
+                                IsHitTestVisible="False"
+                            HorizontalAlignment="Center">0</Label>
+                    </Grid>
+                </Grid>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+    </StackPanel>
+</Window>
