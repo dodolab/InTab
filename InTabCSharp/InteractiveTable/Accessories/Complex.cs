@@ -1,31 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 
 namespace InteractiveTable.Accessories
 {
     /// <summary>
-    /// Komplexni cisla se vsemi operacemi
+    /// Complex numbers with all operations
     /// </summary>
     [Serializable]
     public struct Complex
     {
         /// <summary>
-        /// Realne slozka
+        /// Real part
         /// </summary>
         public double a;
 
         /// <summary>
-        /// Komplexni slozka
+        /// Complex part
         /// </summary>
         public double b;
 
         /// <summary>
-        /// Vytvori nove komplexni cislo
+        /// Creates a new complex number
         /// </summary>
-        /// <param name="a">Realna slozka</param>
-        /// <param name="b">Komplexni slozka</param>
+        /// <param name="a">Real part</param>
+        /// <param name="b">Complex part</param>
         public Complex(double a, double b)
         {
             this.a = a;
@@ -33,18 +30,18 @@ namespace InteractiveTable.Accessories
         }
 
         /// <summary>
-        /// Vytvori komplexni cislo z polomeru a uhlu
+        /// Creates a new complex number from a radius and an angle
         /// </summary>
-        /// <param name="r">dany polomer</param>
-        /// <param name="angle">uhel</param>
+        /// <param name="r">radius</param>
+        /// <param name="angle">angle</param>
         /// <returns></returns>
         public static Complex FromExp(double r, double angle)
-        { // jdi do prdele
+        { 
             return new Complex(r * Math.Cos(angle), r * Math.Sin(angle));
         }
 
         /// <summary>
-        /// Vrati uhel fi
+        /// Returns an angle
         /// </summary>
         public double Angle
         {
@@ -55,7 +52,7 @@ namespace InteractiveTable.Accessories
         }
 
         /// <summary>
-        /// Vypise komplexni cislo
+        /// Renders a complex number
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -64,66 +61,42 @@ namespace InteractiveTable.Accessories
         }
 
         /// <summary>
-        /// Vrati absolutni hodnotu komplexniho cisla
+        /// Returns an absolute value of the complex number
         /// </summary>
         public double Norma
         {
             get { return Math.Sqrt(a * a + b * b); }
         }
         /// <summary>
-        /// Vrati neodmocnenou absolutni hodnotu
+        /// Returns an absolute value of the complex number, not squared
         /// </summary>
         public double NormaSquare
         {
             get { return a * a + b * b; }
         }
-
-        /// <summary>
-        /// Operator pro scitani komplexnich cisel
-        /// </summary>
-        /// <param name="x1">prvni cislo</param>
-        /// <param name="x2">druhe cislo</param>
-        /// <returns></returns>
+        
         public static Complex operator +(Complex x1, Complex x2)
         {
             return new Complex(x1.a + x2.a, x1.b + x2.b);
         }
 
-        /// <summary>
-        /// Operator pro nasobeni komplexnich cisel skalarem
-        /// </summary>
-        /// <param name="k">skalar</param>
-        /// <param name="x">komplexni cislo</param>
-        /// <returns></returns>
         public static Complex operator *(double k, Complex x)
         {
             return new Complex(k * x.a, k * x.b);
         }
 
-        /// <summary>
-        /// Operator pro nasobeni komplexnich cisel skalarem
-        /// </summary>
-        /// <param name="x">komplexni cislo</param>
-        /// <param name="k">skalar</param>
-        /// <returns></returns>
         public static Complex operator *(Complex x, double k)
         {
             return new Complex(k * x.a, k * x.b);
         }
 
-        /// <summary>
-        /// Operator pro vektorovy soucin komplexnich cisel
-        /// </summary>
-        /// <param name="x1">prvni cislo</param>
-        /// <param name="x2">druhe cislo</param>
-        /// <returns></returns>
         public static Complex operator *(Complex x1, Complex x2)
         {
             return new Complex(x1.a * x2.a - x1.b * x2.b, x1.b * x2.a + x1.a * x2.b);
         }
 
         /// <summary>
-        /// Vrati kosunis uhlu fi
+        /// Returns a cosine value of the angle
         /// </summary>
         /// <returns></returns>
         public double CosAngle()
@@ -132,25 +105,25 @@ namespace InteractiveTable.Accessories
         }
 
         /// <summary>
-        /// Rotace komplexniho cisla podle kosinove a sinove hodnoty uhlu 
+        /// Returns a rotation of the complex number around the cosine and sine part of the angle
         /// </summary>
-        /// <param name="CosAngle">cosinus uhlu</param>
-        /// <param name="SinAngle">sinus uhlu</param>
+        /// <param name="cosAngle">cosine part</param>
+        /// <param name="sinAngle">sine part</param>
         /// <returns></returns>
-        public Complex Rotate(double CosAngle, double SinAngle)
+        public Complex Rotate(double cosAngle, double sinAngle)
         {
-            return new Complex(CosAngle * a - SinAngle * b, SinAngle * a + CosAngle * b);
+            return new Complex(cosAngle * a - sinAngle * b, sinAngle * a + cosAngle * b);
         }
 
         /// <summary>
-        /// Rotace komplexniho cisla podle uhlu v radianech
+        /// Returns a rotation of the complex number around a given radian
         /// </summary>
-        /// <param name="Angle">uhel v radianech</param>
+        /// <param name="angle">angle in radians</param>
         /// <returns></returns>
-        public Complex Rotate(double Angle)
+        public Complex Rotate(double angle)
         {
-            var CosAngle = Math.Cos(Angle);
-            var SinAngle = Math.Sin(Angle);
+            var CosAngle = Math.Cos(angle);
+            var SinAngle = Math.Sin(angle);
             return new Complex(CosAngle * a - SinAngle * b, SinAngle * a + CosAngle * b);
         }
     }

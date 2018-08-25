@@ -1,3 +1,4 @@
 *.suo
 InTabCSharp/InteractiveTable/bin/
 InTabCSharp/InteractiveTable/obj/
+InTabCSharp/.vs/

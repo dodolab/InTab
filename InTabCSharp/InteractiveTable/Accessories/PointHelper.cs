@@ -1,54 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
 namespace InteractiveTable.Accessories
 {
     /// <summary>
-    /// Pomocna trida pro rozsirene operace s obdelniky a body
+    /// Helper class with extension methods for vectors and points
     /// </summary>
     public static class PointHelper
     {
         /// <summary>
-        /// Transformuje bod z komponenty o rozemerech ref_width x ref_height do soustavy,
-        /// jejiz osa je ve stredu teto komponenty
+        /// Transforms a point from a component of a size refWidth x refHeight into a system whose
+        /// axis is in the origin of this component
         /// </summary>
-        /// <param name="point_to_transform">bod, ktery se bude transformovat</param>
-        /// <param name="ref_width">sirka komponenty</param>
-        /// <param name="ref_height">vyska komponenty</param>
+        /// <param name="pointToTransform">point that is to be transformed</param>
+        /// <param name="refWidth">width of the component</param>
+        /// <param name="refHeight">height of the component</param>
         /// <returns></returns>
-        public static FPoint TransformPointToEuc(FPoint point_to_transform, double ref_width, double ref_height)
+        public static FPoint TransformPointToEuc(FPoint pointToTransform, double refWidth, double refHeight)
         {
-            return new FPoint(point_to_transform.X - ref_width / 2, ref_height / 2 - point_to_transform.Y);
+            return new FPoint(pointToTransform.X - refWidth / 2, refHeight / 2 - pointToTransform.Y);
         }
 
         /// <summary>
-        /// Transformuje bod z FRAME geometrie do Euklidovske geometrie
+        /// Transforms a point from FRAME geometry into Euclidean geometry
         /// </summary>
-        /// <param name="point_to_transform">bod, ktery se bude transformovat</param>
-        /// <param name="ref_width">sirka prostoru</param>
-        /// <param name="ref_height">vyska prostoru</param>
+        /// <param name="pointToTransform">point that is to be transformed</param>
+        /// <param name="refWidth">width of the component</param>
+        /// <param name="refHeight">height of the component</param>
         /// <returns></returns>
-        public static FPoint TransformPointToFrame(FPoint point_to_transform, double ref_width, double ref_height)
+        public static FPoint TransformPointToFrame(FPoint pointToTransform, double refWidth, double refHeight)
         {
-            return new FPoint(point_to_transform.X + ref_width / 2, ref_height / 2 - point_to_transform.Y);
+            return new FPoint(pointToTransform.X + refWidth / 2, refHeight / 2 - pointToTransform.Y);
         }
 
         /// <summary>
-        /// Vrati stred obdelniku
+        /// Returns a center of a rectangle
         /// </summary>
-        /// <param name="rect"></param>
-        /// <returns></returns>
         public static Point Center(this Rectangle rect)
         {
             return new Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
         }
 
         /// <summary>
-        /// Vrati obsah obdelniku
+        /// Returns an area of a rectangle
         /// </summary>
-        /// <param name="rect"></param>
         /// <returns></returns>
         public static int Area(this Rectangle rect)
         {
@@ -56,10 +52,8 @@ namespace InteractiveTable.Accessories
         }
 
         /// <summary>
-        /// Vrati vzdalenost mezi dvema body
+        /// Returns a distance between two points
         /// </summary>
-        /// <param name="point"></param>
-        /// <param name="p"></param>
         /// <returns></returns>
         public static int Distance(this Point point, Point p)
         {
@@ -67,10 +61,9 @@ namespace InteractiveTable.Accessories
         }
 
         /// <summary>
-        /// Normalizuje pole bodu tak, aby se vesly do obdelnika rectangle
+        /// Normalizes an array of points so that they will fit into a given rectangle
         /// </summary>
-        /// <param name="points">pole bodu</param>
-        /// <param name="rectangle">obdelnik</param>
+        /// <param name="points">array of points to transform</param>
         public static void NormalizePoints(Point[] points, Rectangle rectangle)
         {
             if (rectangle.Height == 0 || rectangle.Width == 0)
@@ -89,11 +82,9 @@ namespace InteractiveTable.Accessories
         }
 
         /// <summary>
-        /// Normalizuje pole bodu jako relativni normalizaci mezi obdelniky rectangle a needRectangle
+        /// Normalizes an array of points as a relative normalization between two given rectangles
         /// </summary>
-        /// <param name="points"></param>
-        /// <param name="rectangle"></param>
-        /// <param name="needRectangle"></param>
+        /// <param name="points">array of points to transform</param>
         public static void NormalizePoints2(Point[] points, Rectangle rectangle, Rectangle needRectangle)
         {
             if (rectangle.Height == 0 || rectangle.Width == 0)
@@ -110,12 +101,8 @@ namespace InteractiveTable.Accessories
         }
 
         /// <summary>
-        /// Vrati bod posunuty o dx a dy
+        /// Returns a point shifted by dx and dy
         /// </summary>
-        /// <param name="p"></param>
-        /// <param name="dx"></param>
-        /// <param name="dy"></param>
-        /// <returns></returns>
         public static PointF Offset(this PointF p, float dx, float dy)
         {
             return new PointF(p.X + dx, p.Y + dy);
