@@ -55,10 +55,7 @@ namespace InteractiveTable.Managers
         public static Boolean OUTPUT_DRAW_ALLOWED = false;
         // VYSTUP DO SIMULACNIHO OKNA
         public static Boolean SIMULATION_DRAW_ALLOWED = true;
-        // VYSTUP PRES SERVER DO KLIENTA
-        public static Boolean OUTPUT_SERVER_ALLOWED = false;
-
-        
+       
 
         // posledni vyrenderovany obrazek - pouziva jej pouze OUTPUT WINDOW!!
         public static BitmapSource LAST_BITMAP = null;

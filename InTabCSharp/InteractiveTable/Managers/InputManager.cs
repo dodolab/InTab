@@ -15,7 +15,6 @@ using System.Threading;
 using InteractiveTable.Accessories;
 using InteractiveTable.Core.Data.Deposit;
 using InteractiveTable.Core.Data.Capture;
-using InteractiveTable.Core.ClientServer;
 
 namespace InteractiveTable.Managers
 {

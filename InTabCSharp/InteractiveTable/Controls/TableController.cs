@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using InteractiveTable.GUI.Table;
 using InteractiveTable.Managers;
 using System.Windows.Controls;
 using System.Windows;
-using InteractiveTable.Settings;
 using System.Windows.Input;
 using InteractiveTable.Core.Data.TableObjects.FunctionObjects;
-using InteractiveTable.Core.Physics.System;
 using InteractiveTable.Core.Data.TableObjects.Shapes;
 using InteractiveTable.Accessories;
 using InteractiveTable.GUI.Other;
@@ -17,11 +13,11 @@ using InteractiveTable.GUI.Other;
 namespace InteractiveTable.Controls
 {
     /// <summary>
-    /// Controller pro simulacni okno
+    /// Controller for the simulator window
     /// </summary>
     public class TableController
     {
-        #region promenne, gettery, settery, konstruktory
+        #region var, get, set, const
 
         private TablePanel tablePanel;
         private TableManager tableManager;
@@ -32,18 +28,12 @@ namespace InteractiveTable.Controls
             rockImages = new HashSet<Image>();
         }
 
-        /// <summary>
-        /// Vrati nebo nastavi odkaz na panel s kameny
-        /// </summary>
         public TablePanel TablePanel
         {
             get { return tablePanel; }
             set { this.tablePanel = value; }
         }
-
-        /// <summary>
-        /// Vrati nebo nastavi odkaz na manazera stolu
-        /// </summary>
+        
         public TableManager TableManager
         {
             get { return tableManager; }
@@ -53,10 +43,10 @@ namespace InteractiveTable.Controls
 
         #endregion
 
-        #region funkce
+        #region functions
 
         /// <summary>
-        /// Prepocita pozici kamenu-obrazku
+        /// Recalculates positions of stones based on the feedback from camera
         /// </summary>
         public void RecalculateStones()
         {
@@ -68,7 +58,7 @@ namespace InteractiveTable.Controls
                 FPoint newRock_pos = PointHelper.TransformPointToFrame(pos, CommonAttribService.ACTUAL_TABLE_WIDTH, CommonAttribService.ACTUAL_TABLE_HEIGHT);
                 img.Margin = new Thickness(newRock_pos.X / CommonAttribService.ACTUAL_TABLE_SIZE_MULTIPLIER - img.Width / 2, newRock_pos.Y / CommonAttribService.ACTUAL_TABLE_SIZE_MULTIPLIER - img.Height / 2, 0, 0);
 
-                // pokud se kamen posunul tam, kam nema, smazeme ho
+                // stone has moved to an unknown place -> delete it
                 if (img.Margin.Left <= 0 || img.Margin.Left >= (CommonAttribService.ACTUAL_TABLE_WIDTH / CommonAttribService.ACTUAL_TABLE_SIZE_MULTIPLIER)
                     || img.Margin.Top <= 0 || img.Margin.Top >= (CommonAttribService.ACTUAL_TABLE_HEIGHT / CommonAttribService.ACTUAL_TABLE_SIZE_MULTIPLIER))
                 {
@@ -76,7 +66,7 @@ namespace InteractiveTable.Controls
                 }
             }
 
-            // musime to smazat zde, aby to nevyhodilo vyjimku pri modifikaci ve foreach
+            // remove stones
             foreach (Image img in image_to_delete)
             {
                 tableManager.RemoveObject(((A_TableObject)img.DataContext));
@@ -86,7 +76,7 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Prida obrazkum kamenu na liste do dataContext objekty, se kterymi se poji
+        /// Sets prototypes of all stones for the bottom bar
         /// </summary>
         private void SetToolContext()
         {
@@ -94,12 +84,7 @@ namespace InteractiveTable.Controls
             Generator gn = new Generator();
             Magneton mg = new Magneton();
             BlackHole blh = new BlackHole();
-
-            //=====================
-            //tady se budou nastavovat
-            // jeste nejake doplnujic
-            // vlastnosti tech kamenu
-
+            
             tablePanel.tableToolPanel.generatorRockImage.DataContext = gn;
             tablePanel.tableToolPanel.gravityRockImage.DataContext = rck;
             tablePanel.tableToolPanel.magnetonRockImage.DataContext = mg;
@@ -107,10 +92,8 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Vrati true, pokud je ukazatel mysi na herni plose
+        /// Returns true, if the mouse pointer is within a game board
         /// </summary>
-        /// <param name="e"></param>
-        /// <param name="img"></param>
         /// <returns></returns>
         private Boolean MouseInTableArea(System.Windows.Input.MouseButtonEventArgs e, Image img)
         {
@@ -128,19 +111,16 @@ namespace InteractiveTable.Controls
 
 
         /// <summary>
-        /// Vrati zakazany smer, kam uz se kamen nesmi posunout
-        /// 0 = muze kamkoliv
-        /// 1 = nesmi DOLEVA
-        /// 2 = nesmi NAHORU
-        /// 3 = nesmi DOPRAVA
-        /// 4 = nesmi DOLU
+        /// Returns a direction to which the stone cannot move anymore
+        /// 0 = anywhere
+        /// 1 = blocked from left
+        /// 2 = blocked from top
+        /// 3 = blocked from right
+        /// 4 = blocked from bottom
         /// </summary>
-        /// <param name="e"></param>
-        /// <param name="img"></param>
         /// <returns></returns>
         private int MouseInTableArea(System.Windows.Input.MouseEventArgs e, Image img)
         {
-
             Grid tableGrid = tablePanel.tableAreaPanel.tableGrid as Grid;
 
             Point tablePosMouse = e.GetPosition(tableGrid);
@@ -155,24 +135,20 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Pridani kamene na plochu
+        /// Adds a stone to a gameboard
         /// </summary>
-        /// <param name="e"></param>
         private void InsertRockImage(System.Windows.Input.MouseButtonEventArgs e)
         {
-            // zkontrolujeme, zda se nachazime na herni plose a pridame kamen
             if (MouseInTableArea(e, dragImage_new))
             {
                 int left = (int)e.GetPosition(tablePanel).X - dragImage_mousePos_X;
                 int top = (int)e.GetPosition(tablePanel).Y - dragImage_mousePos_Y;
-
-                // nastaveni handleru, abychom s timto objektem mohli manipulovat
+                
+                // sets handler so that we can manipulate with the object
                 dragImage_new.MouseDown += new System.Windows.Input.MouseButtonEventHandler(RockImageOld_MouseDown);
                 dragImage_new.MouseUp += new System.Windows.Input.MouseButtonEventHandler(rockImage_MouseUp);
-
-                //kamen byl pridan, jeste o tom ale dame vedet tableManageru, ktery o tom informuje fyz. engine
-
-                // zjistime, co je to za objekt a vytvorime ho znovu
+                
+                // check the type of the object to insert
                 A_TableObject object_to_put = null;
                 if ((A_TableObject)dragImage_new.DataContext is Graviton)
                 {
@@ -199,20 +175,19 @@ namespace InteractiveTable.Controls
                     ((BlackHole)object_to_put).BaseSettings = tableManager.TableDepositor.table.Settings.blackHoleSettings;
                 }
 
-                // nastavime mu pozici
+                // sets position
                 object_to_put.Position = PointHelper.TransformPointToEuc(new FPoint(left * CommonAttribService.ACTUAL_TABLE_SIZE_MULTIPLIER + dragImage_new.Width / 2,
                     top * CommonAttribService.ACTUAL_TABLE_SIZE_MULTIPLIER + dragImage_new.Height / 2), CommonAttribService.ACTUAL_TABLE_WIDTH,
                     CommonAttribService.ACTUAL_TABLE_HEIGHT);
 
-                // priradime ho zpet do obrazku kamene
                 dragImage_new.DataContext = object_to_put;
-                // vlozime ho do soustavy
+                // add it into a system
                 tableManager.InsertObject(object_to_put);
                 rockImages.Add(dragImage_new);
             }
             else
             {
-                // smazeme obrazek z mainGridu, protoze je ve spatne pozici
+                // icon is beyond the border of the game table -> delete it
                 if (tablePanel.mainGrid.Children.Contains(dragImage_new))
                 {
                     tablePanel.mainGrid.Children.Remove(dragImage_new);
@@ -224,11 +199,8 @@ namespace InteractiveTable.Controls
 
         #endregion
 
-        #region handlery
-
-        /// <summary>
-        /// Nastavi handlery pro stul
-        /// </summary>
+        #region handlers
+        
         public void SetHandlers()
         {
 
@@ -242,31 +214,31 @@ namespace InteractiveTable.Controls
             tablePanel.mainGrid.MouseLeave += new System.Windows.Input.MouseEventHandler(mainGrid_MouseLeave);
             tablePanel.mainGrid.MouseUp += new System.Windows.Input.MouseButtonEventHandler(mainGrid_MouseUp);
             tablePanel.SizeChanged += new SizeChangedEventHandler(tablePanel_SizeChanged);
-
-            // zavola se inicializace prvotnich kamenu
+            
+            // initialize tools (bottom bar with stone prototypes)
             SetToolContext();
         }
 
         /// <summary>
-        /// Zvetseni tableAreaPanelu zpusobi, ze se zvetsi pouze kreslici plocha, to se tady musi osetrit
+        /// Recalculate size of the game board based on the size of the window
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void tablePanel_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            // zvetseni stolu (view)
+            // handle view
             tablePanel.tableAreaPanel.Width = tablePanel.tableAreaPanel.Width + e.NewSize.Width - e.PreviousSize.Width;
             tablePanel.tableAreaPanel.Height = tablePanel.tableAreaPanel.Height + e.NewSize.Height - e.PreviousSize.Height;
             tablePanel.tableAreaPanel.tableGrid.Width = tablePanel.tableAreaPanel.tableGrid.Width + (e.NewSize.Width - e.PreviousSize.Width);
             tablePanel.tableAreaPanel.tableGrid.Height = tablePanel.tableAreaPanel.tableGrid.Height + (e.NewSize.Height - e.PreviousSize.Height);
 
 
-            // zvetseni stolu (model)
+            // handle model
             FRectangle tableRect = ((FRectangle)((Table)tableManager.TableDepositor.table).Shape);
             tableRect.Width = tablePanel.tableAreaPanel.tableGrid.Width;
             tableRect.Height = tablePanel.tableAreaPanel.tableGrid.Height;
 
-            // upraveni polohy kamenu (obrazku)
+            // set margins of all stones
             foreach (Image img in rockImages)
             {
                 img.Margin =
@@ -280,20 +252,17 @@ namespace InteractiveTable.Controls
 
             CommonAttribService.ACTUAL_TABLE_WIDTH = (int)(tablePanel.tableAreaPanel.tableGrid.Width * CommonAttribService.ACTUAL_TABLE_SIZE_MULTIPLIER);
             CommonAttribService.ACTUAL_TABLE_HEIGHT = (int)(tablePanel.tableAreaPanel.tableGrid.Height * CommonAttribService.ACTUAL_TABLE_SIZE_MULTIPLIER);
-
         }
 
 
         /// <summary>
-        /// Uvolneni tlacitka mysi nad jiz pridanym kamenem
+        /// Mouse goes up over an existing ston
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void rockImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            // prave tlacitko mysi zpristupni okno s nastavenim
             if (e.ChangedButton == MouseButton.Right)
             {
+                // display stone edit dialog
                 RockEditorWindow rcked = new RockEditorWindow();
                 rcked.InitData((A_Rock)((Image)sender).DataContext);
                 rcked.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -302,45 +271,44 @@ namespace InteractiveTable.Controls
             }
             else
             {
-
-                // pokud je mys nad kosem, smaz kamen
+                // if the mouse is over a bin, delete the stone
                 Point thrashPoint = e.GetPosition(tablePanel.tableToolPanel.thrashImage);
                 if (thrashPoint.X >= 0 && thrashPoint.X <= tablePanel.tableToolPanel.thrashImage.Width &&
                     thrashPoint.Y >= 0 && thrashPoint.Y <= tablePanel.tableToolPanel.thrashImage.Height)
                 {
-                    // kamen vymazeme
+                    // delete the stone
                     tablePanel.mainGrid.Children.Remove((Image)sender);
                     rockImages.Remove((Image)sender);
                     tableManager.RemoveObject((A_TableObject)((Image)sender).DataContext);
                 }
             }
         }
-
-        // kamen na plose, se kterym je aktualne manipulovano
+        
+        // currently dragged image
         private Image dragImage_old;
 
         /// <summary>
-        /// Kliknuti mysi na kamen, ktery jiz je na plose
+        /// Click on an existing stone
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void RockImageOld_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            dragImage_old = (Image)sender; // nastavime odkaz na kamen, se kterym je provedena interakce
-            dragImage_mousePos_X = (int)e.GetPosition((Image)sender).X; // nastaveni rozmeru vuci mysi
+            dragImage_old = (Image)sender;
+            dragImage_mousePos_X = (int)e.GetPosition((Image)sender).X; // update position of the image based on the mouse pos
             dragImage_mousePos_Y = (int)e.GetPosition((Image)sender).Y;
         }
 
         /// <summary>
-        /// Uvolneni tlacitka mysi nad hlavnim panelem zpusobi, ze se prida novy kamen (pokud tam nejaky je)
+        /// Mouse up over a main panel invokes adding a new stone into a gameboard
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void mainGrid_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            // pokud je odkaz na dragImage, uzivatel manipuloval s kamenem
             if (dragImage_new != null)
             {
+                // user has manipulated with a stone -> add it into a game board
                 InsertRockImage(e);
             }
 
@@ -351,13 +319,10 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Mys opusti hlavnihlavni panel v TablePanel - pokud tahne nejaky kamen, smaze se
+        /// Mouse leaves the main panel -> delete dragged stone
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void mainGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            //pokud uzivatel presouva kamen z listy a pote se dostane mimo panel, kamen zmizi
             if (tablePanel.mainGrid.Children.Contains(dragImage_new))
                 tablePanel.mainGrid.Children.Remove(dragImage_new);
             dragImage_new = null;
@@ -365,13 +330,10 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Nastane, pokud hlavni panel v TablePanel ztrati fokus
+        /// If the main panel loses its focus, the dragged stone will disappear
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void mainGrid_LostFocus(object sender, System.Windows.RoutedEventArgs e)
         {
-            //pokud uzivatel presouva kamen z listy a panel ztrati focus, tak musi zmizet
             if (tablePanel.mainGrid.Children.Contains(dragImage_new))
                 tablePanel.mainGrid.Children.Remove(dragImage_new);
             dragImage_new = null;
@@ -380,10 +342,8 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Pohyb mysi po plose, rozdeleni na nekolik moznych akci
+        /// Move over a grid
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void mainGrid_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
@@ -393,7 +353,7 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Premistovani kamenu z listy po plose
+        /// Moving the stone from the bottombar to a gameboard with the mouse pointer
         /// </summary>
         /// <param name="e"></param>
         private void mainGrid_dragImageMove(System.Windows.Input.MouseEventArgs e)
@@ -401,16 +361,16 @@ namespace InteractiveTable.Controls
             double left = (int)e.GetPosition(tablePanel).X - dragImage_mousePos_X;
             double top = (int)e.GetPosition(tablePanel).Y - dragImage_mousePos_Y;
 
-            // hybani s novym kamenem (jeste nebyl pridan)
+            // dragging a new stone
             if (dragImage_new != null) dragImage_new.Margin = new System.Windows.Thickness(left, top, 0, 0);
-            // hybani s jiz pridanym kamenem, krome polohy obrazku se meni i jeho fyzicka poloha
+            // dragging a stone that has been already added to a gameboard
             if (dragImage_old != null)
             {
 
-                double left_old = (int)dragImage_old.Margin.Left; // stary margin, slouzi pro porovnani
+                double left_old = (int)dragImage_old.Margin.Left; 
                 double top_old = (int)dragImage_old.Margin.Top;
 
-                // obrazek jiz pridany muze mit pozici jen v ramci plochy
+                // already added stone cannot go beyond the game board
                 int dragDirection = MouseInTableArea(e, dragImage_old);
 
                 if (dragDirection == 0 ||
@@ -429,30 +389,28 @@ namespace InteractiveTable.Controls
             }
         }
 
-        // obrazek kamenu, ktery se bude presouvat
+        // image of a stone that is to be dragged
         private Image dragImage_new;
-        // pozice mysi vzhledem k obrazku kamenu -> aby se vykresloval ve stejne vzd. od mysi
+        // mouse position relative to an image of a stone
         private int dragImage_mousePos_X, dragImage_mousePos_Y;
 
         /// <summary>
-        /// Kliknuti na gravitacni kamen na liste
+        /// Click on a stone in the bottombar
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void RockImageNew_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            dragImage_new = new Image(); // vytvoreni noveho obrazku, ktery se bude posouvat po liste
+            dragImage_new = new Image(); // create a new image that will be dragged over the game board
             dragImage_new.Source = ((Image)sender).Source.Clone();
-            dragImage_new.DataContext = ((Image)sender).DataContext; // kopirovani kontextu
+            dragImage_new.DataContext = ((Image)sender).DataContext; 
             dragImage_new.Name = ((Image)sender).Name;
-            dragImage_new.Width = ((Image)sender).Width; // nastaveni parametru (rozmery, pocatecni umisteni)
+            dragImage_new.Width = ((Image)sender).Width; 
             dragImage_new.Height = ((Image)sender).Height;
             dragImage_new.Margin = new System.Windows.Thickness(-100);
             dragImage_new.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             dragImage_new.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-            dragImage_mousePos_X = (int)e.GetPosition((Image)sender).X; // nastaveni rozmeru vuci mysi
+            dragImage_mousePos_X = (int)e.GetPosition((Image)sender).X; 
             dragImage_mousePos_Y = (int)e.GetPosition((Image)sender).Y;
-            tablePanel.mainGrid.Children.Add(dragImage_new); // pridani do panelu v TablePanel
+            tablePanel.mainGrid.Children.Add(dragImage_new); 
         }
 
         #endregion

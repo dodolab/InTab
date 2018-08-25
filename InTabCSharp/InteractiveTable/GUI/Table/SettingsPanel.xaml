@@ -94,17 +94,6 @@
                                    Grid.Column="0"
                                    Grid.Row="0">Povrchová interakce</CheckBox>
 
-                        <ComboBox Name="surfaceInterComboBox"
-                                  Grid.Column="1"
-                                  Grid.Row="0"
-                                  Margin="2"
-                                  SelectedIndex="0">
-                            <ComboBox.Items>
-                                <ComboBoxItem Name="interTableCmbIt"
-                                              Content="Stůl"></ComboBoxItem>
-                            </ComboBox.Items>
-                        </ComboBox>
-
                         <CheckBox Name="gravityMovementChck"
                                  Grid.Column="0"
                                   Grid.Row="1"

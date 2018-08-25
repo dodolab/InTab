@@ -8,7 +8,6 @@ using InteractiveTable.Core.Data.Deposit;
 using InteractiveTable.Settings;
 using InteractiveTable.Accessories;
 using InteractiveTable.Core.Physics.System;
-using InteractiveTable.Core.ClientServer;
 
 namespace InteractiveTable.Managers
 {
@@ -24,7 +23,6 @@ namespace InteractiveTable.Managers
        private InputManager inputManager;
        private Boolean timer_running = true; // indikator, zda vlakno bude bezet nebo ne
        private DateTime last_render = DateTime.Now; // cas posledniho renderu
-       private ServerSender serverSender = new ServerSender();
 
        public TableManager()
        {
@@ -151,49 +149,6 @@ namespace InteractiveTable.Managers
 
                // transformace fyzikalniho systemu
                PhysicsLogic.TransformSystem(tableDepositor);
-                   // poslani dat na klienta (pokud je zapnuty vystup do serveru)
-               if (CommonAttribService.OUTPUT_SERVER_ALLOWED)
-               {
-                   DateTime now = DateTime.Now;
-                   // kontrola intervalu
-                   if ((now - lastSendTime).TotalMilliseconds > CaptureSettings.Instance().SEND_INTERVAL)
-                   {
-                       
-                       if (!CaptureSettings.Instance().SEND_IMAGES)
-                       {
-                           Console.WriteLine("POSILAM KAMENY");
-                           serverSender.SendRocks(RockList.createRockList(TableDepositor.GetAllRocks(), CommonAttribService.ACTUAL_TABLE_WIDTH, CommonAttribService.ACTUAL_TABLE_HEIGHT));
-                           lastSendTime = now;
-                       }
-                       else
-                       {
-                           try
-                           {
-                               if (!CaptureSettings.Instance().MOTION_DETECTION || 
-                                   (!sentImage && CameraManager.isInPeace && CameraManager.peaceCounter > 35))
-                               {
-                                   Console.WriteLine("POSILAM OBRAZEK");
-                                   sentImage = true;
-                                   serverSender.SendRocks(RockList.createRockImage(CameraManager.GetImage(),
-                                   CalibrationSettings.Instance().CALIBRATION_LETTER_A,
-                                   CalibrationSettings.Instance().CALIBRATION_LETTER_C,
-                                   CalibrationSettings.Instance().CALIBRATION_LETTER_ROTATION));
-                                   lastSendTime = now;
-                               }
-                               else
-                               {
-                                   if (!CameraManager.isInPeace && CameraManager.unpeaceCounter > 3)
-                                   {
-                                       sentImage = false;
-                                   }
-                               }
-                           }
-                           catch
-                           {
-                           }
-                       }
-                   }
-               }
 
                // prekresleni obrazku
                tablePanel.tableAreaPanel.Repaint(tableDepositor);

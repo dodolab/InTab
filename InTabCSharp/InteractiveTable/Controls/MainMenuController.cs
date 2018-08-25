@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using InteractiveTable.GUI.CaptureSet;
 using InteractiveTable.Managers;
 using System.Windows.Forms;
 using InteractiveTable.GUI.Table;
-using InteractiveTable.Settings;
 using InteractiveTable.GUI.Other;
-using InteractiveTable.Core.Data.TableObjects.Shapes;
-using InteractiveTable.Core.Data.TableObjects.FunctionObjects;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using InteractiveTable.Core.Data.Deposit;
@@ -17,45 +11,36 @@ using InteractiveTable.Core.Data.Deposit;
 namespace InteractiveTable.Controls
 {
     /// <summary>
-    /// Controller pro hlavni menu 
+    /// Controller for the main menu
     /// </summary>
     public class MainMenuController
     {
         #region vars, get-set, init
 
-        // odkaz na hlavni okno
+        // main window
         private MainWindow mainWindow;
-        // odkaz na manazera oken
+        // window manager
         private WindowManager mainManager;
-        // odkaz na manazera stolu
+        // table manager
         private TableManager tableManager;
 
         public MainMenuController()
         {
 
         }
-
-        /// <summary>
-        /// Vrati nebo nastavi odkaz na hlavni okno
-        /// </summary>
+        
         public MainWindow MainWindow
         {
             get { return mainWindow; }
             set { this.mainWindow = value; }
         }
 
-        /// <summary>
-        /// Vrati nebo nastavi odkaz na manazera stolu
-        /// </summary>
         public TableManager TableManager
         {
             get { return tableManager; }
             set { this.tableManager = value; }
         }
 
-        /// <summary>
-        /// Vrati nebo nastavi odkaz na manazera oken
-        /// </summary>
         public WindowManager MainManager
         {
             get { return mainManager; }
@@ -63,7 +48,7 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Nastavi handlery pro hlavni menu
+        /// Sets handlers for the main menu
         /// </summary>
         public void SetHandlers()
         {
@@ -71,7 +56,6 @@ namespace InteractiveTable.Controls
             mainWindow.mainMenu.openGLItem.Click += new System.Windows.RoutedEventHandler(OpenGLItem_Click);
             mainWindow.mainMenu.userSettingsItem.Click += new System.Windows.RoutedEventHandler(UserSettingsItem_Click);
             mainWindow.mainMenu.tableCalibrationItem.Click += new System.Windows.RoutedEventHandler(tableCalibrationItem_Click);
-            mainWindow.mainMenu.letterCalibrationItem.Click += new System.Windows.RoutedEventHandler(letterCalibrationItem_Click);
             mainWindow.mainMenu.systemLoad.Click += new System.Windows.RoutedEventHandler(systemLoad_Click);
             mainWindow.mainMenu.systemSave.Click += new System.Windows.RoutedEventHandler(systemSave_Click);
             mainWindow.mainMenu.help.Click += new System.Windows.RoutedEventHandler(help_Click);
@@ -85,20 +69,16 @@ namespace InteractiveTable.Controls
         #region handlers
 
         /// <summary>
-        /// Ukonceni aplikace
+        /// Ends the application
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void endApp_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             CommonAttribService.mainWindow.Close();
         }
 
         /// <summary>
-        /// Kliknuti na napovedu
+        /// Displays a help file
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void help_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             try
@@ -107,25 +87,13 @@ namespace InteractiveTable.Controls
             }
             catch
             {
-                MessageBox.Show("Nemohu nalézt soubor s nápovědou!");
+                MessageBox.Show("I cannot find a help file!");
             }
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko ABOUT
+        /// Saves the whole application state into file
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void about_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-           // TODO !!!!
-        }
-
-        /// <summary>
-        /// Ulozeni cele soustavy do souboru
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void systemSave_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             SaveFileDialog sfd = new SaveFileDialog();
@@ -146,13 +114,11 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Nacteni cele soustavy ze souboru
+        /// Loads a whole application state from a file
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void systemLoad_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            MessageBox.Show("Upozornění: Načtená soustava není přístupná přes simulátor!");
+            MessageBox.Show("Warning: loaded system is not accessible via from the simulator!");
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Systems(*.sst)|*.sst";
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -173,35 +139,18 @@ namespace InteractiveTable.Controls
 
    
         /// <summary>
-        /// Kliknuti na kalibraci stolu otevre okno pro kalibraci
+        /// Opens a window for calibration of the table
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void tableCalibrationItem_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-                TableCalibrationWindow tableCl = new TableCalibrationWindow();
-               // tableCl.Owner = CommonAttribService.mainWindow;
-                tableCl.Show();
-                tableCl.LoadValues();
-        }
-
-        /// <summary>
-        /// Kliknuti na kalibraci stolu pro dopis v Intab2
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void letterCalibrationItem_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            LetterCalibrationWindow tableCl = new LetterCalibrationWindow();
+            TableCalibrationWindow tableCl = new TableCalibrationWindow();
             tableCl.Show();
             tableCl.LoadValues();
         }
 
         /// <summary>
-        /// Kliknuti na uzivatelske nastaveni otevre okno s nastavenim
+        /// Opens a window with user settings
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void UserSettingsItem_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             SettingsWindow setWin = new SettingsWindow();
@@ -211,14 +160,10 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Otevreni okna pro nastaveni kontur a zachytavani
+        /// Opens a window for contour settings and capturing
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void Menu_contourSubItem_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
-            // nastaveni MVC pointeru + otevreni okna
             CaptureWindow capture = new CaptureWindow();
             CaptureSetController capture_ctrl = new CaptureSetController();
             CaptureSetManager capture_mng = new CaptureSetManager();
@@ -228,42 +173,35 @@ namespace InteractiveTable.Controls
             capture_mng.CaptureSetControl = capture_ctrl;
             capture_ctrl.SetDefaultValues();
             capture_ctrl.SetHandlers();
-            capture_mng.Initialize(); // inicializace vlakna pro odchytavani kamery
+            capture_mng.Initialize(); // initialize a thread for camera capture
             if (CommonAttribService.DEFAULT_TEMPLATES != null) capture.Processor.templates = CommonAttribService.DEFAULT_TEMPLATES;
             capture.Show();
         }
 
         /// <summary>
-        /// Zobrazeni vystupniho okna
+        /// Opens an output window
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OpenGLItem_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             CommonAttribService.MODE_2D = false;
             TableOutput table3D = new TableOutput();
             tableManager.Table3D = table3D;
 
-            // pri zruseni table3D okna se opet prepneme do modu vykreslovani na klasickou plochu
+            // change the mode back to 2D after closing this window
             table3D.Closed += new EventHandler(delegate(object sender2, EventArgs e2)
             {
                 CommonAttribService.MODE_2D = true;
             });
             table3D.Show();
         }
-
-
-
+        
         /// <summary>
-        /// Pri zruseni hlavniho okna dojde k ukonceni cele aplikace
+        /// Close the application upon closing the main window
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void mainWindow_Closed(object sender, EventArgs e)
         {
             Application.Exit();
         }
-
 
         #endregion
     }

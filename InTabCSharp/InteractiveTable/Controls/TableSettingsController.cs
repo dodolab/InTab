@@ -1,27 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using InteractiveTable.GUI.Table;
 using InteractiveTable.Managers;
 using System.Windows;
 using InteractiveTable.Settings;
-using InteractiveTable.Core.Data.TableObjects.FunctionObjects;
-using InteractiveTable.Core.Data.TableObjects.Shapes;
 using InteractiveTable.GUI.Other;
 using InteractiveTable.Core.Physics.System;
-using System.Windows.Controls;
 using InteractiveTable.Core.Data.TableObjects.SettingsObjects;
 using System.Windows.Media.Imaging;
 
 namespace InteractiveTable.Controls
 {
     /// <summary>
-    /// Controller pro panel s nastavenim simulacniho okna
+    /// Controller for a panel with overal settings for the game board
     /// </summary>
     public class TableSettingsController
     {
-        #region promenne, gettery, settery, konstruktory
+        #region prom, get, set, const
 
         private SettingsPanel tableSetPanel;
         private TableManager tableManager;
@@ -43,13 +37,10 @@ namespace InteractiveTable.Controls
             set { this.tableManager = value; }
         }
 
-
-        /// <summary>
-        /// Nastavi handlery vsem komponentam
-        /// </summary>
+        
         public void SetHandlers()
         {
-            // pocatecni nastaveni vsech checkboxu a slideru:::
+            // default settings of all checkboxes and sliders
             tableSetPanel.surfaceInterChck.IsChecked = PhysicSettings.Instance().DEFAULT_INTERACTION_ALLOWED;
             tableSetPanel.gravityMovementChck.IsChecked = PhysicSettings.Instance().DEFAULT_GRAVITON_ENABLED;
             tableSetPanel.magnetonMovementChck.IsChecked = PhysicSettings.Instance().DEFAULT_MAGNETON_ENABLED;
@@ -65,7 +56,6 @@ namespace InteractiveTable.Controls
             tableSetPanel.gridDispChck.IsChecked = GraphicsSettings.Instance().DEFAULT_GRID_ENABLED;
             tableSetPanel.particleColorChangeChck.IsChecked = GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_ALLOWED;
             tableSetPanel.rockDispChck.IsChecked = GraphicsSettings.Instance().DEFAULT_OUTPUT_ROCK_DISPLAY;
-
 
             tableSetPanel.particleEnergyLoseSizeSlider.Value = PhysicSettings.Instance().DEFAULT_ENERGY_TABLE_LOOSING_SPEED;
             tableSetPanel.particleEnergyLoseSizeSlider.Maximum = PhysicSettings.Instance().DEFAULT_ENERGY_TABLE_LOOSING_SPEED_MAX;
@@ -96,7 +86,6 @@ namespace InteractiveTable.Controls
             tableSetPanel.recordImage.MouseUp += new System.Windows.Input.MouseButtonEventHandler(recordImage_MouseUp);
             tableSetPanel.simulationImage.MouseUp += new System.Windows.Input.MouseButtonEventHandler(simulationImage_MouseUp);
             tableSetPanel.outputImage.MouseUp += new System.Windows.Input.MouseButtonEventHandler(outputImage_MouseUp);
-            tableSetPanel.serverImage.MouseUp += new System.Windows.Input.MouseButtonEventHandler(serverImage_MouseUp);
             tableSetPanel.generatorGenAngleSlider.ValueChanged += new System.Windows.RoutedPropertyChangedEventHandler<double>(sliderValueChanged);
             tableSetPanel.generatorGenFirstAngleSlider.ValueChanged += new System.Windows.RoutedPropertyChangedEventHandler<double>(sliderValueChanged);
             tableSetPanel.generatorMaxVelocSlider.ValueChanged += new System.Windows.RoutedPropertyChangedEventHandler<double>(sliderValueChanged);
@@ -127,7 +116,6 @@ namespace InteractiveTable.Controls
             tableSetPanel.particleColorChangeComboBox.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(ComboBoxItem_changed);
             tableSetPanel.generationComboBox.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(ComboBoxItem_changed);
             tableSetPanel.absorbComboBox.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(ComboBoxItem_changed);
-            tableSetPanel.surfaceInterComboBox.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(ComboBoxItem_changed);
             tableSetPanel.particleSizeChangeComboBox.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(ComboBoxItem_changed);
             tableSetPanel.tableGravityXTbx.LostFocus += new System.Windows.RoutedEventHandler(TextBox_FocusLost);
             tableSetPanel.tableGravityYTbx.LostFocus += new System.Windows.RoutedEventHandler(TextBox_FocusLost);
@@ -140,40 +128,32 @@ namespace InteractiveTable.Controls
         #region handlery tlacitek
 
         /// <summary>
-        /// Kliknuti na tlacitko STOP zastavi a resetuje simulaci
+        /// Click on STOP will reset the simulation
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void stopImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             tableManager.StopThread();
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko PAUSE pozastavi simulaci
+        /// Click on PAUSE will pause the simulation
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void pauseImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             tableManager.PauseThread();
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko PLAY spusti simulaci
+        /// Click on PLAY will execute the simulation
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void playImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             tableManager.RunThread();
         }
 
         /// <summary>
-        /// Kliknuti na kameru zpusobi zobrazeni zachytavani
+        /// Click on the camera will display a capture window
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void cameraImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (!(tableManager.InputManager.InteractiveWindow != null && tableManager.InputManager.InteractiveWindow.IsVisible))
@@ -186,10 +166,8 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Kliknuti na nahravani spusti/zastavi nahravaci vlakno
+        /// Click on the RECORD button will execute camera recording for AR
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void recordImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (tableManager.InputManager.IsRunning())
@@ -207,10 +185,8 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko povolujici vykreslovani na VYSTUP promitacky
+        /// Click on the OUTPUT icon will enable rendering into the projector output window
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void outputImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             CommonAttribService.OUTPUT_DRAW_ALLOWED = !CommonAttribService.OUTPUT_DRAW_ALLOWED;
@@ -227,10 +203,8 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko povolujici vykreslovani do SIMULACNIHO okna
+        /// Click on the OUTPUT icon will enable rendering into the simulation window
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void simulationImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             CommonAttribService.SIMULATION_DRAW_ALLOWED = !CommonAttribService.SIMULATION_DRAW_ALLOWED;
@@ -246,29 +220,8 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko povolujici vystup na server
+        /// Click on color settings 
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void serverImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            CommonAttribService.OUTPUT_SERVER_ALLOWED = !CommonAttribService.OUTPUT_SERVER_ALLOWED;
-
-            if (CommonAttribService.OUTPUT_SERVER_ALLOWED)
-            {
-                tableSetPanel.serverImage.Source = new BitmapImage(new Uri("/InteractiveTable;component/Template/images/tableIcons/pl_server_active.png", UriKind.Relative));
-            }
-            else
-            {
-                tableSetPanel.serverImage.Source = new BitmapImage(new Uri("/InteractiveTable;component/Template/images/tableIcons/pl_server.png", UriKind.Relative));
-            }
-        }
-
-        /// <summary>
-        /// Kliknuti na NASTAVENI BAREV
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void particleColorChangeBut_Click(object sender, RoutedEventArgs e)
         {
             ParticleColorSetWindow partCol = new ParticleColorSetWindow();
@@ -278,20 +231,18 @@ namespace InteractiveTable.Controls
 
         #endregion
 
-        #region handlery nastaveni
+        #region settings handlers
 
 
 
         /// <summary>
-        /// Kliknuti na tlacitko HIDE skryje panel s nastavenim
+        /// Click on HID will hide or show the settings panel
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void settingVisibilityBut_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (CommonAttribService.mainWindow.WindowState == WindowState.Maximized)
             {
-                MessageBox.Show("Lze provést pouze u ne-maximalizovaného okna");
+                MessageBox.Show("This function is not available in maximized mode!");
             }
             else
             {
@@ -315,14 +266,12 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Zmena hodnoty v libovolnem textboxu
+        /// Change of value of any textbox
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void TextBox_FocusLost(object sender, System.Windows.RoutedEventArgs e)
         {
 
-            if (sender == tableSetPanel.tableGravityXTbx) // gravitace stolu v ose X
+            if (sender == tableSetPanel.tableGravityXTbx) // X-axis gravity
             {
                 double value = 0;
                 try
@@ -337,7 +286,7 @@ namespace InteractiveTable.Controls
                 tableManager.TableDepositor.table.Settings.gravity.X = value;
             }
 
-            if (sender == tableSetPanel.tableGravityYTbx) // gravitace stolu v ose Y
+            if (sender == tableSetPanel.tableGravityYTbx) // Y-axis gravity
             {
                 double value = 0;
                 try
@@ -354,20 +303,18 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Zmena hodnoty v libovolnem comboboxu
+        /// Change of all dropdowns
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ComboBoxItem_changed(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (sender == tableSetPanel.gravityComboBox) // zmena druhu gravitacniho pusobeni
+            if (sender == tableSetPanel.gravityComboBox) // gravity mode change
             {
                 if (tableSetPanel.aditiveGravityCmbIt.IsSelected) PhysicsSettings.gravitationMode = GravitationMode.ADITIVE;
                 if (tableSetPanel.averageGravityCmbIt.IsSelected) PhysicsSettings.gravitationMode = GravitationMode.AVERAGE;
                 if (tableSetPanel.multiplyGravityCmbIt.IsSelected) PhysicsSettings.gravitationMode = GravitationMode.MULTIPLY;
             }
 
-            if (sender == tableSetPanel.magnetonComboBox) // zmena druhu magnetickeho pusobeni
+            if (sender == tableSetPanel.magnetonComboBox) // magnetism mode change
             {
                 if (tableSetPanel.aditiveMagnetonCmbIt.IsSelected) PhysicsSettings.magnetismMode = MagnetismMode.ADITIVE;
                 if (tableSetPanel.averageMagnetonCmbIt.IsSelected) PhysicsSettings.magnetismMode = MagnetismMode.AVERAGE;
@@ -375,7 +322,7 @@ namespace InteractiveTable.Controls
             }
 
 
-            if (sender == tableSetPanel.particleColorChangeComboBox) // zmena zpusobu obarveni castic
+            if (sender == tableSetPanel.particleColorChangeComboBox) // colouring mode change
             {
                 if (tableSetPanel.colorChange_gravityCmbIt.IsSelected) GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_MODE = ParticleColorMode.GRAVITY;
                 if (tableSetPanel.colorChange_sizeCmbIt.IsSelected) GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_MODE = ParticleColorMode.SIZE;
@@ -383,26 +330,20 @@ namespace InteractiveTable.Controls
                 if (tableSetPanel.colorChange_weighCmbIt.IsSelected) GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_MODE = ParticleColorMode.WEIGH;
             }
 
-            if (sender == tableSetPanel.generationComboBox) // zpusob generovani castic
+            if (sender == tableSetPanel.generationComboBox) // particle generating mode change
             {
                 if (tableSetPanel.standardGenerationCmbIt.IsSelected) tableManager.TableDepositor.table.Settings.generatorSettings.generationMode = GenerationMode.STANDARD;
                 if (tableSetPanel.strangeGenerationCmbIt.IsSelected) tableManager.TableDepositor.table.Settings.generatorSettings.generationMode = GenerationMode.STRANGE;
             }
 
-            if (sender == tableSetPanel.absorbComboBox) // zpusob pohlcovani castic
+            if (sender == tableSetPanel.absorbComboBox) // absorption mode change
             {
                 if (tableSetPanel.blackHoleAbsorbCmbIt.IsSelected) PhysicsSettings.absorptionMode = AbsorptionMode.BLACKHOLE;
                 if (tableSetPanel.regenerationAbsorbCmbIt.IsSelected) PhysicsSettings.absorptionMode = AbsorptionMode.RECYCLE;
                 if (tableSetPanel.selectingAbsorbCmbIt.IsSelected) PhysicsSettings.absorptionMode = AbsorptionMode.SELECT;
             }
-
-
-            if (sender == tableSetPanel.surfaceInterComboBox) // povrchova interakce
-            {
-                // je zde zatim jen jedna, neni potreba nic osetrovat
-            }
-
-            if (sender == tableSetPanel.particleSizeChangeComboBox) // zavislost velikosti castic
+            
+            if (sender == tableSetPanel.particleSizeChangeComboBox) // dynamic particle size mode change
             {
                 if (tableSetPanel.sizeChange_gravityCmbIt.IsSelected) PhysicsSettings.particle_sizeMode = ParticleSizeMode.GRAVITY;
                 if (tableSetPanel.sizeChange_velocityCmbIt.IsSelected) PhysicsSettings.particle_sizeMode = ParticleSizeMode.VELOCITY;
@@ -412,86 +353,82 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Zmena hodnoty v libovolnem checkboxu
+        /// Change of all checkboxes
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void CheckBoxCheckChanged(object sender, System.Windows.RoutedEventArgs e)
         {
-
-
-            if (sender == tableSetPanel.generatorRegularGenChck) // pravidelne generovani castic
+            if (sender == tableSetPanel.generatorRegularGenChck) // regular generating of particles
             {
                 tableManager.TableDepositor.table.Settings.generatorSettings.Regular_generating =
                     (bool)tableSetPanel.generatorRegularGenChck.IsChecked;
             }
 
-            if (sender == tableSetPanel.gravityMovementChck) // promenne gravitacni pole
+            if (sender == tableSetPanel.gravityMovementChck) // variable gravity field
             {
                 tableManager.TableDepositor.table.Settings.gravitonSettings.enabled =
                     (bool)tableSetPanel.gravityMovementChck.IsChecked;
             }
 
-            if (sender == tableSetPanel.magnetonMovementChck) // magnetismus
+            if (sender == tableSetPanel.magnetonMovementChck) // magnetism
             {
                 tableManager.TableDepositor.table.Settings.magnetonSettings.enabled =
                     (bool)tableSetPanel.magnetonMovementChck.IsChecked;
             }
 
-            if (sender == tableSetPanel.particleColorChangeChck) // zmena barvy castic
+            if (sender == tableSetPanel.particleColorChangeChck) // particle color change
             {
                 GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_ALLOWED =
                     (bool)tableSetPanel.particleColorChangeChck.IsChecked;
             }
 
-            if (sender == tableSetPanel.particleEnergyLoseChck) // ztrata energie castic
+            if (sender == tableSetPanel.particleEnergyLoseChck) // particle energy change
             {
                 tableManager.TableDepositor.table.Settings.energy_loosing =
                     (bool)tableSetPanel.particleEnergyLoseChck.IsChecked;
             }
 
-            if (sender == tableSetPanel.gravitonLocalPulseChck) // promenliva pusobnost kamenu
+            if (sender == tableSetPanel.gravitonLocalPulseChck) // change of local pulse of gravity stones
             {
                 tableManager.TableDepositor.table.Settings.gravitonSettings.Energy_pulsing =
                    (bool)tableSetPanel.gravitonLocalPulseChck.IsChecked;
             }
 
-            if (sender == tableSetPanel.magnetonLocalPulseChck) // promenliva pusobnost kamenu
+            if (sender == tableSetPanel.magnetonLocalPulseChck) // change of local pulse of magnet stones
             {
                 tableManager.TableDepositor.table.Settings.magnetonSettings.Energy_pulsing =
                    (bool)tableSetPanel.magnetonLocalPulseChck.IsChecked;
             }
 
-            if (sender == tableSetPanel.surfaceInterChck) // interaktivita s povrchem stolu
+            if (sender == tableSetPanel.surfaceInterChck) // collision change with the borders of the table
             {
                 tableManager.TableDepositor.table.Settings.interaction =
                    (bool)tableSetPanel.surfaceInterChck.IsChecked;
             }
 
-            if (sender == tableSetPanel.tableGravityChck) // gravitace generovana stolem
+            if (sender == tableSetPanel.tableGravityChck) // gravity generated by the table
             {
                 tableManager.TableDepositor.table.Settings.gravity_allowed =
                    (bool)tableSetPanel.tableGravityChck.IsChecked;
             }
 
-            if (sender == tableSetPanel.generationChck) // generovat castice
+            if (sender == tableSetPanel.generationChck) // enabling particle generator
             {
                 tableManager.TableDepositor.table.Settings.generatorSettings.enabled =
                   (bool)tableSetPanel.generationChck.IsChecked;
             }
 
-            if (sender == tableSetPanel.absorbChck) // pohlcovat castice
+            if (sender == tableSetPanel.absorbChck) // enabling particle absorber
             {
                 tableManager.TableDepositor.table.Settings.blackHoleSettings.enabled =
                   (bool)tableSetPanel.absorbChck.IsChecked;
             }
 
-            if (sender == tableSetPanel.particleSizeChck) // povolit ruznou velikost castic
+            if (sender == tableSetPanel.particleSizeChck) // enable variable size of particles
             {
                 PhysicsSettings.particle_sizeChanging_allowed = (bool)tableSetPanel.particleSizeChck.IsChecked;
             }
 
-            if (sender == tableSetPanel.gridDispChck) // zobrazit mrizku
+            if (sender == tableSetPanel.gridDispChck) // display grid
             {
                 GraphicsSettings.Instance().DEFAULT_GRID_ENABLED = (bool)tableSetPanel.gridDispChck.IsChecked;
             }
@@ -502,7 +439,7 @@ namespace InteractiveTable.Controls
                     (bool)tableSetPanel.blackHoleLocalPulseChck.IsChecked;
             }
 
-            if (sender == tableSetPanel.rockDispChck) // vykreslit kameny na vystupu
+            if (sender == tableSetPanel.rockDispChck) // draw stones in the opengl window
             {
                 GraphicsSettings.Instance().DEFAULT_OUTPUT_ROCK_DISPLAY = (bool)tableSetPanel.rockDispChck.IsChecked;
             }
@@ -510,38 +447,36 @@ namespace InteractiveTable.Controls
 
 
         /// <summary>
-        /// Zmena hodnoty v libovolnem slideru
+        /// Change of any slider
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void sliderValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
-            if (sender == tableSetPanel.generatorGenAngleSlider) // zmena rozptylu generatoru
+            if (sender == tableSetPanel.generatorGenAngleSlider) // change of directions of generators
             {
                 tableSetPanel.generatorGenAngleTb.Text = tableSetPanel.generatorGenAngleSlider.Value.ToString("#.##");
                 tableManager.TableDepositor.table.Settings.generatorSettings.angle_maximum = tableSetPanel.generatorGenAngleSlider.Value;
             }
 
-            if (sender == tableSetPanel.generatorGenFirstAngleSlider) // zmena smeru generovanych castic
+            if (sender == tableSetPanel.generatorGenFirstAngleSlider) // change of initial direction of generated particles
             {
                 tableSetPanel.generatorGenFirstAngleTb.Text = tableSetPanel.generatorGenFirstAngleSlider.Value.ToString("#.##");
                 tableManager.TableDepositor.table.Settings.generatorSettings.angle_offset = tableSetPanel.generatorGenFirstAngleSlider.Value;
             }
 
 
-            if (sender == tableSetPanel.generatorMaxVelocSlider) // zmena maximalni rychlosti generovanych
+            if (sender == tableSetPanel.generatorMaxVelocSlider) // change of max velocity of generated particles
             {
                 tableSetPanel.generatorMaxVelocTb.Text = tableSetPanel.generatorMaxVelocSlider.Value.ToString("#.##");
                 tableManager.TableDepositor.table.Settings.generatorSettings.particle_maximum_speed = tableSetPanel.generatorMaxVelocSlider.Value;
 
                 if (tableSetPanel.generatorMinVelocSlider.Value > tableSetPanel.generatorMaxVelocSlider.Value)
                 {
-                    MessageBox.Show("Maximální rychlost nesmí být menší než minimální!!");
+                    MessageBox.Show("Maximum velocity cannot be lower than the minimal!");
                     tableSetPanel.generatorMaxVelocSlider.Value = tableSetPanel.generatorMinVelocSlider.Value;
                 }
             }
 
-            if (sender == tableSetPanel.generatorMinVelocSlider) // zmena minimalni rychlosti generovanych castic
+            if (sender == tableSetPanel.generatorMinVelocSlider) // change of min velocity of generated particles
             {
 
                 tableSetPanel.generatorMinVelocTb.Text = tableSetPanel.generatorMinVelocSlider.Value.ToString("#.##");
@@ -549,48 +484,48 @@ namespace InteractiveTable.Controls
 
                 if (tableSetPanel.generatorMinVelocSlider.Value > tableSetPanel.generatorMaxVelocSlider.Value)
                 {
-                    MessageBox.Show("Minimální rychlost nesmí být větší než maximální!!");
+                    MessageBox.Show("Minimum velocity cannot be greater than maximal!");
                     tableSetPanel.generatorMinVelocSlider.Value = tableSetPanel.generatorMaxVelocSlider.Value;
                 }
             }
 
-            if (sender == tableSetPanel.particleEnergyLoseSizeSlider) // zmena rychlosti ztraty energie castic
+            if (sender == tableSetPanel.particleEnergyLoseSizeSlider) // change of energy decceleration speed
             {
                 tableSetPanel.particleEnergyLoseSizeTb.Text = tableSetPanel.particleEnergyLoseSizeSlider.Value.ToString("#.##");
                 tableManager.TableDepositor.table.Settings.energy_loosing_speed = tableSetPanel.particleEnergyLoseSizeSlider.Value;
             }
 
-            if (sender == tableSetPanel.generatorSpeedSlider) // zmena rychlosti generovani castic
+            if (sender == tableSetPanel.generatorSpeedSlider) // change of generating speed
             {
                 tableSetPanel.generatorSpeedTb.Text = tableSetPanel.generatorSpeedSlider.Value.ToString("#.##");
                 tableManager.TableDepositor.table.Settings.generatorSettings.generatingSpeed = tableSetPanel.generatorSpeedSlider.Value;
             }
 
-            if (sender == tableSetPanel.generatorMinSizeSlider) // zmena minimalni velikosti generovanych castic
+            if (sender == tableSetPanel.generatorMinSizeSlider) // change of min size of generated particles
             {
                 tableSetPanel.generatorMinSizeTb.Text = tableSetPanel.generatorMinSizeSlider.Value.ToString("#.##");
                 tableManager.TableDepositor.table.Settings.generatorSettings.particle_minimum_size = tableSetPanel.generatorMinSizeSlider.Value;
 
                 if (tableSetPanel.generatorMinSizeSlider.Value > tableSetPanel.generatorMaxSizeSlider.Value)
                 {
-                    MessageBox.Show("Minimální velikost nesmí být větší než maximální!!");
+                    MessageBox.Show("Minimal size cannot be greater than maximal size!");
                     tableSetPanel.generatorMinSizeSlider.Value = tableSetPanel.generatorMaxSizeSlider.Value;
                 }
             }
 
-            if (sender == tableSetPanel.generatorMaxSizeSlider) // zmena maximalni velikosti generovanych castic
+            if (sender == tableSetPanel.generatorMaxSizeSlider) // change of max size of generated particles
             {
                 tableSetPanel.generatorMaxSizeTb.Text = tableSetPanel.generatorMaxSizeSlider.Value.ToString("#.##");
                 tableManager.TableDepositor.table.Settings.generatorSettings.particle_maximum_size = tableSetPanel.generatorMaxSizeSlider.Value;
 
                 if (tableSetPanel.generatorMinSizeSlider.Value > tableSetPanel.generatorMaxSizeSlider.Value)
                 {
-                    MessageBox.Show("Maximální velikost nesmí být menší než minimální!!");
+                    MessageBox.Show("Maximal siz cannot be lower than minimal size!");
                     tableSetPanel.generatorMaxSizeSlider.Value = tableSetPanel.generatorMinSizeSlider.Value;
                 }
             }
 
-            if (sender == tableSetPanel.tableSizeSlider) // zmena velikosti stolu
+            if (sender == tableSetPanel.tableSizeSlider) // change of the size of the table
             {
                 tableSetPanel.tableSizeTb.Text = tableSetPanel.tableSizeSlider.Value.ToString("#");
                 double old_multiplier = CommonAttribService.ACTUAL_TABLE_SIZE_MULTIPLIER;
@@ -602,10 +537,8 @@ namespace InteractiveTable.Controls
 
                 tableManager.TablePanel.tableAreaPanel.TableController.RecalculateStones();
             }
-
         }
        
-
         #endregion
     }
 }

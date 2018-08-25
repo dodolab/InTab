@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using InteractiveTable.GUI.CaptureSet;
 using System.Windows.Forms;
 using Emgu.CV;
@@ -16,7 +13,7 @@ using InteractiveTable.Settings;
 namespace InteractiveTable.Controls
 {
     /// <summary>
-    /// Controller pro CaptureSet - okno, ktere prirazuje konturam vlastnosti podle kamenu
+    /// Controller CaptureSet - a window that assignes features to contours based on particular stones
     /// </summary>
     public class CaptureSetController
     {
@@ -38,7 +35,7 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Nastavi GUI eventy
+        /// Sets GUI events
         /// </summary>
         public void SetHandlers()
         { 
@@ -85,7 +82,7 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko RESTART restartuje veskera nastaveni
+        /// Click on RESET - resets all settings
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -98,9 +95,7 @@ namespace InteractiveTable.Controls
         }
 
         private Boolean settingsLock = false;
-        /// <summary>
-        /// Nastavi defaultni hodnoty
-        /// </summary>
+
         public void SetDefaultValues()
         {
      
@@ -127,7 +122,7 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Ulozeni vsech hodnot a prekresleni
+        /// Saves all values and re-renders everything
         /// </summary>
         public void ApplySettings()
         {
@@ -172,7 +167,7 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Ulozeni veskerych hodnot do Properties
+        /// Saves all values into Properties
         /// </summary>
         public void SaveSettings()
         {
@@ -180,7 +175,7 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Prekresli combobox, ktery zobrazuje mozna rozliseni
+        /// Resets dropdown that displays all possible resolutions 
         /// </summary>
         public void ApplyCamSettings()
         {
@@ -199,18 +194,18 @@ namespace InteractiveTable.Controls
         #region handler logic
 
         /// <summary>
-        /// Ukonceni okna, ulozi nastavene hodnoty
+        /// Closes the window, saving all values
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void captureWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (System.Windows.Forms.MessageBox.Show("Chcete uložit změny?", "Změna nastavení", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+            if (MessageBox.Show("Do you want to save your changes?", "Configuration change", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
             {
                 SaveSettings();
                 try
                 {
-                    //reinicializace depositoru
+                    //depositor reinitialization
                     CommonAttribService.mainWindow.MyManager.TableManager.InputManager.RealTableManager.Init(CommonAttribService.DEFAULT_TEMPLATES);
                 }
                 catch { }
@@ -219,7 +214,7 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Zmena rozliseni kamery zpusobi zmenu v nekterych nastavenich
+        /// Resets certain configurations upon camera resolution change
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -244,30 +239,24 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Zmena zaskrtnuti libovolneho checkboxu ulozi provedene zmeny
+        /// A change in any checkbox invokes applying the changes
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void checkBox_checkChanged(object sender, System.Windows.RoutedEventArgs e)
         {
             if(!settingsLock) ApplySettings();
         }
 
         /// <summary>
-        /// Zmena hodnot libovolneho slideru ulozi veskere zmeny
+        /// A change in any slider invokes applying the change
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void slider_valueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
             if (!settingsLock) ApplySettings();
         }
 
         /// <summary>
-        /// Kliknuti na ikonu pro nacteni obrazku nacte obrazek
+        /// Click on a loadIcon will load an image
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void loadImageImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -287,20 +276,16 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Kliknuti na ikonu pro editaci sablon zobrazi okno se seznamem sablon
+        /// Click on editIcon will display a window with the list of all templates
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void editTemplateImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         { 
             new TemplateEditor(captureWindow.Processor.templates).Show();
         }
 
         /// <summary>
-        /// Kliknuti na ikonu pro zobrazeni okna s prohlizenim kontur
+        /// Click on displayIcon will display a window with a list of all contours
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void addTemplateImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
               if (captureWindow.Frame != null)
@@ -308,7 +293,7 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Kliknuti na ikonu pro ukladani sablon
+        /// Click on saveIcon will save all templates
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -332,7 +317,7 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Kliknuti na ikonu pro prirazovani kamenum konturam
+        /// Click on assignIcon will assign stones to particular contours
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -340,7 +325,7 @@ namespace InteractiveTable.Controls
         {
             if (captureWindow.Processor.templates.Count == 0)
             {
-                MessageBox.Show("Nemáte nastavené šablony!");
+                MessageBox.Show("You need to set templates first!");
                 return; 
             }
 
@@ -351,10 +336,8 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Kliknuti na ikonu pro nacitani sablon ze souboru
+        /// Click on openIcon will open a template from a file
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void openTemplateImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -368,7 +351,7 @@ namespace InteractiveTable.Controls
                 {
                     using (FileStream fs = new FileStream(fileName, FileMode.Open))
                     {
-                        // POZOR! zde se zmeni defaultni cesta i defaultni sablony, pokud dojde k otevreni nove sablony!
+                        // WARNING: here a default path and also a default template will change, if we open a new template
                         Templates tmp = (Templates)new BinaryFormatter().Deserialize(fs);
                         CommonAttribService.DEFAULT_TEMPLATES = tmp;
                         captureWindow.Processor.templates = tmp;
@@ -382,13 +365,11 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Kliknuti na ikonu pro zalozeni nove sablony
+        /// Click on newTemplate icon will create a new template database
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void newTemplateImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (MessageBox.Show("Chcete vytvořit novou databázi šablon?", "Vytvoření nové databáze", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
+            if (MessageBox.Show("Do you want to create a new template database?", "Create database", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
                 captureWindow.Processor.templates.Clear();
         }
 

@@ -15,7 +15,7 @@
                                Margin="3"
                                Height="36"
                                Width="36"
-                               Source="/InteractiveTable;component/Template/images/captureSet/newFile.png" ToolTip="Nová šablona"/>
+                               Source="/InteractiveTable;component/Template/images/captureSet/newFile.png" ToolTip="New template"/>
                         <Image Name="openTemplateImage"
                                Margin="3"
                                Height="36"

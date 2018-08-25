@@ -126,9 +126,6 @@
     <Compile Include="Core\Capture\FoundRock.cs" />
     <Compile Include="Core\Capture\RockDesc.cs" />
     <Compile Include="Core\Capture\FoundTemplateDesc.cs" />
-    <Compile Include="Core\ClientServer\RockList.cs" />
-    <Compile Include="Core\ClientServer\ServerSender.cs" />
-    <Compile Include="Core\ClientServer\TcpServer.cs" />
     <Compile Include="Core\TableObjects\FunctionObjects\A_Rock.cs" />
     <Compile Include="Core\TableObjects\FunctionObjects\BlackHole.cs" />
     <Compile Include="Core\TableObjects\FunctionObjects\Magneton.cs" />
@@ -162,9 +159,6 @@
     </Compile>
     <Compile Include="GUI\Other\InteractiveWindow.xaml.cs">
       <DependentUpon>InteractiveWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Other\LetterCalibrationWindow.xaml.cs">
-      <DependentUpon>LetterCalibrationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\Other\Loading.xaml.cs">
       <DependentUpon>Loading.xaml</DependentUpon>
@@ -240,10 +234,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\Other\InteractiveWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="GUI\Other\LetterCalibrationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
