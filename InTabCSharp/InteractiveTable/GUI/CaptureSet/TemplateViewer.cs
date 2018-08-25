@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
 using System.IO;
@@ -67,8 +62,6 @@ namespace InteractiveTable.GUI.CaptureSet
                 e.Graphics.DrawImage(bmp,
                     new Rectangle(rect.X, rect.Y, (int)(boundRect.Width * k), (int)(boundRect.Height * k)),
                     boundRect, GraphicsUnit.Pixel);
-        //        e.Graphics.DrawImage(bmp, boundRect, new Rectangle(new Point(boundRect.X, boundRect.Y), new Size(50,50)),
-            //        GraphicsUnit.Pixel);
             }
 
             if (e.ColumnIndex == 0)
@@ -79,8 +72,8 @@ namespace InteractiveTable.GUI.CaptureSet
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (tbTemplateName.Text == "<jméno šablony>")
-                MessageBox.Show("Vložte jméno šablony");
+            if (tbTemplateName.Text == "<template name>")
+                MessageBox.Show("Insert template name");
             else
                 try
                 {
@@ -97,7 +90,7 @@ namespace InteractiveTable.GUI.CaptureSet
         private void tbTemplateName_Enter(object sender, EventArgs e)
         {
             tbTemplateName.ForeColor = Color.Black;
-            if (tbTemplateName.Text == "<jméno šablony>")
+            if (tbTemplateName.Text == "<template name>")
                 tbTemplateName.Text = "";
         }
 

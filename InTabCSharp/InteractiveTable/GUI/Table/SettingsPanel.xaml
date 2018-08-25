@@ -20,57 +20,52 @@
                     Width="37"
                     HorizontalAlignment="Left" Grid.Column="0">
             <Image Name="settingVisibilityBut"
-                   ToolTip="Nastavení stolu"
+                   ToolTip="Table settings"
                     Height="32"
                     Margin="2"
                     Source="/InteractiveTable;component/Template/images/tableIcons/play_options_gaussian.png" Width="24"></Image>
             <Image Name="cameraImage"
-                   ToolTip="Náhled"
+                   ToolTip="Previwe"
                    Height="32" 
                    Margin="2" 
                    Source="/InteractiveTable;component/Template/images/tableIcons/play_camera_gaussian.png" Width="27"></Image>
             <Image Name="pauseImage" 
-                   ToolTip="Pozastavit"
+                   ToolTip="Pause"
                    Height="32"
                    Margin="2" 
                    Source="/InteractiveTable;component/Template/images/tableIcons/play_pause.png" Width="30"></Image>
             <Image Name="playImage"
-                   ToolTip="Spustit"
+                   ToolTip="Play"
                    Height="32"
                    Margin="2" 
                    Source="/InteractiveTable;component/Template/images/tableIcons/play_play.png" Width="33"></Image>
             <Image Name="stopImage"
-                   ToolTip="Zastavit"
+                   ToolTip="Stop"
                    Height="32"
                    Margin="2" 
                    Source="/InteractiveTable;component/Template/images/tableIcons/play_stop.png" Width="29"></Image>
             <Image Name="recordImage"
-                   ToolTip="Nahrávat"
+                   ToolTip="Record"
                    Height="32"
                    Margin="2" 
                    Source="/InteractiveTable;component/Template/images/tableIcons/play_record_test.png" Width="26"></Image>
             <Image Name="simulationImage"
-                   ToolTip="Výstup do simulace"
+                   ToolTip="Output to simulator"
                    Height="32"
                    Margin="2" 
                    Source="/InteractiveTable;component/Template/images/tableIcons/pl_simulation_active.png" Width="26"></Image>
             <Image Name="outputImage"
-                   ToolTip="Výstup do promítačky"
+                   ToolTip="Output to OpenGL renderer"
                    Height="32"
                    Margin="2" 
                    Source="/InteractiveTable;component/Template/images/tableIcons/pl_output.png" Width="26"></Image>
-            <Image Name="serverImage"
-                   ToolTip="Výstup na server"
-                   Height="32"
-                   Margin="2" 
-                   Source="/InteractiveTable;component/Template/images/tableIcons/pl_server.png" Width="26"></Image>
         </StackPanel>
         <ScrollViewer Grid.Column="1"
                       Width="295"
                       Name="settingsScroll" Visibility="Collapsed">
             <StackPanel IsEnabled="True"
                     Orientation="Vertical">
-                <GroupBox Header="Soustava"
+                <GroupBox Header="System"
                         BorderBrush="#FFD4D0C8"
                         Margin="2,5">
                     <Grid>
@@ -92,12 +87,12 @@
                         <CheckBox      Name="surfaceInterChck"
                                    Margin="2"
                                    Grid.Column="0"
-                                   Grid.Row="0">Povrchová interakce</CheckBox>
+                                   Grid.Row="0">Surface interaction</CheckBox>
 
                         <CheckBox Name="gravityMovementChck"
                                  Grid.Column="0"
                                   Grid.Row="1"
-                                  Margin="2">Gravitace</CheckBox>
+                                  Margin="2">Gravity</CheckBox>
                         <ComboBox Name="gravityComboBox"
                                   Grid.Column="1"
                                   Grid.Row="1"
@@ -105,17 +100,17 @@
                                   SelectedIndex="0">
                             <ComboBox.Items>
                                 <ComboBoxItem Name="aditiveGravityCmbIt"
-                                              Content="Aditivní"></ComboBoxItem>
+                                              Content="Additive"></ComboBoxItem>
                                 <ComboBoxItem Name="averageGravityCmbIt"
-                                              Content="Průměrná"></ComboBoxItem>
+                                              Content="Average"></ComboBoxItem>
                                 <ComboBoxItem Name="multiplyGravityCmbIt"
-                                              Content="Multiplikativní"></ComboBoxItem>
+                                              Content="Multiplier"></ComboBoxItem>
                             </ComboBox.Items>
                         </ComboBox>
                         <CheckBox Name="magnetonMovementChck"
                                   Grid.Column="0"
                                   Grid.Row="2"
-                                  Margin="2">Magnetismus</CheckBox>
+                                  Margin="2">Magnetism</CheckBox>
                         <ComboBox Name="magnetonComboBox"
                                   Grid.Column="1"
                                   Grid.Row="2"
@@ -123,17 +118,17 @@
                                   SelectedIndex="0">
                             <ComboBox.Items>
                                 <ComboBoxItem Name="aditiveMagnetonCmbIt"
-                                              Content="Aditivní"></ComboBoxItem>
+                                              Content="Additive"></ComboBoxItem>
                                 <ComboBoxItem Name="averageMagnetonCmbIt"
-                                              Content="Průměrná"></ComboBoxItem>
+                                              Content="Average"></ComboBoxItem>
                                 <ComboBoxItem Name="multiplyMagnetonCmbIt"
-                                              Content="Multiplikativní"></ComboBoxItem>
+                                              Content="Multiplier"></ComboBoxItem>
                             </ComboBox.Items>
                         </ComboBox>
                         <CheckBox Name="generationChck"
                                   Grid.Column="0"
                                   Grid.Row="3"
-                                  Margin="2">Generování</CheckBox>
+                                  Margin="2">Generating</CheckBox>
                         <ComboBox Name="generationComboBox"
                                   Grid.Column="1"
                                   Grid.Row="3"
@@ -141,16 +136,16 @@
                                   SelectedIndex="0">
                             <ComboBox.Items>
                                 <ComboBoxItem Name="standardGenerationCmbIt"
-                                              Content="Standardní"></ComboBoxItem>
+                                              Content="Standard"></ComboBoxItem>
                                 <ComboBoxItem Name="strangeGenerationCmbIt"
-                                              Content="Podivné"></ComboBoxItem>
+                                              Content="Weird"></ComboBoxItem>
                             </ComboBox.Items>
                         </ComboBox>
 
                         <CheckBox Name="absorbChck"
                                   Grid.Column="0"
                                   Grid.Row="4"
-                                  Margin="2">Pohlcování</CheckBox>
+                                  Margin="2">Absorption</CheckBox>
                         <ComboBox Name="absorbComboBox"
                                   Grid.Column="1"
                                   Grid.Row="4"
@@ -158,28 +153,28 @@
                                   SelectedIndex="0">
                             <ComboBox.Items>
                                 <ComboBoxItem Name="blackHoleAbsorbCmbIt"
-                                              Content="Černá díra"></ComboBoxItem>
+                                              Content="Black hole"></ComboBoxItem>
                                 <ComboBoxItem Name="regenerationAbsorbCmbIt"
-                                              Content="Recyklace"></ComboBoxItem>
+                                              Content="Recycling"></ComboBoxItem>
                                 <ComboBoxItem Name="selectingAbsorbCmbIt"
-                                              Content="Výběrové"></ComboBoxItem>
+                                              Content="Selective"></ComboBoxItem>
                             </ComboBox.Items>
                         </ComboBox>
                         <CheckBox Name="gridDispChck" 
                                   Margin="2"
                                    Grid.Column="0"
-                                   Grid.Row="6">Vykreslit mřížku</CheckBox>
+                                   Grid.Row="6">Show grid</CheckBox>
 
                         <CheckBox Name="rockDispChck" 
                                   Margin="2"
                                    Grid.Column="1"
-                                   Grid.Row="6">Vykreslit kameny</CheckBox>
+                                   Grid.Row="6">Show stones</CheckBox>
 
 
                         <CheckBox Name="tableGravityChck"
                                   Grid.Column="0"
                                   Grid.Row="7"
-                                  Margin="2">Gravitace stolu</CheckBox>
+                                  Margin="2">Table gravity</CheckBox>
                         <StackPanel Orientation="Horizontal"
                                 Grid.Column="1"
                                 Grid.Row="7">
@@ -194,7 +189,7 @@
                         </StackPanel>
                         
                         <TextBlock Grid.Row="8"
-                                   Margin="5,0">Velikost stolu</TextBlock>
+                                   Margin="5,0">Table size</TextBlock>
                         <Slider Name="tableSizeSlider"
                                Margin="2"
                                Grid.Column="1"
@@ -206,7 +201,7 @@
 
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Kameny"
+                <GroupBox Header="Stones"
                         BorderBrush="#FFD4D0C8"
                         Margin="2,5">
                     <Grid>
@@ -223,16 +218,16 @@
                         </Grid.RowDefinitions>
                         <CheckBox Name="gravitonLocalPulseChck"
                                           Grid.Column="0"
-                                          Grid.Row="2">Pulsar gravitace</CheckBox>
+                                          Grid.Row="2">Gravity pulsar</CheckBox>
                         <CheckBox Name="magnetonLocalPulseChck"
                                   Grid.Column="1"
-                                  Grid.Row="2">Pulsar magnetu</CheckBox>
+                                  Grid.Row="2">Magnet pulsar</CheckBox>
                         <CheckBox Name="blackHoleLocalPulseChck"
                                   Grid.Column="0"
-                                  Grid.Row="3">Pulsar černé díry</CheckBox>
+                                  Grid.Row="3">Black hole pulsar</CheckBox>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Částice"
+                <GroupBox Header="Particles"
                         BorderBrush="#FFD4D0C8"
                         Margin="2,5">
                     <Grid>
@@ -254,7 +249,7 @@
                         <CheckBox Name="particleEnergyLoseChck"
                           Margin="2"
                           Grid.Column="0"
-                          Grid.Row="0">Ztráta energie</CheckBox>
+                          Grid.Row="0">Energy decrease</CheckBox>
                         <Slider Name="particleEnergyLoseSizeSlider"
                                Margin="2"
                                Grid.Column="1"
@@ -266,13 +261,13 @@
                         <CheckBox Name="particleColorChangeChck"
                                   Margin="2"
                                   Grid.Column="0"
-                                  Grid.Row="4">Změna barvy</CheckBox>
+                                  Grid.Row="4">Color change</CheckBox>
                         <Button Name="particleColorChangeBut"
                                 Margin="2"
                                 Grid.Column="1"
-                                Grid.Row="4"> Nastavení barev </Button>
+                                Grid.Row="4"> Color settings </Button>
                         <TextBlock Margin="2"
-                                   Grid.Row="5">Typ barevné změny</TextBlock>
+                                   Grid.Row="5">Color change type</TextBlock>
                         <ComboBox Name="particleColorChangeComboBox"
                                   Grid.Column="1"
                                   Grid.Row="5"
@@ -280,23 +275,23 @@
                                   SelectedIndex="0">
                             <ComboBox.Items>
                                 <ComboBoxItem Name="colorChange_gravityCmbIt"
-                                              Content="Gravitační"></ComboBoxItem>
+                                              Content="Gravity"></ComboBoxItem>
                                 <ComboBoxItem Name="colorChange_velocityCmbIt"
-                                              Content="Rychlostní"
+                                              Content="Velocity"
                                               IsSelected="True"></ComboBoxItem>
                                 <ComboBoxItem Name="colorChange_weighCmbIt"
-                                              Content="Váhová"></ComboBoxItem>
+                                              Content="Weight"></ComboBoxItem>
                                 <ComboBoxItem Name="colorChange_sizeCmbIt"
-                                              Content="Rozměrová"></ComboBoxItem>
+                                              Content="Size"></ComboBoxItem>
                             </ComboBox.Items>
                         </ComboBox>
                         <CheckBox Name="particleSizeChck"
                                   Margin="2"
                                   Grid.Column="1"
-                                  Grid.Row="6">Závislost velikostí</CheckBox>
+                                  Grid.Row="6">Size dependency</CheckBox>
                         <TextBlock Margin="2"
                                    Grid.Column="0"
-                                   Grid.Row="7">Typ změny velikosti</TextBlock>
+                                   Grid.Row="7">Size dependency type</TextBlock>
                         <ComboBox Name="particleSizeChangeComboBox"
                                   Grid.Column="1"
                                   Grid.Row="7"
@@ -304,20 +299,20 @@
                                   SelectedIndex="0">
                             <ComboBox.Items>
                                 <ComboBoxItem Name="sizeChange_gravityCmbIt"
-                                              Content="Gravitační"></ComboBoxItem>
+                                              Content="Gravity"></ComboBoxItem>
                                 <ComboBoxItem Name="sizeChange_velocityCmbIt"
                                               IsSelected="True"
-                                              Content="Rychlostní"></ComboBoxItem>
+                                              Content="Velocity"></ComboBoxItem>
                                 <ComboBoxItem Name="sizeChange_weighCmbIt"
-                                              Content="Váhová"></ComboBoxItem>
+                                              Content="Weight"></ComboBoxItem>
                                 <ComboBoxItem Name="sizeChange_noneCmbIt"
-                                              Content="Vynulovat"></ComboBoxItem>
+                                              Content="Stop"></ComboBoxItem>
                             </ComboBox.Items>
                         </ComboBox>
 
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Generátor"
+                <GroupBox Header="Generator"
                         BorderBrush="#FFD4D0C8"
                         Margin="2,5">
                     <Grid>
@@ -339,10 +334,10 @@
                                   Margin="2"
                                   Grid.Column="1"
                                   Grid.Row="0"
-                                  IsChecked="True">Pravidelný</CheckBox>
+                                  IsChecked="True">Regular</CheckBox>
                         <TextBlock Margin="2"
                                    Grid.Column="0"
-                                   Grid.Row="1">Offset úhlu generování</TextBlock>
+                                   Grid.Row="1">Generating angle offset</TextBlock>
                         <Slider Name="generatorGenFirstAngleSlider"
                                Margin="2"
                                Grid.Column="1"
@@ -353,7 +348,7 @@
                                   Grid.Row="1">1</TextBlock>
                         <TextBlock Margin="2"
                                    Grid.Column="0"
-                                   Grid.Row="2">Úhel generování</TextBlock>
+                                   Grid.Row="2">Generating angle</TextBlock>
                         <Slider Name="generatorGenAngleSlider"
                                Margin="2"
                                Grid.Column="1"
@@ -364,7 +359,7 @@
                                   Grid.Row="2">1</TextBlock>
                         <TextBlock Margin="2"
                                    Grid.Column="0"
-                                   Grid.Row="3">Min. rychlost částic</TextBlock>
+                                   Grid.Row="3">Min. particle velocity</TextBlock>
                         <Slider Name="generatorMinVelocSlider"
                                Margin="2"
                                Grid.Column="1"
@@ -375,7 +370,7 @@
                                   Grid.Row="3">1</TextBlock>
                         <TextBlock Margin="2"
                                    Grid.Column="0"
-                                   Grid.Row="4">Max. rychlost částic</TextBlock>
+                                   Grid.Row="4">Max. particle velocity</TextBlock>
                         <Slider Name="generatorMaxVelocSlider"
                                Margin="2"
                                Grid.Column="1"
@@ -386,7 +381,7 @@
                                   Grid.Row="4">1</TextBlock>
                         <TextBlock Margin="2"
                                    Grid.Column="0"
-                                   Grid.Row="5">Rychlost generování</TextBlock>
+                                   Grid.Row="5">Generating speed</TextBlock>
                         <Slider Name="generatorSpeedSlider"
                                Margin="2"
                                Grid.Column="1"
@@ -398,7 +393,7 @@
 
                         <TextBlock Margin="2"
                                    Grid.Column="0"
-                                   Grid.Row="6">Min. velikost částic</TextBlock>
+                                   Grid.Row="6">Min. particle size</TextBlock>
                         <Slider Name="generatorMinSizeSlider"
                                Margin="2"
                                Grid.Column="1"
@@ -410,7 +405,7 @@
 
                         <TextBlock Margin="2"
                                    Grid.Column="0"
-                                   Grid.Row="7">Max. velikost částic</TextBlock>
+                                   Grid.Row="7">Max. particle size</TextBlock>
                         <Slider Name="generatorMaxSizeSlider"
                                Margin="2"
                                Grid.Column="1"

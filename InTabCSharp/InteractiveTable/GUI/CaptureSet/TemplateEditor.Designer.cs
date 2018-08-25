@@ -41,8 +41,8 @@
             this.dgvTemplates.AllowUserToAddRows = false;
             this.dgvTemplates.AllowUserToDeleteRows = false;
             this.dgvTemplates.AllowUserToResizeRows = false;
-            this.dgvTemplates.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.dgvTemplates.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvTemplates.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvTemplates.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTemplates.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -78,9 +78,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 7);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 13);
+            this.label1.Size = new System.Drawing.Size(56, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Šablony";
+            this.label1.Text = "Templates";
             // 
             // btDelete
             // 
@@ -88,7 +88,7 @@
             this.btDelete.Name = "btDelete";
             this.btDelete.Size = new System.Drawing.Size(99, 23);
             this.btDelete.TabIndex = 4;
-            this.btDelete.Text = "Smazat šablonu";
+            this.btDelete.Text = "Remove template";
             this.btDelete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btDelete.UseVisualStyleBackColor = true;
             this.btDelete.Click += new System.EventHandler(this.btDelete_Click);

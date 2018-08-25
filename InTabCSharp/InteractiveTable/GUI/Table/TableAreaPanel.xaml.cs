@@ -22,15 +22,13 @@ using InteractiveTable.Controls;
 namespace InteractiveTable.GUI.Table
 {
     /// <summary>
-    /// Simulacni okno stolu
+    /// Simulator window
     /// </summary>
     public partial class TableAreaPanel : UserControl
     {
-        // vykreslovaci manazer
         private TableDrawingManager tableDrawingManager;
-        // controller pro komponentu
         private TableController tableController;
-        // aktualne vykresleny obrazek
+        // current image being rendered
         private Image tableImage;
 
         public TableAreaPanel()
@@ -47,7 +45,7 @@ namespace InteractiveTable.GUI.Table
 
 
         /// <summary>
-        /// Vykresli soustavu na plochu
+        /// Renders the system into the window
         /// </summary>
         /// <param name="objects"></param>
         public void Repaint(TableDepositor objects)
@@ -55,7 +53,7 @@ namespace InteractiveTable.GUI.Table
             if (CommonAttribService.SIMULATION_DRAW_ALLOWED)
             {
                 BitmapSource bmp = null;
-                // pokud jsou zaple oba vystupy, budeme si brat bitmapu z toho druheho, neni treba ji vytvaret znovu
+                // if both outputs are enabled, let's just take the picture from the OpenGL window
                 if (CommonAttribService.OUTPUT_DRAW_ALLOWED && !CommonAttribService.MODE_2D)
                 {
                     bmp = CommonAttribService.LAST_BITMAP;

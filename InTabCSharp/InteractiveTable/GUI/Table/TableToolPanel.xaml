@@ -8,7 +8,7 @@
              Height="39">
     <StackPanel Orientation="Horizontal">
         <Image Name="generatorRockImage" 
-               ToolTip="Generátor"
+               ToolTip="Generator"
                Source="/InteractiveTable;component/Template/images/tableIcons/rock_generator.png"
                Margin="5,2,0,2"
                Width="32"
@@ -27,13 +27,13 @@
                Width="32"
                Height="32"></Image>
         <Image Name="blackHoleRockImage" 
-               ToolTip="Černá díra"
+               ToolTip="Black hole"
                Source="/InteractiveTable;component/Template/images/tableIcons/rock_blackHole.png"
                Margin="5,2,0,2"
                Width="32"
                Height="32"></Image>
         <Image Name="thrashImage" 
-               ToolTip="Koš"
+               ToolTip="Trash"
                Source="/InteractiveTable;component/Template/images/tableIcons/thrash.png"
                Margin="5,2,0,2"
                Width="32"

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="InteractiveTable.GUI.Table.TableOutput"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        
-        Title="Výstupní okno" Height="350" Width="525">
+        Title="Opengl rendering window" Height="350" Width="525">
     <Grid Name="tableGrid"
            RenderOptions.BitmapScalingMode="HighQuality"
            RenderOptions.EdgeMode="Aliased">
@@ -13,13 +13,5 @@
     <Window.Background>
         <SolidColorBrush Color="Black"></SolidColorBrush>
     </Window.Background>
-    <!-- 
-    <UserControl.Background>
-        <ImageBrush ImageSource="/InteractiveTable;component/Template/images/tableIcons/texture.png" 
-                    Stretch="Fill" 
-                    TileMode="Tile" 
-                    Viewport="0,1,12,12" 
-                    ViewportUnits="Absolute"
-                    />
-    </UserControl.Background> -->
+    
 </Window>

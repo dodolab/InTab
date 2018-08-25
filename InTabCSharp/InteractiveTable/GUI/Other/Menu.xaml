@@ -7,21 +7,20 @@
              HorizontalAlignment="Stretch"
              Height="23">
     <Menu Name="menu" DataContext="{Binding}">
-        <MenuItem Name="fileItem" Header="Soubor">
-            <MenuItem Name="systemLoad" Header="Načíst soustavu" />
-            <MenuItem Name="systemSave" Header="Uložit soustavu" />
-            <MenuItem Name="endApp" Header="Konec" />
+        <MenuItem Name="fileItem" Header="File">
+            <MenuItem Name="systemLoad" Header="Load system" />
+            <MenuItem Name="systemSave" Header="Save system" />
+            <MenuItem Name="endApp" Header="Exit" />
         </MenuItem>
-        <MenuItem Name="tableItem" Header="Stůl">
-            <MenuItem Name="openGLItem" Header="Výstupní okno"/>
+        <MenuItem Name="tableItem" Header="Table">
+            <MenuItem Name="openGLItem" Header="OpenGL window"/>
         </MenuItem>
-        <MenuItem Name="settingItem" Header="Nastavení">
-            <MenuItem Name="userSettingsItem" Header="Nastavení uživatele" />
-            <MenuItem Name="tableCalibrationItem" Header="Kalibrace stolu"/>
-            <MenuItem Name="letterCalibrationItem" Header="Kalibrace stolu pro dopis"/>
-            <MenuItem Name="contourSubItem" Header="Nastavení kontur" />
+        <MenuItem Name="settingItem" Header="Settings">
+            <MenuItem Name="userSettingsItem" Header="User settings" />
+            <MenuItem Name="tableCalibrationItem" Header="Table calibration"/>
+            <MenuItem Name="contourSubItem" Header="Contour settings" />
         </MenuItem>
-        <MenuItem Name="help" Header="Nápověda">
+        <MenuItem Name="help" Header="Help">
         </MenuItem>
     </Menu>
 </UserControl>

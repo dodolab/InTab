@@ -154,9 +154,6 @@
     <Compile Include="GUI\CaptureSet\TemplateViewer.Designer.cs">
       <DependentUpon>TemplateViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Other\AboutWindow.xaml.cs">
-      <DependentUpon>AboutWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="GUI\Other\InteractiveWindow.xaml.cs">
       <DependentUpon>InteractiveWindow.xaml</DependentUpon>
     </Compile>
@@ -226,10 +223,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\CaptureSet\ContourSetWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="GUI\Other\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

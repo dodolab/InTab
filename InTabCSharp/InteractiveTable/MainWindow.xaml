@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:rc="clr-namespace:InteractiveTable.GUI.Table"
         xmlns:rw="clr-namespace:InteractiveTable.GUI.Other"
-        Title="Interaktivní stůl"
+        Title="Interactive table"
         Width="555"
         Height="400"
         MinWidth="555"

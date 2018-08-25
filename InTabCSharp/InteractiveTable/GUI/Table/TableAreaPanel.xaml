@@ -16,13 +16,4 @@
     <UserControl.Background>
         <SolidColorBrush Color="Black"></SolidColorBrush>
     </UserControl.Background>
-    <!-- 
-    <UserControl.Background>
-        <ImageBrush ImageSource="/InteractiveTable;component/Template/images/tableIcons/texture.png" 
-                    Stretch="Fill" 
-                    TileMode="Tile" 
-                    Viewport="0,1,12,12" 
-                    ViewportUnits="Absolute"
-                    />
-    </UserControl.Background> -->
 </UserControl>

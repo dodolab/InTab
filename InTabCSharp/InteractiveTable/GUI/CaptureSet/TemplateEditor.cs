@@ -62,7 +62,6 @@ namespace InteractiveTable.GUI.CaptureSet
                 {
                     Refresh();
                     templates[iRow].Draw(CreateGraphics(), new Rectangle(dgvTemplates.Bounds.Right + 10, dgvTemplates.Bounds.Top, 300, 200));
-           //         cbPreferredAngle.Checked = templates[iRow].preferredAngleNoMore90;
                 }
             }
         }

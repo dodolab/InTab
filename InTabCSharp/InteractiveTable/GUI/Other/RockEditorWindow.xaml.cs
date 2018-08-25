@@ -1,30 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using InteractiveTable.Core.Data.TableObjects.FunctionObjects;
 using InteractiveTable.Settings;
 
 namespace InteractiveTable.GUI.Other
 {
     /// <summary>
-    /// Editor virtualnich kamenu v simulacnim okne
+    /// Virtual stone editor
     /// </summary>
     public partial class RockEditorWindow : Window
     {
-        // kamen, ktery se bude editovat
+        // stone to edit
         private A_Rock rock;
  
-
-        #region konstruktory, gettery a settery
+        #region cons, getters, setters
 
         public RockEditorWindow()
         { 
@@ -46,15 +35,13 @@ namespace InteractiveTable.GUI.Other
             GminPartSizeSlider.ValueChanged+=new RoutedPropertyChangedEventHandler<double>(Slider_ValueChanged);
             GmaxPartSizeSlider.ValueChanged+=new RoutedPropertyChangedEventHandler<double>(Slider_ValueChanged);
         }
-
-   
-
+        
         #endregion
 
-        #region slider handlery
+        #region slider handlers
 
         /// <summary>
-        /// Zmena hodnoty slideru pouze zmeni txt pod nim
+        /// Change of a slider value just refreshes a label below it
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -94,11 +81,11 @@ namespace InteractiveTable.GUI.Other
 
         #endregion
 
-
-        #region logika
+  
+        #region logics
 
         /// <summary>
-        /// Inicializuje hodnoty komponent podle kamene
+        /// Load data from a stone entity
         /// </summary>
         /// <param name="rock"></param>
         public void InitData(A_Rock rock)
@@ -122,13 +109,9 @@ namespace InteractiveTable.GUI.Other
                     magnetonGroup.Visibility = Visibility.Visible;
                 }
 
-                LoadValues(); // pokud nacitame existujici data, musi se nacist informace o prvni konture
+                LoadValues(); // if we are loading an existing data, we need to load info about the first contour
             }
-        
-
-       /// <summary>
-       /// Vynuluje veskere hodnoty
-       /// </summary>
+       
         public void RestartComponents()
         {
             GminPartSizeSlider.Value = 0;
@@ -148,7 +131,7 @@ namespace InteractiveTable.GUI.Other
 
 
        /// <summary>
-       /// Nate hodnoty kontury, ktera jiz ma nastavene vlastnosti
+       /// Loads values of a contour that already has everything set
        /// </summary>
         private void LoadValues()
         {
@@ -186,7 +169,7 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Ulozi hodnoty kontury pri kliknuti na nastaveni jine kontury
+        /// Saves values of a contour
         /// </summary>
         private void SaveValues()
         {
@@ -231,21 +214,17 @@ namespace InteractiveTable.GUI.Other
         #endregion
 
         /// <summary>
-        /// Kliknuti na tlacitko OK ulozi nastaveni a zavre okno
+        /// Click on OK will save the values and closes the window
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void okButton_Click(object sender, RoutedEventArgs e)
         {
-                SaveValues();
-                if (!Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.RightShift)) this.Close();
+            SaveValues();
+            if (!Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.RightShift)) this.Close();
         }
 
         /// <summary>
-        /// Nacte defaultni nastaveni
+        /// Loads default settings
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void loadDefButton_Click(object sender, RoutedEventArgs e)
         {
             GminPartSizeSlider.Value = PhysicSettings.Instance().DEFAULT_PARTICLE_SIZE;

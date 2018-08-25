@@ -20,32 +20,32 @@
                                Margin="3"
                                Height="36"
                                Width="36"
-                               Source="/InteractiveTable;component/Template/images/captureSet/openFile.png" ToolTip="Otevřít šablonu"/>
+                               Source="/InteractiveTable;component/Template/images/captureSet/openFile.png" ToolTip="Open template"/>
                         <Image Name="saveTemplateImage"
                                Margin="3"
                                Height="36"
                                Width="36"
-                               Source="/InteractiveTable;component/Template/images/captureSet/saveFile.png"  ToolTip="Uložit šablonu"/>
+                               Source="/InteractiveTable;component/Template/images/captureSet/saveFile.png"  ToolTip="Save template"/>
                         <Image Name="addTemplateImage"
                                Margin="3"
                                Height="36"
                                Width="36"
-                               Source="/InteractiveTable;component/Template/images/captureSet/newTemplate.png" ToolTip="Přidat konturu"/>
+                               Source="/InteractiveTable;component/Template/images/captureSet/newTemplate.png" ToolTip="Add a contour"/>
                         <Image Name="editTemplateImage"
                                Margin="3"
                                Height="36"
                                Width="36"
-                               Source="/InteractiveTable;component/Template/images/captureSet/editTemplate.png" ToolTip="Správce kontur"/>
+                               Source="/InteractiveTable;component/Template/images/captureSet/editTemplate.png" ToolTip="Contour manager"/>
                         <Image Name="loadImageImage"
                                Margin="3"
                                Height="36"
                                Width="36"
-                               Source="/InteractiveTable;component/Template/images/captureSet/loadImage.png" ToolTip="Načíst obrázek"/>
+                               Source="/InteractiveTable;component/Template/images/captureSet/loadImage.png" ToolTip="Load image"/>
                         <Image Name="setContourImage"
                                Margin="3"
                                Height="36"
                                Width="36"
-                               Source="/InteractiveTable;component/Template/images/captureSet/setContours.png" ToolTip="Přiřadit kámen konturám"/>
+                               Source="/InteractiveTable;component/Template/images/captureSet/setContours.png" ToolTip="Assign a stone to contours"/>
 
 
         </StackPanel>
@@ -61,26 +61,26 @@
             <StackPanel VerticalAlignment="Top"
                         Width="215">
                 <Grid>
-                <Label>Restart nastavení:</Label>
+                    <Label>Settings reset:</Label>
                 <Button Name="resetButton"
                           Width="80"
                           HorizontalAlignment="Right"
                         Margin="5"
                         Content="RESET"></Button>
                 </Grid>
-                <GroupBox  Header="Zachytávání"
+                <GroupBox  Header="Capture"
                            BorderBrush="Black"
                            Margin="2,5">
                     <StackPanel Orientation="Vertical">
                 <Grid>
-                <Label>Rozlišení kamery</Label>
+                <Label>Camera resolution</Label>
                 <ComboBox Name="resolutionComboBox"
                           Width="100"
                           HorizontalAlignment="Right"></ComboBox>
                 </Grid>
                         
                 <Grid>
-                    <Label>Práh bloků</Label>
+                    <Label>Treshold of blocks</Label>
                     <Slider Name="blockLevelSlider"
                             Width="100"
                             HorizontalAlignment="Right" Value="4" Minimum="1" Maximum="80"></Slider>
@@ -94,7 +94,7 @@
                 </Grid>
 
                 <Grid>
-                    <Label>Dilatace</Label>
+                    <Label>Dilatation</Label>
                     <Slider Name="dilatationSlider"
                             Width="100"
                             HorizontalAlignment="Right"></Slider>
@@ -108,7 +108,7 @@
                 </Grid>
 
                 <Grid>
-                    <Label>Eroze</Label>
+                            <Label>Erosion</Label>
                     <Slider Name="erodeSlider"
                             Width="100"
                             HorizontalAlignment="Right"></Slider>
@@ -122,7 +122,7 @@
                 </Grid>
 
                 <Grid>
-                    <Label>Gamma</Label>
+                    <Label>Inverted gamma</Label>
                     <Slider Name="gammaSlider"
                             Width="100"
                             HorizontalAlignment="Right" Value="1" Maximum="5" SmallChange="0.01"></Slider>
@@ -138,28 +138,28 @@
              
 
                 <Grid Margin="10,2">
-                    <CheckBox Name="invertCheck">Invertovat</CheckBox>
+                    <CheckBox Name="invertCheck">Invert</CheckBox>
                     <CheckBox Name="normalizeCheck"
                               HorizontalAlignment="Right"
-                              Width="90">Vyrovnat</CheckBox>
+                              Width="90">Balance</CheckBox>
                 </Grid>
 
                 <Grid Margin="10,2">
-                    <CheckBox Name="blurCheck">Blur efekt</CheckBox>
+                    <CheckBox Name="blurCheck">Blur effect</CheckBox>
                     <CheckBox Name="adaptiveNoiseCheck"
                               HorizontalAlignment="Right"
-                              Width="90">Adaptivní šum</CheckBox>
+                              Width="90">Adaptive noise</CheckBox>
                 </Grid>
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox Header="Vyhledávání"
+                <GroupBox Header="Searching"
                           BorderBrush="Black"
                           Margin="2,5">
                     <StackPanel Orientation="Vertical">
                         
                 <Grid>
-                    <Label>Min. délka kontur</Label>
+                    <Label>Min. contour length</Label>
                     <Slider Name="contourMinLengthSlider"
                             Width="100"
                             HorizontalAlignment="Right" Maximum="100" Value="15"></Slider>
@@ -173,7 +173,7 @@
                 </Grid>
 
                 <Grid>
-                    <Label>Min. oblast kontur</Label>
+                    <Label>Min. contour size</Label>
                     <Slider Name="contourMinAreaSlider"
                             Width="100"
                             HorizontalAlignment="Right" Value="10" Maximum="300"></Slider>
@@ -187,7 +187,7 @@
                 </Grid>
 
                 <Grid>
-                    <Label>Šumový filtr</Label>
+                    <Label>Noise filter</Label>
                     <Slider Name="noiseSlider"
                             Width="100"
                             HorizontalAlignment="Right" Maximum="100" Value="0"></Slider>
@@ -201,27 +201,27 @@
                 </Grid>
 
                 <Grid Margin="10,2">
-                    <CheckBox Name="showContourCheck">Ukaž kontury</CheckBox>
+                    <CheckBox Name="showContourCheck">Display contours</CheckBox>
                     <CheckBox Name="showBinaryCheck"
                               HorizontalAlignment="Right"
-                              Width="90">Ukaž binární</CheckBox>
+                              Width="90">Show binary</CheckBox>
                 </Grid>
 
                 <Grid Margin="10,2">
-                    <CheckBox Name="showAngleCheck">Ukaž úhly</CheckBox>
+                    <CheckBox Name="showAngleCheck">Show angles</CheckBox>
                     <CheckBox Name="showBlackWhiteCheck"
                               HorizontalAlignment="Right"
-                              Width="90">Černobílé</CheckBox>
+                              Width="90">Black and white</CheckBox>
                 </Grid>
                     </StackPanel>
                 </GroupBox>
                 
-                <GroupBox Header="Porovnávání"
+                <GroupBox Header="Comparing"
                           BorderBrush="Black"
                           Margin="2,5">
                     <StackPanel Orientation="Vertical">
                 <Grid>
-                    <Label>Max. ACF průměr</Label>
+                    <Label>Max. ACF average</Label>
                     <Slider Name="maxACFAverSlider"
                             Width="100"
                             HorizontalAlignment="Right" Value="4" Maximum="50"></Slider>
@@ -235,7 +235,7 @@
                 </Grid>
 
                 <Grid>
-                    <Label>Minimální ACF</Label>
+                    <Label>Min. ACF</Label>
                     <Slider Name="minACFSlider"
                             Width="100"
                             HorizontalAlignment="Right" Maximum="1" SmallChange="0.01" Value="0.96"></Slider>
@@ -249,7 +249,7 @@
                 </Grid>
 
                 <Grid>
-                    <Label>Minimální ICF</Label>
+                    <Label>Min. ICF</Label>
                     <Slider Name="minICFSlider"
                             Width="100"
                             HorizontalAlignment="Right" SmallChange="0.01" Value="0.85" Maximum="1"></Slider>
@@ -263,7 +263,7 @@
                 </Grid>
 
                 <Grid>
-                    <Label>Porovnávací úhel</Label>
+                    <Label>Comparing angle</Label>
                     <Slider Name="angleSlider"
                             Width="100"
                             HorizontalAlignment="Right" Value="45" Maximum="180"></Slider>

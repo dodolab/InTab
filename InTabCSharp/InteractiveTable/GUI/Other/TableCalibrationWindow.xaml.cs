@@ -1,45 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using System.Threading;
 using InteractiveTable.Settings;
 using InteractiveTable.Managers;
 
 namespace InteractiveTable.GUI.Other
 {
     /// <summary>
-    /// Kalibracni okno, nastavuje kalibracni obdelnik
+    /// Calibration window
     /// </summary>
     public partial class TableCalibrationWindow : Window
     {
 
-        private System.Drawing.Image frame; // obrazek z kamery jako Drawing.Bitmap
-        private Image UIFrame; // obrazek jako UIComponent
+        private System.Drawing.Image frame; // image from camera as System.Drawing.Image
+        private Image UIFrame; // image from camera as UIComponent
 
-        private Point[] calibrationPoints; // kalibracni body, staci pouze dva
-        private double perspective = 0; // perspektivni zkresleni, vyjadruje pomer dolni zakladny a horni zakladny pouze pro mod perspective
-        private System.Windows.Shapes.Ellipse[] visualPoints; // viditelne body
-        private Line[] visualLines; // viditelne usecky;
-        private int pointCounter = 0; // citac bodu
-        private int rotation = 0; // rotace zachyceneho obrazku
-        private CalibrationMode mode; // kalibracni mod (obdelnik nebo perspektiva)
+        private Point[] calibrationPoints; // calibration points
+        private double perspective = 0; // perspective deformation, expresses a ration of the bottom and the top base of a trapezoid
+        private System.Windows.Shapes.Ellipse[] visualPoints; // visible points
+        private Line[] visualLines; // visible lines
+        private int pointCounter = 0; // point counter
+        private int rotation = 0; // rotation of the captured image
+        private CalibrationMode mode; // calibration mode
 
-        private Point originalMousePosition; // ulozeni pozice mysi pri pohybu nad oknem
+        private Point originalMousePosition; // mouse position before moving over the window
 
-        System.Windows.Shapes.Ellipse draggingPoint = null; // bod, se kterym uzivatel hybe
-        System.Windows.Shapes.Line draggingLine = null; // usecka, se kterou uzivatel hybe
-        private Point draggingPoint_firstPos = new Point(); // prvotni pozice draggingPointu, nez se s nim zacne hybat
+        System.Windows.Shapes.Ellipse draggingPoint = null; // current dragging point
+        System.Windows.Shapes.Line draggingLine = null; // current dragging line 
+        private Point draggingPoint_firstPos = new Point(); // original position of the dragging point
 
         public TableCalibrationWindow()
         {
@@ -49,7 +44,7 @@ namespace InteractiveTable.GUI.Other
         #region functions
 
         /// <summary>
-        /// Nacte drivejsi zkalibrovane parametry
+        /// Loads calibration settings
         /// </summary>
         public void LoadValues()
         {
@@ -62,8 +57,7 @@ namespace InteractiveTable.GUI.Other
                 pointCounter = 2;
                 rotation = CalibrationSettings.Instance().CALIBRATION_ROTATION;
                 perspective = CalibrationSettings.Instance().CALIBRATION_PERSPECTIVE;
-
-                // nastaveni radio buttonu
+                
                 if (perspective != 1)
                 {
                     perspectiveRadio.IsChecked = true;
@@ -83,7 +77,7 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Prekresli vsechny hodnoty
+        /// Refreshes all values
         /// </summary>
         private void RepaintValues()
         {
@@ -97,7 +91,7 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Ulozi kalibracni parametry (Staci souradnice dvou rohu, rotace a perspektivni mod)
+        /// Saves calibration parameters (we need only coordinates of two edges, rotation and the mode)
         /// </summary>
         private void SaveValues()
         {
@@ -107,21 +101,19 @@ namespace InteractiveTable.GUI.Other
             CalibrationSettings.Instance().CALIBRATION_POINT_C.Y = calibrationPoints[1].Y;
             CalibrationSettings.Instance().CALIBRATION_ROTATION = rotation;
             CalibrationSettings.Instance().CALIBRATION_PERSPECTIVE = perspective;
-
-
-
+            
             CalibrationSettings.Instance().Save();
         }
 
         /// <summary>
-        /// Vytvori ze 2 kalibracnich bodu 4 usecky a spoji je do obdelniku
+        /// Creates 4 lines from 2 calibration points and joins them into a rectangle
         /// </summary>
         private void CreateLines()
         {
             if ((calibrationPoints[1].X <= calibrationPoints[0].X) || (calibrationPoints[1].Y >= calibrationPoints[0].Y))
             {
-                // musi se kreslit zleva doprava, jinak je to spatne
-                MessageBox.Show("Záchytné body musí být zleva doprava zdola nahoru!!");
+                // we must draw the points from left to right
+                MessageBox.Show("Anchor points must be created from left to right and from bottom to top!");
                 resetBut_Click(null, null);
                 return;
             }
@@ -129,12 +121,12 @@ namespace InteractiveTable.GUI.Other
             Point p1 = calibrationPoints[0];
             Point p3 = calibrationPoints[1];
 
-            // ODHAD OSTATNICH BODU PODLE ZADANYCH HODNOT ( a = (2*r1r2)/(r1+1))
+            // estimation of all other points ( a = (2*r1r2)/(r1+1))
             double r1 = perspective;
             double r2 = p3.X - p1.X;
-            double bx = p1.X + (2 * (r1 * r2)) / (r1 + 1); // X-ova souradnice bodu B v lichobezniku
-            double cx = p3.X; // X-ova souradnice bodu C v lichobezniku
-            double dx = p1.X + bx - cx; // X-ova souradnice bodu D v lichobezniku
+            double bx = p1.X + (2 * (r1 * r2)) / (r1 + 1); // X-coord of the B-point of a trapezoid
+            double cx = p3.X; // X-coord of the C-point of a trapezoid
+            double dx = p1.X + bx - cx; // X-coord of the D-point of a trapezoid
 
             Point p2 = new Point(dx, p3.Y);
             Point p4 = new Point(bx, p1.Y);
@@ -149,18 +141,18 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Vykresli bod na souradnicich X a Y; index je index v poli, kam se bod ulozi
+        /// Draws a point on [X,Y] coordinates
         /// </summary>
-        /// <param name="x">souradnice X</param>
-        /// <param name="y">souradnice Y</param>
-        /// <param name="index">index v poli, kam se novy bod ulozi</param>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinte</param>
+        /// <param name="index">index of an array to which the new point should be stored</param>
         private void DrawPoint(int x, int y, int index)
         {
             System.Windows.Shapes.Ellipse point = new System.Windows.Shapes.Ellipse();
             point.Fill = Brushes.Red;
             point.Width = 10;
             point.Height = 10;
-            point.DataContext = new Point(x, y); // v data-contextu bude mit ulozenu svoji polohu!!
+            point.DataContext = new Point(x, y); // store its position into a dataContext
             point.Margin = GetMargin(x - point.Width / 2, y - point.Height / 2);
             point.VerticalAlignment = VerticalAlignment.Top;
             point.HorizontalAlignment = HorizontalAlignment.Left;
@@ -171,10 +163,8 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Vrati pozici bodu vzhledem k obrazku a vzhledem k celemu imageboxu
+        /// Returns a position of a point relative to an image
         /// </summary>
-        /// <param name="x">pozice bodu v ose X</param>
-        /// <param name="y">pozice bodu v ose Y</param>
         /// <returns></returns>
         private Thickness GetMargin(double x, double y)
         {
@@ -183,12 +173,10 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Zvetsi/zmensi obdelnik podle tazeneho bodu
+        /// Changes the size of the rectangle according to the dragged point
         /// </summary>
-        /// <param name="delta"></param>
         private void ResizeRectangle(Point delta)
         {
-            // musime zjistit vsechny body obdelnika, ktere se budou posouvat (vsechny krome uhlopricky)
             Point dragging = (Point)draggingPoint.DataContext;
             if (calibrationPoints[0].X == dragging.X) calibrationPoints[0] = new Point(calibrationPoints[0].X + delta.X, calibrationPoints[0].Y);
             if (calibrationPoints[0].Y == dragging.Y) calibrationPoints[0] = new Point(calibrationPoints[0].X, calibrationPoints[0].Y + delta.Y);
@@ -199,10 +187,8 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Posune vsechny objekty na plose podle hodnot X a Y
+        /// Shifts all objects by X and Y
         /// </summary>
-        /// <param name="x">hodnota X-ove souradnice</param>
-        /// <param name="y">hodnota Y-ove souradnice</param>
         private void ChangeMargins(double x, double y)
         {
             calibrationPoints[0] = new Point(calibrationPoints[0].X + x, calibrationPoints[0].Y + y);
@@ -234,14 +220,13 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Provede transformaci perspektivy podle promenne X
+        /// Transforms the perspective by X-parameter
         /// </summary>
         /// <param name="x"></param>
         private void TransformPerspective(double x)
         {
-            System.Windows.Shapes.Ellipse referred = null; // bod, ktery bude take ovlivnen
+            System.Windows.Shapes.Ellipse referred = null; // a point that will also be affected
 
-            // najdeme bod, ktery bude take ovlivnen
             foreach (System.Windows.Shapes.Ellipse el in visualPoints)
             {
                 if (el != draggingPoint && el.Margin.Top == draggingPoint.Margin.Top)
@@ -253,25 +238,25 @@ namespace InteractiveTable.GUI.Other
 
             Point referredPoint = (Point)referred.DataContext;
             Point draggingOwnPoint = (Point)draggingPoint.DataContext;
-
-            // kontrola, abychom tahli pouze za horni body
+            
+            // we need to move only the top points
             if (referredPoint.Y > calibrationPoints.Min(rp => rp.Y)) return;
-            // kontrola, aby zkresleni nebylo prilis velke
+            // we shouldn't cross the min dragging point
             if (Math.Abs(referredPoint.X - draggingOwnPoint.X - 2 * x) <= CommonAttribService.DEFAULT_CALIBRATION_MINIMUM) return;
-            // kontrola, aby se body nedostaly mimo obrazek
+            // the points mustn't go beyond the image
             if ((x > 0) &&
                 (Math.Min(referredPoint.X, draggingOwnPoint.X)) + x < 0 ||
                 (Math.Max(referredPoint.X, draggingOwnPoint.X)) - x >= UIFrame.ActualWidth) return;
 
             TransformPerspectiveLines(referredPoint, draggingOwnPoint, x);
 
-            // uprava zachytnych bodu
+            // relax the anchor points
             if (((int)calibrationPoints[0].X) == (int)referredPoint.X && ((int)calibrationPoints[0].Y) == (int)referredPoint.Y) calibrationPoints[0] = new Point(referredPoint.X - x, referredPoint.Y);
             if (((int)calibrationPoints[0].X) == (int)draggingOwnPoint.X && ((int)calibrationPoints[0].Y) == (int)draggingOwnPoint.Y) calibrationPoints[0] = new Point(draggingOwnPoint.X + x, draggingOwnPoint.Y);
             if (((int)calibrationPoints[1].X) == (int)referredPoint.X && ((int)calibrationPoints[1].Y) == (int)referredPoint.Y) calibrationPoints[1] = new Point(referredPoint.X - x, referredPoint.Y);
             if (((int)calibrationPoints[1].X) == (int)draggingOwnPoint.X && ((int)calibrationPoints[1].Y) == (int)draggingOwnPoint.Y) calibrationPoints[1] = new Point(draggingOwnPoint.X + x, draggingOwnPoint.Y);
 
-            // provedeme transformaci, prekreslime usecky, nastavime hodnoty
+            // apply the transform and re-render all lines
             referredPoint = new Point(referredPoint.X - x, referredPoint.Y);
             referred.Margin = new Thickness(referred.Margin.Left - x, referred.Margin.Top, 0, 0);
             referred.DataContext = referredPoint;
@@ -279,15 +264,13 @@ namespace InteractiveTable.GUI.Other
             draggingPoint.Margin = new Thickness(draggingPoint.Margin.Left + x, draggingPoint.Margin.Top, 0, 0);
             draggingPoint.DataContext = draggingOwnPoint;
 
-            // upraveni perspektivniho zkresleni
+            // edit the perspective transform
             perspective = Math.Abs((((Point)(visualPoints[3].DataContext)).X - ((Point)(visualPoints[0].DataContext)).X) / (((Point)(visualPoints[2].DataContext)).X - ((Point)(visualPoints[1].DataContext)).X));
         }
 
         /// <summary>
-        /// Provede perspektivni transformaci vsech usecek
+        /// Transforms all lines by a referred point
         /// </summary>
-        /// <param name="referredPoint"></param>
-        /// <param name="x"></param>
         private void TransformPerspectiveLines(Point referredPoint, Point draggingOwnPoint, double x)
         {
 
@@ -318,13 +301,8 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Vykresli usecku z bodu A do bodu B
+        /// Renders a line from A to B
         /// </summary>
-        /// <param name="x1">X-ova souradnice prvniho bodu</param>
-        /// <param name="y1">Y-ova souradnice prvniho bodu</param>
-        /// <param name="x2">X-ova souradnice druheho bodu</param>
-        /// <param name="y2">Y-ova souradnice druheho bodu</param>
-        /// <param name="index"></param>
         private void DrawLine(int x1, int y1, int x2, int y2, int index)
         {
             Line line = new Line();
@@ -344,21 +322,21 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Ziska obrazek z kamery a promitne ho do imageboxu
+        /// Captures a image and renders it into the view
         /// </summary>
         private void CaptureImage()
         {
-            // ziska obrazek
+            // get image
             Image<Bgr, byte> tempFrame = CameraManager.GetImage();
 
-            // rotace
+            // rotate image
             if (rotation != 0)
             {
                 tempFrame = tempFrame.Rotate(rotation, new Bgr(0, 0, 0), true);
             }
-            // prevede ho do bitmapy
+            // transform into bitmap
             frame = tempFrame.ToBitmap(tempFrame.Width, tempFrame.Height);
-            // prevede System.Drawing.Image do System.Windows.Controls, aby se mohl zobrazit
+            // transform into UIComponent
             System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(frame);
             IntPtr hBitmap = bmp.GetHbitmap();
             System.Windows.Media.ImageSource WpfBitmap = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
@@ -366,7 +344,6 @@ namespace InteractiveTable.GUI.Other
             UIFrame.Source = WpfBitmap;
             if (imageBox.Children.Contains(UIFrame)) imageBox.Children.Remove(UIFrame);
             imageBox.Children.Add(UIFrame);
-
         }
 
 
@@ -375,14 +352,11 @@ namespace InteractiveTable.GUI.Other
         #region handlers
 
         /// <summary>
-        /// Po nacteni okna se ihned zachyti obrazek a nastavi se handlery
+        /// Capture an image after load
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             CaptureImage();
-            // nastaveni handleru::
             imageBox.MouseUp += new MouseButtonEventHandler(imageBox_MouseUp);
             imageBox.MouseMove += new MouseEventHandler(imageBox_MouseMove);
 
@@ -391,25 +365,23 @@ namespace InteractiveTable.GUI.Other
        }
 
         /// <summary>
-        /// Uvolneni tlacitka nad imageBoxem vykresli a zapise novy bod
+        /// Releasing mouse button over the imageView will create a new point
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void imageBox_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (draggingPoint == null) // pokud se nejednalo o hybani s bodem
+            if (draggingPoint == null) 
             {
-                if (pointCounter < 2) // pokud je zde 0 nebo 1 bod, vykresli ho
+                if (pointCounter < 2) // there must be two points at most
                 {
                     pointCounter++;
                     calibrationPoints[pointCounter - 1] = new Point((int)e.GetPosition(UIFrame).X, (int)e.GetPosition(UIFrame).Y);
-                    // pozice na platne jsou jine nez pozice na obrazku
                     DrawPoint((int)calibrationPoints[pointCounter - 1].X, (int)calibrationPoints[pointCounter - 1].Y, pointCounter - 1);
 
                     if (pointCounter == 2)
                     {
-                        // TODO!!! perspektiva se pocita nejak divne
-                        CreateLines(); // pokud jsou zde jiz dva body, vytvor obdelnik
+                        // if there are more than 2 points, create a rectangle
                     }
                 }
             }
@@ -417,7 +389,6 @@ namespace InteractiveTable.GUI.Other
             {
                 if (mode == CalibrationMode.RECTANGLE)
                 {
-                    // prekresli obdelnik podle toho, kam se hnul bod
                     ResizeRectangle(new Point(draggingPoint.Margin.Left - draggingPoint_firstPos.X, draggingPoint.Margin.Top - draggingPoint_firstPos.Y));
                 }
             }
@@ -425,31 +396,28 @@ namespace InteractiveTable.GUI.Other
 
 
         /// <summary>
-        /// Pohyb mysi po plose; pokud je stisknute tlacitko mysi, bude
-        /// se pohybovat budto bod nebo cely objekt
+        /// Move with a line or a point
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void imageBox_MouseMove(object sender, MouseEventArgs e)
         {
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                if (draggingLine != null) // pohybuje se s useckou
+                if (draggingLine != null) 
                 {
-                    // hybame s useckou
+                    // moving a line
                     Point delta = new Point(e.GetPosition(imageBox).X-originalMousePosition.X,e.GetPosition(imageBox).Y-originalMousePosition.Y);
                     ChangeMargins(delta.X, delta.Y);
                 }
-                else if (draggingPoint != null && mode == CalibrationMode.PERSPECTIVE) // pohybuje se s bodem -> perspektivni zkresleni
+                else if (draggingPoint != null && mode == CalibrationMode.PERSPECTIVE)
                 {
-                    // hybame s perspektivnim bodem
+                    // moving a point in perspective mode
                     Point delta = new Point(e.GetPosition(imageBox).X - originalMousePosition.X, e.GetPosition(imageBox).Y - originalMousePosition.Y);
                     TransformPerspective(delta.X);
                 }
                 else if (draggingPoint != null && mode == CalibrationMode.RECTANGLE)
                 {
-                    // hybame s obdelnikovym bodem
+                    // moving a point in rectangle mode
                     Point delta = new Point(e.GetPosition(imageBox).X - originalMousePosition.X, e.GetPosition(imageBox).Y - originalMousePosition.Y);
                     draggingPoint.Margin = new Thickness(draggingPoint.Margin.Left + delta.X, draggingPoint.Margin.Top + delta.Y, 0, 0);
                 }
@@ -460,14 +428,12 @@ namespace InteractiveTable.GUI.Other
                 draggingPoint = null;
             }
 
-           originalMousePosition = e.GetPosition(imageBox); // ulozeni pozice mysi
+           originalMousePosition = e.GetPosition(imageBox); // save mouse position
         }
 
         /// <summary>
-        /// Stisknuti tlacitka mysi nastavi draggingPoint, aby se mohl posouvat s mysi
+        /// Pressing a mouse button will set a dragging point
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void point_MouseDown(object sender, MouseButtonEventArgs e)
         {
             draggingPoint = (System.Windows.Shapes.Ellipse)sender;
@@ -475,31 +441,21 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Manipulace s useckou
+        /// Moving a line
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void line_MouseDown(object sender, MouseButtonEventArgs e)
         {
             draggingLine = (System.Windows.Shapes.Line)sender;
         }
-
-       
-        /// <summary>
-        /// Po zavreni okna uvolnime kameru
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
 
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko RESET vyresetuje nastaveni
+        /// Click on reset will reset all settings
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void resetBut_Click(object sender, RoutedEventArgs e)
         {
             pointCounter = 0;
@@ -509,35 +465,29 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko OK ulozi provedene zmeny
+        /// Click on OK will save changes
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OKBut_Click(object sender, RoutedEventArgs e)
         {
-            if (System.Windows.Forms.MessageBox.Show("Chcete uložit změny?", "Změna nastavení", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+            if (System.Windows.Forms.MessageBox.Show("Do you want to save changes?", "Settings change", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
             {
                 SaveValues();
             }
-            // pokud je stiskly SHIFT, pouze se ulozi zmeny
+            // if the SHIFT is pressed, we will not close the window (WTF??)
             if(!Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.RightShift))  this.Close();
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko ZACHYTIT zachyti novy obrazek
+        /// Click on CAPTURE will capture a new image
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void frameBut_Click(object sender, RoutedEventArgs e)
         {
             CaptureImage();
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko ROTOVAT orotuje obrazek doprava
+        /// Click on ROTATE will rotate the image to the right
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void rotateBut3_Click(object sender, RoutedEventArgs e)
         {
             rotation = (rotation + 3) % 360;
@@ -545,7 +495,7 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko ROTOVAT orotuje obrazek doleva
+        /// Click on ROTATE will rotate the image to the right
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -556,10 +506,8 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Zmena perspektivniho modu
+        /// Change of the mode
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void rectangleRadio_Checked(object sender, RoutedEventArgs e)
         {
             // pokud byl predchozi mod perspective ,musime zacit odznova
@@ -569,10 +517,8 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Zmena perspektivniho modu
+        /// Change of the mode
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void perspectiveRadio_Checked(object sender, RoutedEventArgs e)
         {
             this.mode = CalibrationMode.PERSPECTIVE;

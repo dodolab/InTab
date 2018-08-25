@@ -44,9 +44,6 @@ namespace InteractiveTable.Settings
         public int DEFAULT_ADAPTIVE_THRESHOLD_BLOCKSIZE;
         public bool DEFAULT_INVERT_ENABLED;
         public bool DEFAULT_NORMALIZE_ENABLED;
-        public String SERVER_IP_ADDRESS;
-        public bool SEND_IMAGES;
-        public int SEND_INTERVAL;
         public bool MOTION_DETECTION;
         public int MOTION_TOLERANCE;
 
@@ -112,9 +109,6 @@ namespace InteractiveTable.Settings
           DEFAULT_ADAPTIVE_THRESHOLD_BLOCKSIZE = 80;
           DEFAULT_INVERT_ENABLED = false;
           DEFAULT_NORMALIZE_ENABLED = false;
-          SERVER_IP_ADDRESS = "127.0.0.1";
-          SEND_IMAGES = false;
-          SEND_INTERVAL = 1000;
           MOTION_DETECTION = false;
           MOTION_TOLERANCE = 1000;
         }

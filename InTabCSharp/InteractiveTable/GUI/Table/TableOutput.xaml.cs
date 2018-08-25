@@ -23,14 +23,14 @@ using System.IO;
 namespace InteractiveTable.GUI.Table
 {
     /// <summary>
-    /// View pro vystupni okno
+    /// View pro output window
     /// </summary>
     public partial class TableOutput : Window
     {
         private TableDrawingManager tableDrawingManager;
         private int counter = 0;
-        private Boolean maximized = false; // pokud true, je okno ve fullscreenu
-        private Size preMaximized_size = new Size(0, 0); // velikost pred maximalizaci
+        private Boolean maximized = false; // fullscreen flag
+        private Size preMaximized_size = new Size(0, 0); // size before maximizing the window
 
         public TableOutput()
         {
@@ -40,7 +40,7 @@ namespace InteractiveTable.GUI.Table
         }
 
         /// <summary>
-        /// Dvojitym klikem se okno maximalizuje
+        /// Maximize on double click
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -71,11 +71,9 @@ namespace InteractiveTable.GUI.Table
         }
 
         /// <summary>
-        /// Ulozi obrazek do souboru
-        /// pouze pro debugovaci ucely
+        /// Save the picture into a file
+        /// DEBUG ONLY 
         /// </summary>
-        /// <param name="objImage"></param>
-        /// <param name="path"></param>
         /// <returns></returns>
         public Guid SavePhoto(BitmapSource objImage, string path)
         {
@@ -92,7 +90,7 @@ namespace InteractiveTable.GUI.Table
 
         
         /// <summary>
-        /// Vykresli soustavu na plochu
+        /// Renders the system
         /// </summary>
         /// <param name="objects"></param>
         public void Repaint(TableDepositor objects)

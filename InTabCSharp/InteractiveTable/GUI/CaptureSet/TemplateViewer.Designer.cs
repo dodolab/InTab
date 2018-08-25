@@ -41,9 +41,9 @@
             // 
             this.dgvContours.AllowUserToAddRows = false;
             this.dgvContours.AllowUserToDeleteRows = false;
-            this.dgvContours.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvContours.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvContours.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvContours.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvContours.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -73,7 +73,7 @@
             this.tbTemplateName.Name = "tbTemplateName";
             this.tbTemplateName.Size = new System.Drawing.Size(114, 20);
             this.tbTemplateName.TabIndex = 1;
-            this.tbTemplateName.Text = "<jméno šablony>";
+            this.tbTemplateName.Text = "<template name>";
             this.tbTemplateName.Enter += new System.EventHandler(this.tbTemplateName_Enter);
             // 
             // label1
@@ -92,7 +92,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(181, 23);
             this.button1.TabIndex = 3;
-            this.button1.Text = "Vložit do šablony";
+            this.button1.Text = "Insert into template";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -104,7 +104,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(174, 29);
             this.label2.TabIndex = 4;
-            this.label2.Text = "vlož název šablony";
+            this.label2.Text = "insert template name";
             // 
             // TemplateViewer
             // 

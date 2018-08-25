@@ -1,53 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using InteractiveTable.Settings;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using InteractiveTable.Managers;
 using System.Xml.Serialization;
 
 namespace InteractiveTable.GUI.Other
 {
     /// <summary>
-    /// MVC pro nastaveni barevnych prechodu castic
+    /// MVC for color gradients settinsg
     /// </summary>
     public partial class ParticleColorSetWindow : Window
     {
         #region variables
 
-        // znacky reprezentujici RGBA barvu s pozici
+        // markers represent an rgba color with a position
         private HashSet<Ellipse> fadeMarks = new HashSet<Ellipse>();
-        // prave oznacena znacka
+        // currently selected marker 
         private Ellipse selectedEllipse;
-        // barva oznacene znacky
+        // color of the current marker
         private RadialGradientBrush selectedBrush;
-        // barva neoznacene znacky
+        // color of an unselected marker
         private RadialGradientBrush unselectedBrush;
-        // list barev
+        // list of colors
         private LinkedList<FadeColor> colors;
 
         #endregion
 
         #region constructors
-
-        /// <summary>
-        /// Otevre nove okno s nastavenim castic; nastavi veskere handlery a hodnoty
-        /// </summary>
+        
         public ParticleColorSetWindow()
         {
             InitializeComponent();
-            // nastaveni barev u znacek, musi byt kruhovy prechod, aby
-            // nebyl problem s ruznym pozadim
+            // we need to choose radial gradient in order to avoid display issues with various backgrounds
             unselectedBrush = new RadialGradientBrush();
             unselectedBrush.GradientOrigin = new Point(0.5, 0.5);
             unselectedBrush.GradientStops.Add(new GradientStop(Colors.Black, 0.0));
@@ -59,7 +50,7 @@ namespace InteractiveTable.GUI.Other
 
             if (CommonAttribService.DEFAULT_FADE_COLORS != null) LoadColors(CommonAttribService.DEFAULT_FADE_COLORS);
 
-            // nastaveni handleru
+            // set all handlers
             this.MouseUp += new MouseButtonEventHandler(ParticleColorSetWindow_MouseUp);
             alphaSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(alphaSlider_ValueChanged);
             redSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(redSlider_ValueChanged);
@@ -80,21 +71,20 @@ namespace InteractiveTable.GUI.Other
         #region logic
 
         /// <summary>
-        /// Nacte barvy
+        /// Load colors
         /// </summary>
-        /// <param name="colors"></param>
         public void LoadColors(LinkedList<FadeColor> colors)
         {
             foreach(Ellipse el in fadeMarks) paintGrid.Children.Remove(el);
-            fadeMarks.Clear();   // vycisti znacky
+            fadeMarks.Clear();   // remove marks
 
             this.colors = colors;
-
-            //pokud zde NENI barva se znackou 0 a 1, musi se dorovnat
+            
+            // if there isn't any mark on the very left or right, it must be recalculated
             if (colors.Count(col => col.position == 0) == 0) colors.Where(col => col.position == colors.Min(col2 => col2.position)).First().position = 0;
             if (colors.Count(col => col.position == 1) == 0) colors.Where(col => col.position == colors.Max(col2 => col2.position)).First().position = 1;
 
-            // pro kazdou barvu vytvor znacku
+            // create a color for each mark
             foreach (FadeColor color in colors)
             {
                 Ellipse mark = new Ellipse();
@@ -115,13 +105,12 @@ namespace InteractiveTable.GUI.Other
                 fadeMarks.Add(mark);
 
             }
-            RepaintFade(); // prekresli
+            RepaintFade(); // repaint the mark
         }
 
         /// <summary>
-        /// Nacte informaci o barve do slideru a barevneho obdelniku
+        /// Loads info about the color into a slider and a rectangle
         /// </summary>
-        /// <param name="color"></param>
         private void LoadColorInformation(FadeColor color)
         {
             colorRect.Fill = new SolidColorBrush(Color.FromRgb(color.r, color.g, color.b));
@@ -136,7 +125,7 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Oznaci znacku barevnym prechodem
+        /// Selects a marker
         /// </summary>
         /// <param name="el"></param>
         private void SelectEllipse(Ellipse el)
@@ -147,7 +136,7 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Odznaci znacku barevnym prechodem
+        /// Unselects a marker
         /// </summary>
         private void UnSelectEllipse()
         {
@@ -157,7 +146,7 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Prekresli barevny prechod
+        /// Repaints a gradient
         /// </summary>
         private void RepaintFade()
         {
@@ -181,7 +170,6 @@ namespace InteractiveTable.GUI.Other
         #endregion
 
         #region textbox handlers
-        //============== HANDLERY PRO TEXT BOXY ==============================================
         private void greenTbx_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (selectedEllipse != null)
@@ -276,8 +264,6 @@ namespace InteractiveTable.GUI.Other
 
         #region slider handlers
 
-        // ========================= HANDLERY PRO SLIDERY ========================================
-
         private void blueSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             blueTb.Text = blueSlider.Value.ToString("#");
@@ -334,10 +320,8 @@ namespace InteractiveTable.GUI.Other
 
         #region mouse handlers
 
-        //==================== HANDLERY PRO MYS ================================
-
         /// <summary>
-        /// Mouse up nad znackou zpusobi nacteni informaci o teto barve
+        /// Releasing the mouse over a marker will display info about that color
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -346,19 +330,17 @@ namespace InteractiveTable.GUI.Other
             ((Ellipse)sender).ReleaseMouseCapture();
             UnSelectEllipse();
             SelectEllipse((Ellipse)sender);
-           LoadColorInformation((FadeColor)selectedEllipse.DataContext);
+            LoadColorInformation((FadeColor)selectedEllipse.DataContext);
         }
 
         /// <summary>
-        /// Znacka, se kterou je manipulovano
+        /// Currently dragged marker 
         /// </summary>
         private Ellipse draggedEllipse = null;
 
         /// <summary>
-        /// Stisknuti tlacitka mysi nad znackou
+        /// Drag start
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void mark_MouseDown(object sender, MouseButtonEventArgs e)
         {
             ((Ellipse)sender).CaptureMouse();
@@ -366,14 +348,13 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Pohyb mysi nad znackou
+        /// Mouse movement over a marker will shift that marker
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void mark_MouseMove(object sender, MouseEventArgs e)
         {
-            // muze se hybat jen se znackami uprostred
-            if (draggedEllipse != null && e.LeftButton == MouseButtonState.Pressed && !(((FadeColor)draggedEllipse.DataContext).position <= 0 || ((FadeColor)draggedEllipse.DataContext).position >= 1))
+            // we can't drag markers at the border
+            if (draggedEllipse != null && e.LeftButton == MouseButtonState.Pressed && 
+                !(((FadeColor)draggedEllipse.DataContext).position <= 0 || ((FadeColor)draggedEllipse.DataContext).position >= 1))
             {
                 double posX = e.GetPosition(paintGrid).X;
                 if (posX >= draggedEllipse.Width && posX <= (fadeRect.Width - draggedEllipse.Width))
@@ -384,7 +365,6 @@ namespace InteractiveTable.GUI.Other
                 }
             }
         }
-
         
         private void ParticleColorSetWindow_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -399,9 +379,9 @@ namespace InteractiveTable.GUI.Other
 
         #region button handlers
 
-        //===================HANDLERY PRO TLACITKA=========================
-
-        // prida novou znacku
+        /// <summary>
+        /// Inserts a new marker
+        /// </summary>
         private void addBut_Click(object sender, RoutedEventArgs e)
         {
             FadeColor defaultColor = new FadeColor(0, 0, 0, 255, 0.5);
@@ -426,10 +406,12 @@ namespace InteractiveTable.GUI.Other
             RepaintFade();
         }
 
-        // odstrani znacku
+        /// <summary>
+        /// Removes an old marker
+        /// </summary>
         private void removeBut_Click(object sender, RoutedEventArgs e)
         {
-            // musi zde byt nejmene dve znacky
+            // there mast be at least two markers
             if (fadeMarks.Count > 2 && selectedEllipse != null)
             {
                 fadeMarks.Remove(selectedEllipse);
@@ -438,14 +420,16 @@ namespace InteractiveTable.GUI.Other
                 RepaintFade();
             }
         }
-
-        // ulozi informace
+        
+        /// <summary>
+        /// Click on OK will save the settings
+        /// </summary>
         private void okBut_Click(object sender, RoutedEventArgs e)
         {
-            // musime mit alespon dve znacky
+            // we need to have at least 2 markers
             if (fadeMarks != null && fadeMarks.Count > 2)
             {
-                // nejprve se to musi setridit
+                // we need to order it first
                 LinkedList<FadeColor> output = new LinkedList<FadeColor>();
                 HashSet<FadeColor> temp = new HashSet<FadeColor>();
 
@@ -453,8 +437,7 @@ namespace InteractiveTable.GUI.Other
                 foreach (FadeColor fade in temp.OrderBy(fadec => fadec.position)) output.AddLast(fade);
                 CommonAttribService.DEFAULT_FADE_COLORS = output;
 
-                // ulozeni do souboru
-                // ulozime neserazeny hashset, protoze linkedlist se serializovat neda!!!
+                // we need to use HashSet as LinkedList cannot be serialized
                 try
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(HashSet<FadeColor>), new Type[] { typeof(FadeColor) });
@@ -464,14 +447,16 @@ namespace InteractiveTable.GUI.Other
                 }
                 catch (Exception es)
                 {
-                    System.Windows.MessageBox.Show("Nastal problém při ukládání barev!");
+                    System.Windows.MessageBox.Show("An error occurred during saving!");
                 }
             }
 
             if (!Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.RightShift)) this.Close();
         }
 
-        // kliknuti na swap prohodi vsechny barvy
+        /// <summary>
+        /// Click on SWAP will swap all the colors
+        /// </summary>
         private void swapBut_Click(object sender, RoutedEventArgs e)
         {
             foreach (FadeColor clr in colors)
@@ -480,13 +465,12 @@ namespace InteractiveTable.GUI.Other
             }
             LoadColors(colors);
         }
+
         #endregion
-
-
     }
 
     /// <summary>
-    /// Trida reprezentujici barvu prechodu
+    /// Gradient color entity
     /// </summary>
     [Serializable]
     public class FadeColor

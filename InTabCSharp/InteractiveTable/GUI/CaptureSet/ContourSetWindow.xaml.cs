@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using InteractiveTable.Core.Data.Capture;
-using InteractiveTable.Core.Data.Deposit;
 using InteractiveTable.Core.Data.TableObjects.FunctionObjects;
 using System.Windows.Forms;
 using System.IO;
@@ -21,24 +13,21 @@ using InteractiveTable.Settings;
 namespace InteractiveTable.GUI.CaptureSet
 {
     /// <summary>
-    /// MVC pro prizazeni kamenu jednotlivym konturam vcetne nastaveni
+    /// MVC for assigning stones to particular contours
     /// </summary>
     public partial class ContourSetWindow : Window
     {
-        #region promenne
+        #region variables
 
-        private Templates templates; // sablony
-        private HashSet<ContourRock> contourRocks; // kamen + identifikator kontury
-        private Boolean initialized = false; // zda bylo okno inicializovano
-        private ContourRock actual_contour; // aktualni kamen, ktery je nastavovan
+        private Templates templates; // templates
+        private HashSet<ContourRock> contourRocks; // stone + contour identifier
+        private Boolean initialized = false; // init flag
+        private ContourRock actual_contour; // a current contour that is to be configured
 
         #endregion
 
-        #region konstruktory, gettery a settery
-
-        /// <summary>
-        /// Vytvori nove okno a inicializuje handlery vsem objektum
-        /// </summary>
+        #region cons, getters, setters
+        
         public ContourSetWindow()
         { 
             InitializeComponent();
@@ -61,19 +50,13 @@ namespace InteractiveTable.GUI.CaptureSet
             GminPartSizeSlider.ValueChanged+=new RoutedPropertyChangedEventHandler<double>(Slider_ValueChanged);
             GmaxPartSizeSlider.ValueChanged+=new RoutedPropertyChangedEventHandler<double>(Slider_ValueChanged);
         }
-
-        /// <summary>
-        /// Vrati nebo nastavi sablony
-        /// </summary>
+        
         public Templates Templates
         {
             get { return templates; }
             set { this.templates = value; }
         }
 
-        /// <summary>
-        /// Vrati nebo nastavi propojeny seznam kontura-kamen
-        /// </summary>
         public HashSet<ContourRock> ContourRocks
         {
             get { return contourRocks; }
@@ -84,10 +67,8 @@ namespace InteractiveTable.GUI.CaptureSet
         #region view handlers
 
         /// <summary>
-        /// Zmena hodnoty slideru pouze zmeni text pod nim
+        /// Change of a slider will just change a text label below
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (sender == BHweighSlider) BHweighTb.Text = BHweighSlider.Value.ToString("#.##");
@@ -122,10 +103,8 @@ namespace InteractiveTable.GUI.CaptureSet
         }
 
         /// <summary>
-        /// Zmena hodnoty ve vyberu typu kamene pouze zviditelni prislusne groupboxy
+        /// Change of a stone type will either hide or show relevant panels
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void rockTypeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (initialized)
@@ -154,10 +133,9 @@ namespace InteractiveTable.GUI.CaptureSet
                 RestartValues();
             }
         }
-
-
+        
         /// <summary>
-        /// Vynuluje veskere hodnoty
+        /// Resets all values
         /// </summary>
         public void RestartComponents()
         {
@@ -177,20 +155,18 @@ namespace InteractiveTable.GUI.CaptureSet
 
         #endregion
 
-        #region combobox handlery
+        #region combobox handlers
 
         /// <summary>
-        /// Zmena hodnoty ve vyberu kontury, ulozi stavajici hodnoty, vynuluje slidery a nacte soubory, pokud predtim byly nastaveny
+        /// Contour selection change will save current values and reload values
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void contourNameCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (initialized)
             {
                 SaveValues();
                 RestartComponents();
-                actual_contour = contourRocks.Where(ctr => ctr.contour_name.Equals(((ComboBoxItem)contourNameCombo.SelectedItem).Content)).First();
+                actual_contour = contourRocks.First(ctr => ctr.contour_name.Equals(((ComboBoxItem)contourNameCombo.SelectedItem).Content));
                 LoadValues();
             }
         }
@@ -198,21 +174,20 @@ namespace InteractiveTable.GUI.CaptureSet
 
         #endregion
 
-        #region ostatni handlery
+        #region other handlers
 
         /// <summary>
-        /// Kliknuti na tlacitko OK ulozi nastaveni a zavre okno
+        /// Click on OK will save the settings and close the window
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void okButton_Click(object sender, RoutedEventArgs e)
         {
-            if (System.Windows.Forms.MessageBox.Show("Chcete uložit změny?", "Změna nastavení", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+            if (System.Windows.Forms.MessageBox.Show("Do you want to save your changes?", "Settings change", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == 
+                System.Windows.Forms.DialogResult.Yes)
             {
                 SaveValues();
                 templates.rockSettings = contourRocks;
-
-                // pokusime se ulozit soubor; pokud to nepujde, zobrazi se filedialog
+                
+                // Try use a default path. If something goes wrong, display a file dialog
                 try
                 {
                     string fileName = CaptureSettings.Instance().DEFAULT_TEMPLATE_PATH;
@@ -243,10 +218,8 @@ namespace InteractiveTable.GUI.CaptureSet
         }
 
         /// <summary>
-        /// Nacte defaultni nastaveni
+        /// Loads default settings
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void loadDefButton_Click(object sender, RoutedEventArgs e)
         {
             GminPartSizeSlider.Value = PhysicSettings.Instance().DEFAULT_PARTICLE_SIZE;
@@ -265,10 +238,10 @@ namespace InteractiveTable.GUI.CaptureSet
 
         #endregion
 
-        #region logika
+        #region logic
 
         /// <summary>
-        /// Inicializuje vsechna data
+        /// Initializes all data
         /// </summary>
         public void InitData()
         {
@@ -278,12 +251,12 @@ namespace InteractiveTable.GUI.CaptureSet
 
             if (templates != null)
             {
-                // jmeno kazde kontury pridej do comboboxu a vytvor objekt ContourRock, svazany s jejim id
+                // put the name of each contour into a combobox and create a ContourRock, bound with its id
                 foreach (Template tmp in templates)
                 {
                     if (contourRocks.Count(cnt => cnt.contour_name.Equals(tmp.name)) == 0)
                     {
-                        // vytvori prislusny kamen (pouze referencni)
+                        // create a referential stone
                         A_Rock contextRock = null;
                         if (blackHoleCmbIt.IsSelected) contextRock = new BlackHole();
                         if (generatorCmbIt.IsSelected) contextRock = new Generator();
@@ -299,7 +272,6 @@ namespace InteractiveTable.GUI.CaptureSet
                     contourNameCombo.Items.Add(item);
                 }
 
-                // aktualni kontura je ta, ktera je svazana se jmenem, ktere je prave oznaceno v comboboxu
                 actual_contour = contourRocks.Where(cnt => cnt.contour_name.Equals(((ComboBoxItem)(contourNameCombo.SelectedItem)).Content)).First();
                 if (actual_contour.rock is Graviton) gravitonCmbIt.IsSelected = true;
                 else if (actual_contour.rock is Generator) generatorCmbIt.IsSelected = true;
@@ -323,17 +295,17 @@ namespace InteractiveTable.GUI.CaptureSet
                     magnetonGroup.Visibility = Visibility.Visible;
                 }
 
-                LoadValues(); // pokud nacitame existujici data, musi se nacist informace o prvni konture
+                LoadValues(); 
                 initialized = true;
             }
         }
 
         /// <summary>
-        /// Vyresetuje hodnoty aktualniho nastaveni kontury - pristupuje primo k objektu
+        /// Resets values of the current contour settings
         /// </summary>
         private void RestartValues()
         {
-            // pokud nastavujeme konturu a zmenime typ kamene, vse se vynuluje a zacne se znovu
+            // if we change a type of a stone, everything will be reseted 
             ContourRock contourRck = contourRocks.Where(ctr => ctr.contour_name.Equals(((ComboBoxItem)contourNameCombo.SelectedItem).Content)).First();
             contourRocks.Remove(contourRck);
             A_Rock contextRock = null;
@@ -347,7 +319,7 @@ namespace InteractiveTable.GUI.CaptureSet
         }
 
         /// <summary>
-        /// Nacte jiz nastavene hodnoty kontury
+        /// Loads values from a contour
         /// </summary>
         private void LoadValues()
         {
@@ -390,7 +362,7 @@ namespace InteractiveTable.GUI.CaptureSet
         }
 
         /// <summary>
-        /// Ulozi hodnoty kontury pri kliknuti na nastaveni jine kontury
+        /// Saves values of a contour upon click on settings of another contour
         /// </summary>
         private void SaveValues()
         {

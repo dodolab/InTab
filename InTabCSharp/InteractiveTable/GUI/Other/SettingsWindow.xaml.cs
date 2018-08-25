@@ -1,27 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Forms;
-using System.IO;
 using InteractiveTable.Settings;
 using DirectShowLib;
 using InteractiveTable.Managers;
-using System.Net;
 
 namespace InteractiveTable.GUI.Other
 {
     /// <summary>
-    /// Okno pro uzivatelske nastaveni, zde bude mozno nastavit vse, co bude pri dalsim
-    /// startu programu defaultne prednastaveno (napr. cesta k souboru kontur)
+    /// User settings window
     /// </summary>
     public partial class SettingsWindow : Window
     {
@@ -31,7 +20,7 @@ namespace InteractiveTable.GUI.Other
             okBut.Click += new RoutedEventHandler(okBut_Click);
             dependOutputSizeChck.Click += new RoutedEventHandler(dependOutputSizeChck_Click);
 
-            // ziskame vsechny webkamery
+            // get all webcams available and fill the combobox
             DsDevice[] devs = DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice);
 
             for (int i = 0; i < devs.Length; i++)
@@ -44,7 +33,7 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Nacte vsechny hodnoty z nastaveni
+        /// Load all values from storage
         /// </summary>
         public void LoadValues()
         {
@@ -57,19 +46,13 @@ namespace InteractiveTable.GUI.Other
             partColorRedTbx.Text = GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_R.ToString();
             partColorGreenTbx.Text = GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_G.ToString();
             partColorBlueTbx.Text = GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_B.ToString();
-            serverIPTbx.Text = CaptureSettings.Instance().SERVER_IP_ADDRESS;
-            sendIntervalTbx.Text = CaptureSettings.Instance().SEND_INTERVAL.ToString();
             motionDetectionChck.IsChecked = CaptureSettings.Instance().MOTION_DETECTION;
             detectionThreshold.Text = CaptureSettings.Instance().MOTION_TOLERANCE.ToString();
-            if (CaptureSettings.Instance().SEND_IMAGES) sendImageRadio.IsChecked = true;
-            else sendRockRadio.IsChecked = true;
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko Zavislost rozliseni vystupu
+        /// Click on RESOLUTION DEPENDENCY button
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void dependOutputSizeChck_Click(object sender, RoutedEventArgs e)
         {
             if ((bool)dependOutputSizeChck.IsChecked) dependOutputSizeTbx.IsEnabled = false;
@@ -77,13 +60,12 @@ namespace InteractiveTable.GUI.Other
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko NALEZT nalezne soubor se sablonami
+        /// Click on Load contour button
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void contourPathBut_Click(object sender, RoutedEventArgs e)
         {
-           
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Templates(*.bin)|*.bin";
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -97,37 +79,18 @@ namespace InteractiveTable.GUI.Other
                 {
                     System.Windows.MessageBox.Show(ex.Message);
                 }
-
-
             }
         }
 
         /// <summary>
-        /// Kliknuti na tlacitko OK ulozi veskere zmeny
+        /// Click on OK will save all changes
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void okBut_Click(object sender, RoutedEventArgs e)
         {
-
             CaptureSettings.Instance().DEFAULT_TEMPLATE_PATH = contourPathTbx.Text;
             CaptureSettings.Instance().DEFAULT_CAMERA_INDEX = camIndexCombo.SelectedIndex;
             GraphicsSettings.Instance().OUTPUT_TABLE_SIZE_DEPENDENT = (bool)dependOutputSizeChck.IsChecked;
-            CaptureSettings.Instance().SEND_IMAGES =(bool)sendImageRadio.IsChecked;
             CaptureSettings.Instance().MOTION_DETECTION = (bool)motionDetectionChck.IsChecked;
-
-            String ipAddress = serverIPTbx.Text;
-
-            IPAddress address;
-            if (IPAddress.TryParse(ipAddress, out address))
-            {
-                CaptureSettings.Instance().SERVER_IP_ADDRESS = ipAddress;
-            }
-            else
-            {
-                System.Windows.Forms.MessageBox.Show("Špatná IP adresa serveru!");
-                return;
-            }
 
             try
             {
@@ -137,7 +100,7 @@ namespace InteractiveTable.GUI.Other
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show("Špatné hodnoty barev částic (musí být v rozmezí 0-255)");
+                System.Windows.Forms.MessageBox.Show("Wrong values of particle colors (need to be 0-255)");
                 return; 
             }
             try
@@ -149,25 +112,13 @@ namespace InteractiveTable.GUI.Other
                 }
                 else
                 {
-                    System.Windows.Forms.MessageBox.Show("Povolené hodnoty velikosti jsou 320-1920");
+                    System.Windows.Forms.MessageBox.Show("Allowed sizes are 100-2000");
                     return;
                 }
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show("Nastavena špatná hodnota velikosti tabulky!");
-                return;
-            }
-
-            try
-            {
-                int interval = Int32.Parse(sendIntervalTbx.Text);
-                if (interval < 100 || interval > 10000) throw new Exception();
-                CaptureSettings.Instance().SEND_INTERVAL = interval;
-            }
-            catch
-            { 
-                System.Windows.Forms.MessageBox.Show("Nastavena špatná hodnota intervalu! Povolené hodnoty jsou 100-10000");
+                System.Windows.Forms.MessageBox.Show("The size cannot be determined!");
                 return;
             }
 
@@ -179,22 +130,20 @@ namespace InteractiveTable.GUI.Other
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show("Nastavena špatná hodnota tolerance! Povolené hodnoty jsou 500-10000");
+                System.Windows.Forms.MessageBox.Show("Allowed value for tolerance must be in 500-10000");
                 return;
             }
 
             CaptureSettings.Instance().Save();
             GraphicsSettings.Instance().Save();
 
-              // pokud je zmacknuty shift, okno se nezavre; jen z debugovacich duvodu
+              // if the left shift is pressed, we will not close the window (WTF??)
               if(!Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.RightShift))  this.Close();
         }
 
         /// <summary>
-        /// Reset veskereho nastaveni
+        /// Reset of al settings
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void resetBut_Click(object sender, RoutedEventArgs e)
         {
             CalibrationSettings.Instance().Restart();
@@ -202,6 +151,5 @@ namespace InteractiveTable.GUI.Other
             GraphicsSettings.Instance().Restart();
             PhysicSettings.Instance().Restart();
         }
-
     }
 }
