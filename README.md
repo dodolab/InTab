@@ -1,6 +1,5 @@
 InTab
 ===================
----
 
 ## What's the InTab?
 
