@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using InteractiveTable.Core.Data.TableObjects.Shapes;
 using InteractiveTable.Settings;
 using InteractiveTable.Core.Data.TableObjects.SettingsObjects;
@@ -9,21 +6,18 @@ using InteractiveTable.Core.Data.TableObjects.SettingsObjects;
 namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
 {
     /// <summary>
-    /// Objekt reprezentujici cernou diru
+    /// Black hole
     /// </summary>
      [Serializable]
     public class BlackHole : A_Rock
     {
-        // pocet pohlcenych objektu
+        // number of absorbed objects
         protected int absorbNumber = 0;
-        // nastaveni
+        // advanced settings
         protected new BlackHoleSettings settings;
-        // zakladni nastaveni
+        // base settings
         protected new BlackHoleSettings baseSettings;
 
-         /// <summary>
-         /// Vytvori novou cernou diru s defaultni vahou, kapacitou a polomerem
-         /// </summary>
         public BlackHole()
         {
             this.shape = new FCircle();
@@ -35,7 +29,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
         }
 
          /// <summary>
-         /// Vrati pocet pohlcenych castic
+         /// Gets or sets number of absorbed particles
          /// </summary>
         public int AbsorbNumber
         {
@@ -52,7 +46,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
             set
             {
                 if (value is BlackHoleSettings) this.settings = (BlackHoleSettings)value;
-                else throw new Exception("Spatny argument");
+                else throw new Exception("Bad argument");
             }
         }
 
@@ -65,7 +59,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
             set
             {
                 if (value is BlackHoleSettings) this.baseSettings = (BlackHoleSettings)value;
-                else throw new Exception("Spatny argument");
+                else throw new Exception("Bad argument");
             }
         }
     }

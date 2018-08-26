@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
 using InteractiveTable.Core.Data.TableObjects.Shapes;
 using InteractiveTable.Settings;
 using InteractiveTable.Core.Data.TableObjects.SettingsObjects;
@@ -12,47 +8,40 @@ using System.Xml.Serialization;
 namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
 {
     /// <summary>
-    /// Abstraktni trida pro tableObject, zde jsou veskere vlastnosti spolecne vsem objektum na stole
+    /// Base class for all table objects
     /// </summary>
     [Serializable]
     public abstract class A_TableObject
     {
         /// <summary>
-        /// Auto-inkrementor identifikatoru
+        /// Static counter for all identifiers
         /// </summary>
         protected static int id_counter = 0;
 
 
-        protected FPoint position; // aktualni pozice
-        protected int id; // identifikator
+        protected FPoint position; // current position
+        protected int id; // identifier
         [XmlIgnore]
-        protected A_TableObjectSettings settings; // konkretni nastaveni
+        protected A_TableObjectSettings settings; // current settings
         [XmlIgnore]
-        protected A_TableObjectSettings baseSettings; // obecne nastaveni
-        protected bool settings_allowed = false; // DULEZITE -> pokud true, bude se brat nastaveni objektu; pokud false, bude se brat obecne nastaveni
-        protected A_Shape shape; // tvar objektu
+        protected A_TableObjectSettings baseSettings; // general settings
+        protected bool settings_allowed = false; // if true, we will take the settings into account. If false, we will take global settings instead
+        protected A_Shape shape; // shape of the object
 
-
-
-        /// <summary>
-        /// Vytvori novy tableObject, priradi mu identifikator a defaultni pozici
-        /// </summary>
+        
         public A_TableObject()
         {
             id = id_counter++;
             this.position = PhysicSettings.Instance().DEFAULT_TABLEOBJECT_POINT;
         }
 
-        /// <summary>
-        /// Vrati identifikator objektu
-        /// </summary>
         public int Id
         {
             get { return id; }
         }
 
         /// <summary>
-        /// Vrati nebo nastavi hodnotu stanovujici, zda bude mit objekt sve nebo globalni nastaveni
+        /// Gets or sets an identifier whether the local settings of this object should be taken into accoutn
         /// </summary>
         public bool Settings_Allowed
         {
@@ -75,7 +64,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
         }
 
         /// <summary>
-        /// Vrati nebo nastavi tvar objektu
+        /// Gets or sets shape of the object
         /// </summary>
         public virtual A_Shape Shape
         {
@@ -89,9 +78,6 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
             }
         }
 
-        /// <summary>
-        /// Vrati nebo nastavi pozici objektu
-        /// </summary>
         public virtual FPoint Position
         {
             get

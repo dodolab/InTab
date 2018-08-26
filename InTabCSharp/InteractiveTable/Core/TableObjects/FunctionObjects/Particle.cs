@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
 using InteractiveTable.Settings;
-using InteractiveTable.Core.Physics.System;
 using InteractiveTable.Accessories;
 using InteractiveTable.Core.Data.TableObjects.SettingsObjects;
-using InteractiveTable.GUI.Other;
 
 namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
 {
     /// <summary>
-    /// Kamen predstavujici castici
+    /// Particle entity
     /// </summary>
-     [Serializable]
+   [Serializable]
    public class Particle : A_TableObject
     {
        protected FVector vector_Velocity;
@@ -41,13 +35,10 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
            set
            {
                if (value is ParticleSettings) this.settings = (ParticleSettings)value;
-               else throw new Exception("Spatny argument");
+               else throw new Exception("Bad argument");
            }
        }
 
-         /// <summary>
-         /// Vrati nebo nastavi pozici castice
-         /// </summary>
        public override FPoint Position
        {
            get
@@ -60,9 +51,6 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
            }
        }
 
-         /// <summary>
-         /// Vrati nebo nastavi rychlost castice
-         /// </summary>
         public FVector Vector_Velocity
         {
             get
@@ -75,9 +63,6 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
             }
         }
 
-         /// <summary>
-         /// Vrati nebo nastavi zrychleni castice
-         /// </summary>
         public FVector Vector_Acceleration
         {
             get

@@ -1,58 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using InteractiveTable.Core.Data.TableObjects.FunctionObjects;
 
 namespace InteractiveTable.Core.Data.Capture
 {
     /// <summary>
-    /// Objekt propojujici identifikaci kontury a typ kamene
+    /// Entity that contains a stone and a contour it belongs to
     /// </summary>
     [Serializable]
     public class ContourRock
     {
         public const double INCREASE_HOP = 1.35;
-        /// <summary>
-        /// Odkaz na kamen i s nastavenim
-        /// </summary>
+        
         public A_Rock rock;
-        /// <summary>
-        /// Nazev kontury
-        /// </summary>
+
         public String contour_name;
         /// <summary>
-        /// Je true, pokud kamen chyby - spusti se animace ubirani potencialu
+        /// If true, the stone has disapperad from the table -> this will trigger an animation that will slowly
+        /// decrease it's presence to zero
         /// </summary>
         public Boolean isMissing = false;
+
         /// <summary>
-        /// Pouziva se pro mergovani soustav;
-        /// foundrock je pripadny nalezeny kamen,
-        /// ktery byl prohlasen za identicky
-        /// s timto kamenem
+        /// This is used for merging the system -> if the stone disappears, it might be just because
+        /// of the fact that the camera can't detect the stone properly (too much lighting). Thus,
+        /// if we detect a stone of the same type at the same spot, we will try to restore it
         /// </summary>
        [NonSerialized()]
         public FoundRock foundRock;
+
         /// <summary>
-        /// Minimalni vzdalenost mezi vsemi
-        /// nalezenymi kameny v ramci jedne iterace
+        /// Min length among all found stones during one iteration
         /// </summary>
         public int minLength;
 
-
-
+        /// <summary>
+        /// Improves an intensity of a presence of the stone
+        /// It is used when the stone goes missing -> we will decrease its presence down to zero
+        /// </summary>
         public void ImproveIntensity()
         {
-           // Console.WriteLine("Upravuji intenzitu " + rock.Intensity + " pro kamen na pozici " + rock.Position.X + ", " + rock.Position.Y);
             if (!isMissing)
             {
-               // Console.WriteLine("Kamen nechybi");
                 if ((rock.Intensity * INCREASE_HOP) > 100) rock.Intensity = 100;
                 else rock.Intensity *= INCREASE_HOP;
             }
             else
             {
-               // Console.WriteLine("Kamen chybi");
                 rock.Intensity /= INCREASE_HOP;
                 if (rock.Intensity  < 10) rock.Intensity = 0;
             }

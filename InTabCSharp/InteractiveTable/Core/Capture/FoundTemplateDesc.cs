@@ -1,34 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace InteractiveTable.Core.Data.Capture
 {
     /// <summary>
-    /// Deskriptor pro nalezenou sablonu
+    /// Descriptor for detected template
     /// </summary>
     public class FoundTemplateDesc
     {
         /// <summary>
-        /// Polomer nalezene kontury
+        /// Radius of the template
         /// </summary>
         public double rate;
+
         /// <summary>
-        /// Originalni sablona
+        /// Original template
         /// </summary>
         public Template template;
+
         /// <summary>
-        /// Vzorek sablony
+        /// Template sample
         /// </summary>
         public Template sample;
         /// <summary>
-        /// Uhel mezi originalem a nalezenou sablonou
+        /// Angle between the original and detected template
         /// </summary>
         public double angle;
-
         /// <summary>
-        /// Vrati, kolikrat je nalezeny prvek vetsi nez original
+        /// Scale between the sample and the original template
         /// </summary>
         public double scale
         {

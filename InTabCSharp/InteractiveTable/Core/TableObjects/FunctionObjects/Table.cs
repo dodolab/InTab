@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
 using InteractiveTable.Core.Data.TableObjects.Shapes;
-using InteractiveTable.Settings;
 using InteractiveTable.Core.Data.TableObjects.SettingsObjects;
 using InteractiveTable.Managers;
 
 namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
 {
     /// <summary>
-    /// Virtualni herni stul
+    /// Entity for the table
     /// </summary>
      [Serializable]
     public class Table : A_TableObject
@@ -36,13 +31,10 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
             set
             {
                 if (value is TableSettings) this.settings = (TableSettings)value;
-                else throw new Exception("Spatny argument");
+                else throw new Exception("Bad argument");
             }
         }
 
-         /// <summary>
-         /// Vrati tvar stolu
-         /// </summary>
         public new FRectangle Shape
         {
             get

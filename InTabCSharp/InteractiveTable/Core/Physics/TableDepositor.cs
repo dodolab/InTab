@@ -8,40 +8,21 @@ using InteractiveTable.Core.Physics.System;
 namespace InteractiveTable.Core.Data.Deposit
 {
     /// <summary>
-    /// Trida uchovavajici data pro virtualni stul, obsahuje
-    /// konkretni virtualni objekty
+    /// Holds data for interactive table
     /// </summary>
     [Serializable]
     public class TableDepositor
     {
-        /// <summary>
-        /// Stul
-        /// </summary>
         public Table table;
-        /// <summary>
-        /// Seznam gravitonu
-        /// </summary>
         public HashSet<Graviton> gravitons = new HashSet<Graviton>();
-        /// <summary>
-        /// Seznam magnetonu
-        /// </summary>
         public HashSet<Magneton> magnetons = new HashSet<Magneton>();
-        /// <summary>
-        /// Seznam castic
-        /// </summary>
         public HashSet<Particle> particles = new HashSet<Particle>();
-        /// <summary>
-        /// Seznam generatoru
-        /// </summary>
         public HashSet<Generator> generators = new HashSet<Generator>();
-        /// <summary>
-        /// Seznam cernych der
-        /// </summary>
         public HashSet<BlackHole> blackHoles = new HashSet<BlackHole>();
 
 
         /// <summary>
-        /// Vrati vsechny kameny
+        /// Returns all stones
         /// </summary>
         /// <returns></returns>
         public List<A_Rock> GetAllRocks()
@@ -83,7 +64,7 @@ namespace InteractiveTable.Core.Data.Deposit
         }
 
         /// <summary>
-        /// Smaze vsechny objekty
+        /// Removes all stones
         /// </summary>
         public void ClearTable()
         {

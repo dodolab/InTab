@@ -9,7 +9,7 @@ using InteractiveTable.Core.Data.TableObjects.SettingsObjects;
 namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
 {
     /// <summary>
-    /// Kamen predstavujici magnetismus
+    /// Magnet stone
     /// </summary>
      [Serializable]
     public class Magneton : A_Rock
@@ -35,7 +35,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
           set
           {
               if (value is MagnetonSettings) this.settings = (MagnetonSettings)value;
-              else throw new Exception("Spatny argument");
+              else throw new Exception("Bad argument");
           }
       }
 
@@ -48,7 +48,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
           set
           {
               if (value is MagnetonSettings) this.baseSettings = (MagnetonSettings)value;
-              else throw new Exception("Spatny argument");
+              else throw new Exception("Bad argument");
           }
       }
 

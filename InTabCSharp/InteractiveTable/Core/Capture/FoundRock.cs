@@ -1,41 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using InteractiveTable.Core.Data.Deposit;
 using InteractiveTable.Accessories;
 
 namespace InteractiveTable.Core.Data.Capture
 {
 
     /// <summary>
-    /// Trida uchovavajici nalezeny kamen (jeho typ a pozici)
+    /// Detected stone and its position
     /// </summary>
     public class FoundRock
     {
-        /// <summary>
-        /// Typ nalezeneho kamene
-        /// </summary>
         public FoundRockType type;
-        /// <summary>
-        /// Pozice nalezeneho kamene
-        /// </summary>
         public FPoint position;
+        
         /// <summary>
-        /// Polomer nalezene kontury
+        /// Radius of detected contour
         /// </summary>
         public double radius;
+
         /// <summary>
-        /// Uhel mezi originalem a nalezenou sablonou
+        /// Angle between the detected contour and its template
         /// </summary>
         public double angle;
+
         /// <summary>
-        /// Kolikrat je nalezeny prvek vetsi nez original
+        /// Scale between the detected contour and its template
         /// </summary>
         public double scale;
 
         /// <summary>
-        /// Nazev kontury
+        /// Name of the contour
         /// </summary>
         public String contour_name;
 

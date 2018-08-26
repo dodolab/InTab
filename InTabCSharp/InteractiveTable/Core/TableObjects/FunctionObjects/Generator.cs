@@ -1,31 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using InteractiveTable.Settings;
-using System.Windows;
 using InteractiveTable.Core.Data.TableObjects.SettingsObjects;
 using InteractiveTable.Accessories;
 using InteractiveTable.Core.Data.Deposit;
-using InteractiveTable.Core.Physics.System;
 using InteractiveTable.Managers;
 
 namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
 {
     /// <summary>
-    /// Generator castic
+    /// Particle generator
     /// </summary>
      [Serializable]
     public class Generator : A_Rock
     {
-
-        // pocet neuspesnych volani metody generate
+        
+        // number of failed attempts to create particles (used for probability distribution
         protected double generatingStep = 0;
-        // pocet vygenerovanych objektu
+        // number of generated particles
         public int generatingNumber = 0;
-        // nastaveni
+        // settings
         protected new GeneratorSettings settings;
-         // globalni nastaveni
+         // global settings
         protected new GeneratorSettings baseSettings;
 
         public Generator()
@@ -44,7 +39,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
             set
             {
                 if (value is GeneratorSettings) this.settings = (GeneratorSettings)value;
-                else throw new Exception("Spatny argument");
+                else throw new Exception("Bad argument");
             }
         }
 
@@ -57,16 +52,14 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
             set
             {
                 if (value is GeneratorSettings) this.baseSettings = (GeneratorSettings)value;
-                else throw new Exception("Spatny argument");
+                else throw new Exception("Bad argument");
             }
         }
 
          /// <summary>
-         /// Vrati pole vygenerovanych objektu; zavisi to na poctu volani teto metody
-         /// objekt se vygeneruje kazdy n-ty krok
+         /// Tries to generate particles. May return null if the generator is eiher empty
+         /// or the random attempt failed
          /// </summary>
-         /// <param name="system"></param>
-         /// <param name="counter">update time</param>
          /// <returns></returns>
         public Particle[] Generate(TableDepositor system, double counter)
         {
@@ -75,7 +68,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
             generatingStep++;
             if (generatingStep > (PhysicSettings.Instance().DEFAULT_GENERATING_SPEED - settings.generatingSpeed))
             {
-                // koeficient PRAVIDELNOSTI
+                // coefficient of regularity
                 int coeff = settings.Regular_generating ? 1 : (CommonAttribService.apiRandom.Next(5)+1);
                 int arrayLength = (int)((settings.generatingSpeed/coeff)*((A_Rock)this).Intensity/100);
                 if (arrayLength <= 0) return null;
@@ -85,9 +78,8 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
 
                 for (int i = 0; i < output.Length; i++)
                 {
-                    // vygeneruje castici
                     output[i] = GenerateParticle(counter);
-                    // nastavime na 0, protoze byla metoda uspesne provedena
+                    // start over
                     generatingStep = 0;
 
                 }
@@ -96,12 +88,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
             }
             else return null;
         }
-
-         /// <summary>
-         /// Vygeneruje castici
-         /// </summary>
-         /// <param name="counter">update time pro podivne generovani</param>
-         /// <returns></returns>
+        
         private Particle GenerateParticle(double counter)
         {
 
@@ -118,7 +105,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
             double velocity_x = 0;
             double velocity_y = 0;
 
-            // spocitame uhel generovani
+            // calculate angle
             double angle = 0;
 
             if (settings.generationMode == GenerationMode.STRANGE)
@@ -130,7 +117,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
                 angle = (Math.PI * 2) / 360 * (CommonAttribService.apiRandom.Next((int)(((int)settings.angle_offset) / 5) * 5, (int)(((int)settings.angle_offset + settings.angle_maximum) / 5) * 5));
             }
 
-            // spocitame rychlost castice
+            // calculate velocity
             velocity_x = Math.Cos(angle) * (CommonAttribService.apiRandom.NextDouble() * (settings.particle_maximum_speed - settings.particle_minimum_speed) + settings.particle_minimum_speed);
             velocity_y = Math.Sin(angle) * (CommonAttribService.apiRandom.NextDouble() * (settings.particle_maximum_speed - settings.particle_minimum_speed) + settings.particle_minimum_speed);
 

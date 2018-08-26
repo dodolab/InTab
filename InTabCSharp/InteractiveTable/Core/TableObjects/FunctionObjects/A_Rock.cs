@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using InteractiveTable.Core.Data.TableObjects.Shapes;
 using InteractiveTable.Core.Data.TableObjects.SettingsObjects;
-using System.Xml.Serialization;
 
 namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
 {
     /// <summary>
-    /// Abstraktni trida pro kamen
+    /// Abstract class for all stones
     /// </summary>
     [Serializable]
     public abstract class A_Rock : A_TableObject
@@ -19,9 +15,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
 
         protected double angle;
         protected double scale;
-        // intenzita musi byt inicializovana na 100!!!
         protected double intensity = 100;
-        // nazev kamene (stejny jako nazev kontury, pokud je spojen s konturou)
         protected String name;
 
         public new SettingsObjects.A_RockSettings Settings
@@ -33,7 +27,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
             set
             {
                 if (value is A_RockSettings) this.settings = (A_RockSettings)value;
-                else throw new Exception("Spatny argument");
+                else throw new Exception("Bad argument");
             }
         }
 
@@ -43,7 +37,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
             set
             {
                 if (value is A_RockSettings) this.baseSettings = (A_RockSettings)value;
-                else throw new Exception("Spatny argument");
+                else throw new Exception("Bad argument");
             }
         }
 
@@ -56,7 +50,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
             set
             {
                 if (value is FCircle) this.shape = value;
-                else throw new Exception("Spatny argument");
+                else throw new Exception("Bad argument");
             }
         }
 

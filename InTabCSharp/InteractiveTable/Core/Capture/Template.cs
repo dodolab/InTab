@@ -1,63 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using InteractiveTable.Core.Data.Deposit;
 
 namespace InteractiveTable.Core.Data.Capture
 {
     /// <summary>
-    /// Trida reprezentujici sablony skladajici se z kontury a dalsich vlastnosti
+    /// Template consisting of contour and additional attributse
     /// </summary>
     [Serializable]
     public class Template
     {
         /// <summary>
-        /// Jmeno sablony
+        /// Name
         /// </summary>
         public string name; 
         /// <summary>
-        /// Kontura sablony
+        /// Contour
         /// </summary>
         public Contour contour;
         /// <summary>
-        /// Korelacni kontura sablony
+        /// Correlation contour
         /// </summary>
         public Contour autoCorr; 
         /// <summary>
-        /// Prvni vektor kontury
+        /// First point of the contour
         /// </summary>
         public Point startPoint; 
         /// <summary>
-        /// Pokud true, budou se uvazovat vsechny uhly
+        /// If true, all angles will be taken into account
         /// </summary>
         public bool preferredAngleNoMore90 = false;
 
         /// <summary>
-        /// Prvni deskriptor auto-korelace
+        /// First descriptor of autocorrelation
         /// </summary>
         public int autoCorrDescriptor1;
         /// <summary>
-        /// Druhy deskriptor auto-korelace
+        /// Second descriptor of autocorrelation
         /// </summary>
         public int autoCorrDescriptor2;
         /// <summary>
-        /// Treti deskriptor auto-korelace
+        /// Third descriptor of autocorrelation
         /// </summary>
         public int autoCorrDescriptor3;
         /// <summary>
-        /// Ctvrty deskriptor auto-korelace
+        /// Fourth descriptor of autocorrelation
         /// </summary>
         public int autoCorrDescriptor4;
         /// <summary>
-        /// Normala kontury
+        /// Contour norm
         /// </summary>
         public double contourNorma;
         /// <summary>
-        /// Obsah konvexni obalky
+        /// Area of convex envelope
         /// </summary>
         public double sourceArea; 
+
         /// <summary>
-        /// Pridruzeny objekt sablony, neni serializovan
+        /// Data of assigned template
         /// </summary>
         [NonSerialized]
         public object tag;
@@ -67,11 +67,11 @@ namespace InteractiveTable.Core.Data.Capture
         static int[] filter4 = { -1, 1, -1, 1 };
 
         /// <summary>
-        /// Vytvori novou sablonu
+        /// Creates a new template
         /// </summary>
-        /// <param name="points">pole vektoru</param>
-        /// <param name="sourceArea">velikost</param>
-        /// <param name="templateSize">velikost pole kontury, muze byt jine nez velikost points</param>
+        /// <param name="points">array of vertices</param>
+        /// <param name="sourceArea">size of the envelope</param>
+        /// <param name="templateSize">size of an array of the contour, might by different than points.Length</param>
         public Template(Point[] points, double sourceArea, int templateSize)
         {
             this.sourceArea = sourceArea;
@@ -86,7 +86,7 @@ namespace InteractiveTable.Core.Data.Capture
 
 
         /// <summary>
-        /// Spocita auto-korelaci
+        /// Calculates auto-correlation
         /// </summary>
         public void CalcAutoCorrDescriptions()
         {
@@ -113,7 +113,7 @@ namespace InteractiveTable.Core.Data.Capture
         }
 
         /// <summary>
-        /// Vykresli konturu do objektu gr
+        /// Renders the contour into a graphic object
         /// </summary>
         /// <param name="gr"></param>
         /// <param name="rect"></param>
@@ -126,7 +126,6 @@ namespace InteractiveTable.Core.Data.Capture
             var autoCorr = this.autoCorr.Clone();
             autoCorr.Normalize();
 
-            //vykresli konturu
             Rectangle r = new Rectangle(rect.X, rect.Y, rect.Width / 2, rect.Height);
             r.Inflate(-20, -20);
             var points = contour.GetPoints(startPoint);
@@ -140,14 +139,12 @@ namespace InteractiveTable.Core.Data.Capture
             int ddx = -(int)(boundRect.Left * k);
             int ddy = (int)(boundRect.Bottom * k);
             for (int i = 0; i < points.Length; i++)
-                points[i] = new Point(r.Left + ddx + (int)((points[i].X - contour.SourceBoundingRect.Left - dx) * k), r.Top + ddy + (int)((points[i].Y - contour.SourceBoundingRect.Top - dy) * k));
+                points[i] = new Point(r.Left + ddx + (int)((points[i].X - contour.SourceBoundingRect.Left - dx) * k), r.Top + ddy + 
+                    (int)((points[i].Y - contour.SourceBoundingRect.Top - dy) * k));
             gr.DrawPolygon(Pens.Red, points);
         }
     }
 
-    /// <summary>
-    /// Seznam sablon; kazda sablona obsahuje nastaveni daneho kamene
-    /// </summary>
     [Serializable]
     public class Templates : List<Template>
     {
