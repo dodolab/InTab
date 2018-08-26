@@ -1,28 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using InteractiveTable.GUI.Table;
 using InteractiveTable.Core.Data.TableObjects.FunctionObjects;
 using InteractiveTable.Core.Data.Deposit;
-using InteractiveTable.Settings;
-using InteractiveTable.Accessories;
 using InteractiveTable.Core.Physics.System;
 
 namespace InteractiveTable.Managers
 {
     /// <summary>
-    /// Manazer pro delegaci vykonne logiky simulacniho okna
+    /// Manager that delegates logic of rendering window
     /// </summary>
    public class TableManager
     {
        private TablePanel tablePanel;
        private TableOutput table3D;
-       private System.Windows.Forms.Timer threadTimer; // casovac pro hlavni vykonne vlakno
+       private System.Windows.Forms.Timer threadTimer; // timer for main window
        private TableDepositor tableDepositor;
        private InputManager inputManager;
-       private Boolean timer_running = true; // indikator, zda vlakno bude bezet nebo ne
-       private DateTime last_render = DateTime.Now; // cas posledniho renderu
+       private Boolean timer_running = true; 
+       private DateTime last_render = DateTime.Now; // time of the last render
 
        public TableManager()
        {
@@ -57,9 +54,8 @@ namespace InteractiveTable.Managers
 
 
        /// <summary>
-       /// Spusti hlavni vlakno, kter bude kontrolovat
-       /// vstup z kamery, prekreslovat herni plochu a volat
-       /// fyzikalni logiku
+       /// Executes the main thread that will check for captured image
+       /// and refresh the table
        /// </summary>
        public void RunThread()
        {
@@ -79,18 +75,12 @@ namespace InteractiveTable.Managers
            }
        }
 
-
-       /// <summary>
-       /// Pozastavi vlakno
-       /// </summary>
+        
        public void PauseThread()
        {
            timer_running = false;
        }
-
-      /// <summary>
-      /// Zastavi vlakno a restartuje soustavu
-      /// </summary>
+        
        public void StopThread()
        {
            if (threadTimer != null) threadTimer.Stop();
@@ -107,7 +97,7 @@ namespace InteractiveTable.Managers
        }
 
        /// <summary>
-       /// Restartuje celou soustavu a znovu spusti
+       /// Resets the whole system
        /// </summary>
        public void Restart()
        {
@@ -115,16 +105,13 @@ namespace InteractiveTable.Managers
            timer_running = true;
            RunThread();
        }
-
-       /// <summary>
-       /// Vrati true, pokud vlakno bezi
-       /// </summary>
+        
        public Boolean IsRunning
        {
            get { return timer_running; }
        }
-
-       // indikator kvuli tomu, aby se obrazek posilal jen kdyz doslo ke zmene
+        
+       // a helper flag used for sending a picture only once if a change occured
        private bool sentImage = false;
 
        private DateTime lastSendTime = DateTime.Now;
@@ -132,42 +119,38 @@ namespace InteractiveTable.Managers
 
 
        /// <summary>
-       /// Transformuje soustavu a preda ji k vykresleni
+       /// Refreshes the table
        /// </summary>
-       /// <param name="sender"></param>
-       /// <param name="e"></param>
        private void Render(object sender, EventArgs e)
        {
            if (timer_running)
            {
-               if ((DateTime.Now - last_render).TotalMilliseconds < 35)
+               if ((DateTime.Now - last_render).TotalMilliseconds < 20)
                {
-                   // to kvuli tomu, aby se to vykreslovalo max jednou za 35ms
+                   // only once per 20ms 
                    return;
                }
                last_render = DateTime.Now;
-
-               // transformace fyzikalniho systemu
+                
+               // apply physics
                PhysicsLogic.TransformSystem(tableDepositor);
-
-               // prekresleni obrazku
+                
+               // refresh the image
                tablePanel.tableAreaPanel.Repaint(tableDepositor);
-               // pripadne prekresleni 3D vystupu
+               // refresh opengGL window
                if (table3D != null && table3D.IsVisible)
                {
                    table3D.Repaint(tableDepositor);
                }
            }
        }
-
-       
-
+        
        /// <summary>
-       /// Vlozi novy objekt do soustavy
+       /// Inserts a new object into the system
        /// </summary>
        /// <param name="obj"></param>
        public void InsertObject(A_TableObject obj){
-           if (obj is Particle) tableDepositor.particles.Add((Particle)obj); // castici sem touhle cestou davat nikdy nebudeme
+           if (obj is Particle) tableDepositor.particles.Add((Particle)obj); // this will likely not happen
            if (obj is Graviton) tableDepositor.gravitons.Add((Graviton)obj);
            if (obj is Generator) tableDepositor.generators.Add((Generator)obj);
            if (obj is Magneton) tableDepositor.magnetons.Add((Magneton)obj);
@@ -175,9 +158,8 @@ namespace InteractiveTable.Managers
        }
 
        /// <summary>
-       /// Odstrani stary objekt ze soustavy
+       /// Removes an existing object from the system
        /// </summary>
-       /// <param name="obj"></param>
        public void RemoveObject(A_TableObject obj)
        {
            if (obj is Particle && tableDepositor.particles.Contains(obj)) tableDepositor.particles.Remove((Particle)obj);

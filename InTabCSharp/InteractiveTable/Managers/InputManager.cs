@@ -1,44 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using InteractiveTable.Core.Graphics;
 using InteractiveTable.GUI.Other;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using System.Windows.Controls;
 using System.Windows;
-using System.Windows.Media.Imaging;
 using InteractiveTable.Settings;
 using InteractiveTable.Core.Data.TableObjects.FunctionObjects;
 using System.Threading;
 using InteractiveTable.Accessories;
-using InteractiveTable.Core.Data.Deposit;
 using InteractiveTable.Core.Data.Capture;
 
 namespace InteractiveTable.Managers
 {
     /// <summary>
-    /// Manazer starajici se o rozpoznavac transformaci bodu ze
-    /// soustavy obrazu do soustavy stolu
+    /// Manager that transforms points from the camera space to the interactive space
     /// </summary>
    public class InputManager
     {
 
 
-       private TableManager tableManager; // odkaz na manazera
-       private RealTableManager realTableManager; // odkaz na real table manazera
-       private ContourFilter processor; // processor na filtrovani kontur
-       private InteractiveWindow interactiveWindow; // odkaz na interaktivni okno
-       private Thread workThread; // timer na pozadi
-       private Image<Bgr, byte> captured_frame; // zachyceny obrazek
-       private HashSet<FoundRock> foundRocks = new HashSet<FoundRock>(); // nalezene kameny
-
-       /// <summary>
-       /// Konstruktor
-       /// Nastavi veskere hodnoty z uzivatelskeho nastaveni
-       /// </summary>
-       /// <param name="tableManager"></param>
+       private TableManager tableManager; 
+       private RealTableManager realTableManager; 
+       private ContourFilter processor; 
+       private InteractiveWindow interactiveWindow; 
+       private Thread workThread; 
+       private Image<Bgr, byte> captured_frame; // captured frames
+       private HashSet<FoundRock> foundRocks = new HashSet<FoundRock>(); // detected stones
+        
        public InputManager(TableManager tableManager)
        {
            this.tableManager = tableManager;
@@ -56,7 +46,7 @@ namespace InteractiveTable.Managers
            processor = new ContourFilter();
            processor.templates = CommonAttribService.DEFAULT_TEMPLATES;
 
-           // nastavi defaultni hodnoty processoru
+           // set default values
 
            processor.finder.maxRotateAngle = CaptureSettings.Instance().DEFAULT_ROTATE_ANGLE * Math.PI / 180;
            processor.minContourArea = CaptureSettings.Instance().DEFAULT_CONTOUR_MIN_AREA;
@@ -94,7 +84,7 @@ namespace InteractiveTable.Managers
 
 
        /// <summary>
-       /// Spusti vlakno a jeste prenastavi hodnoty image processoru, kdyby se nahodou zmenily
+       /// Executes processing thread
        /// </summary>
        public bool RunThread()
        {
@@ -102,19 +92,18 @@ namespace InteractiveTable.Managers
 
            if (CommonAttribService.DEFAULT_TEMPLATES == null)
            {
-               MessageBox.Show("Nejsou zde žádné šablony! Nastavte nejprve šablony");
+               MessageBox.Show("There are no templates configured. To work with AR, set templates first!");
                return false;
            }
            if (CommonAttribService.DEFAULT_TEMPLATES.rockSettings.Count == 0)
            {
-               MessageBox.Show("Nastavené šablony nemají přiřazené kameny! Přiřaďte jim nejprve kameny ve správci kontur.");
+               MessageBox.Show("Templates don't have any stones assigned. Assign some in Contour settings.");
                return false;
            }
            else
            {
                try
                {
-                   // zmena nastaveni (pro jistotu)
                    processor.finder.maxRotateAngle = CaptureSettings.Instance().DEFAULT_ROTATE_ANGLE * Math.PI / 180;
                    processor.minContourArea = CaptureSettings.Instance().DEFAULT_CONTOUR_MIN_AREA;
                    processor.minContourLength = CaptureSettings.Instance().DEFAULT_CONTOUR_MIN_LENGTH;
@@ -129,7 +118,7 @@ namespace InteractiveTable.Managers
                }
                catch(Exception e)
                {
-                   MessageBox.Show("Vznikl problém při inicializaci kamery!!; EX: "+e.Message+";;;"+e.StackTrace);
+                   MessageBox.Show("An error occurred during camera initialization: "+e.Message+";;;"+e.StackTrace);
                    return false;
                }
                realTableManager.Init(CommonAttribService.DEFAULT_TEMPLATES);
@@ -142,7 +131,7 @@ namespace InteractiveTable.Managers
        }
 
        /// <summary>
-       /// Vrati true, pokud vlakno bezi
+       /// Returns true if the working thread is running
        /// </summary>
        /// <returns></returns>
        public bool IsRunning()
@@ -151,7 +140,7 @@ namespace InteractiveTable.Managers
        }
 
        /// <summary>
-       /// Zastavi pracovni vlakno
+       /// Stops the working thread
        /// </summary>
        public void StopThread()
        {
@@ -159,7 +148,7 @@ namespace InteractiveTable.Managers
        }
 
        /// <summary>
-       /// Casova smycka - ziska obrazek z kamery a zpracuje ho
+       /// Processing loop, captures an image and processes it
        /// </summary>
        private void Application_Idle()
        {
@@ -167,29 +156,27 @@ namespace InteractiveTable.Managers
            {
                try
                {
-                   // ziska obrazek
                    Image<Bgr, byte> tempFrame = captured_frame = CameraManager.GetImage();
-                   // obrazek se prizpusobi podle nastaveni slideru
                    if (CaptureSettings.Instance().DEFAULT_DILATATION != 0) tempFrame._Dilate((int)CaptureSettings.Instance().DEFAULT_DILATATION);
                    if (CaptureSettings.Instance().DEFAULT_ERODE != 0) tempFrame._Erode((int)CaptureSettings.Instance().DEFAULT_ERODE);
                    if (CaptureSettings.Instance().DEFAULT_GAMMA != 1) tempFrame._GammaCorrect((double)CaptureSettings.Instance().DEFAULT_GAMMA);
                    if (CaptureSettings.Instance().DEFAULT_INVERT_ENABLED) tempFrame._Not();
                    if (CaptureSettings.Instance().DEFAULT_NORMALIZE_ENABLED) tempFrame._EqualizeHist();
 
-                   // osetreni rotace
+                   // fix rotation
                    if (CalibrationSettings.Instance().CALIBRATION_ROTATION != 0)
                    {
                        tempFrame = tempFrame.Rotate(CalibrationSettings.Instance().CALIBRATION_ROTATION, new Bgr(0, 0, 0), true);
                    }
 
-                   processor.ProcessImage(tempFrame); // zpracovani obrazku processorem
+                   processor.ProcessImage(tempFrame); 
                    if (interactiveWindow != null && interactiveWindow.IsVisible) interactiveWindow.DrawImage(tempFrame, processor);
                    InputLogic();
 
 
                }
                catch {
-                  // Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!!!! VYJIMKA PRI VYKRESLOVANI");
+                    // no-op here
                }
            }
        }
@@ -197,9 +184,9 @@ namespace InteractiveTable.Managers
 
 
        /// <summary>
-       /// Vezme nalezene kontury, transformuje jejich pozice do souradneho systemu stolu
-       /// vcetne perspektivniho zkresleni a nakonec vytvori deskriptory nalezenych kamenu
-       /// a vsechno preda mergovaci soustave, ktera ty stavy slouci
+       /// Takes all detected contours, transforms their positions into the coordinate system of the table,
+       /// taking also into accoutn perspective distortion. At last, it creates descriptors of detected
+       /// stones and passes everything to the merging processor that will increase the simulation step
        /// </summary>
        private void InputLogic()
        {
@@ -219,61 +206,61 @@ namespace InteractiveTable.Managers
                        double found_pos_x = foundRect.Left + foundRect.Size.Width / 2;
                        double found_pos_y = foundRect.Top + foundRect.Size.Height / 2;
 
-                       double mx = found_pos_x; // X-ova souradnice bodu v lichobezniku
-                       double my = captured_frame.Height - found_pos_y; // Y-ova souradnice bodu v lichobezniku
+                       double mx = found_pos_x; // X-axis coord in the trapezoid
+                       double my = captured_frame.Height - found_pos_y; // Y-axis coord in the trapezoid
 
-                       double ax = CalibrationSettings.Instance().CALIBRATION_POINT_A.X; // X-ova souradnice bodu A v lichobezniku
+                       double ax = CalibrationSettings.Instance().CALIBRATION_POINT_A.X; // X-axis coord of A-point in trapezoid
 
-                       // ODHAD OSTATNICH BODU PODLE ZADANYCH HODNOT ( a = (2*r1r2)/(r1+1))
+                       // estimation of other points according to ( a = (2*r1r2)/(r1+1))
                        double r1 = CalibrationSettings.Instance().CALIBRATION_PERSPECTIVE;
                        double r2 = CalibrationSettings.Instance().CALIBRATION_POINT_C.X - CalibrationSettings.Instance().CALIBRATION_POINT_A.X;
-                       double bx = ax + (2 * (r1 * r2)) / (r1 + 1); // X-ova souradnice bodu B v lichobezniku
-                       double cx = CalibrationSettings.Instance().CALIBRATION_POINT_C.X; // X-ova souradnice bodu C v lichobezniku
-                       double dx = ax + bx - cx; // X-ova souradnice bodu D v lichobezniku
+                       double bx = ax + (2 * (r1 * r2)) / (r1 + 1); // X-axis coord of B-point in trapezoid
+                       double cx = CalibrationSettings.Instance().CALIBRATION_POINT_C.X; // X-axis coord of C-point in trapezoid
+                       double dx = ax + bx - cx; // X-axis coord of D-point in trapezoid
 
-                       double cy = captured_frame.Height - CalibrationSettings.Instance().CALIBRATION_POINT_C.Y; // Y-ova souradnice bodu C v lichobezniku
-                       double ay = captured_frame.Height - CalibrationSettings.Instance().CALIBRATION_POINT_A.Y; // Y-ova souradnice bodu A v lichobezniku
+                       double cy = captured_frame.Height - CalibrationSettings.Instance().CALIBRATION_POINT_C.Y; // Y-axis coord of C-point in trapezoid
+                       double ay = captured_frame.Height - CalibrationSettings.Instance().CALIBRATION_POINT_A.Y; // Y-axis coord of A-point in trapezoid
 
-                       double pom = (my - ay) / (cy - ay); // pomer vzdalenosti BOD-DOLNI ZAKLADNA a HORNI-DOLNI zakladna
-                       double r1m = mx - (ax + (dx - ax) * pom); // vzdalenost bodu M od leveho ramene
-                       double r1r2 = pom * (cx - bx - dx + ax) + bx - ax; // delka usecky protinajici bod M a prochazejici rameny
+                       double pom = (my - ay) / (cy - ay); // ratio between the bottom base and the upper base
+                       double r1m = mx - (ax + (dx - ax) * pom); // distance of the M point from the left side
+                       double r1r2 = pom * (cx - bx - dx + ax) + bx - ax; // length of a line that crosses the M-point and both sides
 
-                       double ab = Math.Abs(bx - ax); // delka usecky AB
-                       double cd = Math.Abs(cx - dx); // delka usecky CD
-                       double alfa = r1r2 / ab; // perspektivni uhel zkresleni
-                       double maximum = captured_frame.Height / (cd / ab); // maximalni zkresleni
-                       double real = (captured_frame.Height) * (pom / alfa); // zkresleni vzhledem k bodu M
+                       double ab = Math.Abs(bx - ax); // length of AB line
+                       double cd = Math.Abs(cx - dx); // length of CD line
+                       double alfa = r1r2 / ab; // perspective distortion
+                       double maximum = captured_frame.Height / (cd / ab); // max distortion
+                       double real = (captured_frame.Height) * (pom / alfa); // relative distortion to the M-point
 
-                       // prepocet souradnic bodu na obdelnik, ktery predstavuje fotografie
+                       // projection to a rectangle the frame represents
                        double mxx = (ax < bx) ? captured_frame.Width * (r1m / r1r2) : captured_frame.Width - captured_frame.Width * r1m / r1r2;
                        double mxy = (ay > cy) ? (captured_frame.Height * real / maximum) : captured_frame.Height - (captured_frame.Height * real / maximum);
 
 
-                       // PREPOCET Z OBRAZKOVEHO OBDELNIKA NA STOLNI OBDELNIK
+                       // recalculation from camera space to table space
                        mxx *= CommonAttribService.ACTUAL_TABLE_WIDTH / ((double)captured_frame.Width);
                        mxy *= CommonAttribService.ACTUAL_TABLE_HEIGHT / ((double)captured_frame.Height);
                        foundRocks.Add(CreateFoundRock(found.template.name, new FPoint(mxx - CommonAttribService.ACTUAL_TABLE_WIDTH / 2, CommonAttribService.ACTUAL_TABLE_HEIGHT / 2 - mxy),processor.templates, found.rate, found.scale, found.angle));
                    }
                    catch
                    {
-                       MessageBox.Show("Nastal problém při přepočtu kalibrace. Nastavte znovu kalibraci!");
+                       MessageBox.Show("An error occurred during calibration. Try to set the calibration again!");
                        StopThread();
                    }
                    #endregion
 
                   
                }
-               // slouceni obou systemu --> HLAVNI LOGIKA ROZPOZNAVANI
+               // merge both systems between two time steps
                realTableManager.MergeSystems(foundRocks);
            }
        }
 
        /// <summary>
-       /// Vytvori objekt FoundRock na zaklade informaci o konture
+       /// Create a stone entity based on the information about detected contour
        /// </summary>
-       /// <param name="contureName">Nazev kontury</param>
-       /// <param name="position">Pozice kontury</param>
-       /// <param name="templates">List znamych sablon</param>
+       /// <param name="contureName">contour name</param>
+       /// <param name="position">contour position</param>
+       /// <param name="templates">list of known templates</param>
        /// <returns></returns>
        private FoundRock CreateFoundRock(String contureName, FPoint position, Templates templates, double radius, double scale, double angle)
        {
@@ -286,6 +273,5 @@ namespace InteractiveTable.Managers
 
            return new FoundRock(contureName, type, position, radius, scale, angle);
        }
-
     }
 }

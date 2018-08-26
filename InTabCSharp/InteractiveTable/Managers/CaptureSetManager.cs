@@ -1,30 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using InteractiveTable.GUI.CaptureSet;
 using Emgu.CV;
-using InteractiveTable.Core.Graphics;
 using System.Threading;
 using Emgu.CV.Structure;
 using InteractiveTable.Controls;
-using InteractiveTable.Settings;
 
 namespace InteractiveTable.Managers
 {
     /// <summary>
-    /// Manazer pro nastaveni v okne pro nastaveni kontur
+    /// Manager for capture window
     /// </summary>
    public class CaptureSetManager
     {
        private CaptureWindow captureSetWindow; 
        private CaptureSetController captureSetControl;
-       private Boolean captureFromCam = true; // pokud false, bude se nacitat misto kamery obrazek ze souboru
-       private Thread WorkerThread; // pracovni vlakno
-       private DateTime timeDat; // datum posledniho zachytavani
-       private int timeInt; // aktualni zachytavaci cas
+       private Boolean captureFromCam = true; //  if false, the frame will be loaded from a file
+       private Thread WorkerThread; 
+       private DateTime timeDat; // last capture time
+       private int timeInt; // current capture time
 
-       // promenne uchovavajici synchronizacni pristup do uzivatelskeho nastaveni
        private double dilatation = 0;
        private double erode = 0;
        private double gamma = 0;
@@ -53,10 +47,7 @@ namespace InteractiveTable.Managers
            get { return captureSetWindow; }
            set { this.captureSetWindow = value; }
        }
-
-       /// <summary>
-       /// Hlavni inicializace, nastavi pracovni vlakno
-       /// </summary>
+        
        public void Initialize()
        {
  
@@ -72,19 +63,19 @@ namespace InteractiveTable.Managers
            }
 
            captureSetControl.ApplySettings();
-           ProcessFrame(); // zpracuj prvni obrazek
+           ProcessFrame(); // process first image
 
-           // nastavi pacovni vlakno
+           // set working thread
            WorkerThread = new Thread(new ThreadStart(Application_Idle));
            WorkerThread.IsBackground = true;
-           WorkerThread.Priority = ThreadPriority.Lowest; // nejnizsi priorita
-           WorkerThread.SetApartmentState(ApartmentState.STA); // aby se vlakno dostalo k UI komponentam
+           WorkerThread.Priority = ThreadPriority.Lowest; 
+           WorkerThread.SetApartmentState(ApartmentState.STA); // set STA so that we may access UI from this thread
            WorkerThread.Start();
        }
 
 
        /// <summary>
-       /// Hlavni vykreslovaci smycka, zpracovava kontury
+       /// Rendering loop that processes detection
        /// </summary>
        private void Application_Idle()
        {
@@ -98,7 +89,7 @@ namespace InteractiveTable.Managers
        }
 
        /// <summary>
-       /// Zastavi vypocetni vlakno
+       /// Stops the processing thread
        /// </summary>
        public void StopThread()
        {
@@ -106,13 +97,12 @@ namespace InteractiveTable.Managers
        }
 
        /// <summary>
-       /// Zpracuje aktualne zachyceny obrazek
+       /// Processes current frame
        /// </summary>
        private void ProcessFrame()
        {
            try
            {
-               // nastaveni vlastnosti kamery (pokud se zmenily)
                Image<Bgr, byte> tempFrame = null;
 
                if (captureFromCam)
@@ -122,7 +112,7 @@ namespace InteractiveTable.Managers
                    captureSetWindow.Frame = captureSetWindow.ImageFrame.Clone();
                }
 
-               // ulozeni promennych z VIEW (provede se asynchronne)
+               // get values of properties from the UI
                captureSetWindow.Dispatcher.BeginInvoke(new Action(() =>
                {
                    dilatation = captureSetWindow.dilatationSlider.Value;
@@ -135,22 +125,19 @@ namespace InteractiveTable.Managers
                    binary = (bool)captureSetWindow.showBinaryCheck.IsChecked;
                }));
 
-
-               // obrazek se prizpusobi podle nastaveni slideru
+               // apply other settings
                if (dilatation != 0) captureSetWindow.Frame._Dilate((int)dilatation);
                if (erode != 0) captureSetWindow.Frame._Erode((int)erode);
                if (gamma != 1) captureSetWindow.Frame._GammaCorrect((double)gamma);
                if (invert) captureSetWindow.Frame._Not();
                if (normalize) captureSetWindow.Frame._EqualizeHist();
 
-               // nyni vse, co bude na obrazovce, uz se nebude zpracovavat, protoze
-               // se to zpracuje jeste jednou a v efektivnejsim poradi, proto je potreba
-               // obrazek zkopirovat
-               tempFrame = captureSetWindow.Frame.Clone();
 
-               // nastaveni ostatnich vlastnosti obrazku, obrazek bude pote vykreslen
+               tempFrame = captureSetWindow.Frame.Clone();
+                
                if (blackWhite) tempFrame = tempFrame.Convert<Gray, Byte>().Convert<Bgr, byte>();
-               if (blur)
+
+                if (blur)
                {
                    tempFrame = tempFrame.PyrDown().PyrUp();
                }
@@ -165,7 +152,7 @@ namespace InteractiveTable.Managers
            }
            catch (Exception ex)
            {
-              // Console.WriteLine(ex.Message);
+                // no-op here
            }
        }
     }

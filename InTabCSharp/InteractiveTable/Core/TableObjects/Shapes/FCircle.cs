@@ -6,17 +6,13 @@ using System.Text;
 namespace InteractiveTable.Core.Data.TableObjects.Shapes
 {
     /// <summary>
-    /// Tvar typu kruh
+    /// Circle shape
     /// </summary>
      [Serializable]
     public class FCircle : A_Shape
     {
-         //polomer
         private double radius;
 
-         /// <summary>
-         /// Vrati nebo nastavi polomer kruhu
-         /// </summary>
         public double Radius
         {
             get { return radius; }

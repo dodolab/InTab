@@ -1,27 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using InteractiveTable.Settings;
 
 namespace InteractiveTable.Core.Data.TableObjects.SettingsObjects
 {
     /// <summary>
-    /// Nastaveni pro castice
+    /// General settings for particles
     /// </summary>
      [Serializable]
     public class ParticleSettings : A_TableObjectSettings
     {
+        public double weigh = PhysicSettings.Instance().DEFAULT_PARTICLE_WEIGH;
+        public double size = PhysicSettings.Instance().DEFAULT_PARTICLE_SIZE;
         /// <summary>
-        /// Vaha castice
-        /// </summary>
-         public double weigh = PhysicSettings.Instance().DEFAULT_PARTICLE_WEIGH;
-        /// <summary>
-        /// Velikost castice
-        /// </summary>
-         public double size = PhysicSettings.Instance().DEFAULT_PARTICLE_SIZE;
-        /// <summary>
-        /// Puvodni velikost
+        /// Size of the particle at the time it was generated
         /// </summary>
          public double originSize = PhysicSettings.Instance().DEFAULT_PARTICLE_SIZE;
     }

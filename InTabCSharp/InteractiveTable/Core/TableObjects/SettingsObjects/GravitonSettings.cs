@@ -7,14 +7,11 @@ using InteractiveTable.Settings;
 namespace InteractiveTable.Core.Data.TableObjects.SettingsObjects
 {
     /// <summary>
-    /// Nastaveni pro graviton
+    /// General settings for gravitons
     /// </summary>
      [Serializable]
     public class GravitonSettings : A_RockSettings
     {
-        /// <summary>
-        /// Hmotnost gravitonu
-        /// </summary>
         public double weigh = PhysicSettings.Instance().DEFAULT_GRAVITON_WEIGH;
     }
 }

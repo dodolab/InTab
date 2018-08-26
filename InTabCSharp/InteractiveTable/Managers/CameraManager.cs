@@ -10,42 +10,35 @@ using Emgu.CV.CvEnum;
 namespace InteractiveTable.Managers
 {
     /// <summary>
-    /// Trida, ktera v sobe drzi odkaz na kameru;
-    /// jediny zpusob, jak pristupovat k zachycenym obrazkum z kamery, je pomoci teto tridy!!
+    /// Class that holds captured images from camera
     /// </summary>
     public class CameraManager
     {
         /// <summary>
-        /// webova kamera
+        /// Webcam pointer
         /// </summary>
         private static Emgu.CV.Capture camera;
         /// <summary>
-        /// Index udavajici, ktera kamera se bude pouzivat. Pouziva se zde proto,
-        /// aby se kamera reinicializovala, pokud se zmeni nastaveni tohoto indexu
+        /// Index of current webcam in use
         /// </summary>
         private static int ACTUAL_CAMERA_INDEX;
         /// <summary>
-        /// Naposledy zachyceny obrazek
+        /// Last captured frame
         /// </summary>
         private static Image<Bgr, byte> lastFrame;
         /// <summary>
-        /// Cas posledniho rozpoznani
+        /// Time the last frame was captured
         /// </summary>
         private static DateTime lastFrameTime;
-
-        /// <summary>
-        /// Reinicializuje kameru
-        /// </summary>
+        
         public static void Reinitialize()
         {
             ACTUAL_CAMERA_INDEX = CaptureSettings.Instance().DEFAULT_CAMERA_INDEX;
             camera = new Emgu.CV.Capture(ACTUAL_CAMERA_INDEX);
-          
-
         }
 
         /// <summary>
-        /// Zachyti obrazek z kamery
+        /// Captures a frame from camera
         /// </summary>
         private static void CaptureFrame()
         {
@@ -65,12 +58,12 @@ namespace InteractiveTable.Managers
             }
             catch
             {
-               Console.WriteLine("doslo k vyjimce pri ziskavani obrazu z kamery");
+               Console.WriteLine("Unable to capture camera image");
             }
         }
 
         /// <summary>
-        /// Zrusi zachytavani z kamery
+        /// Disposes current camera
         /// </summary>
         public static void DisposeCamera()
         {
@@ -78,37 +71,39 @@ namespace InteractiveTable.Managers
         }
 
         /// <summary>
-        /// Vrati naposledy zachyceny obrazek, resp. jeho kopii
+        /// Gets a copy of last captured image
         /// </summary>
         /// <returns></returns>
         public static Image<Bgr, byte> GetImage()
         {
             if (ACTUAL_CAMERA_INDEX != CaptureSettings.Instance().DEFAULT_CAMERA_INDEX) Reinitialize();
             if (lastFrame == null || (DateTime.Now - lastFrameTime).TotalMilliseconds > 25) CaptureFrame();
-            // pro jistotu...
+            // just for sure...to avoid errors
             if (lastFrame == null) lastFrame = new Image<Bgr, byte>(50, 50);
 
             return lastFrame.Clone();
         }
 
 
-        // posledni zmena mezi 2 obrazky
+        // Last difference between two image
         public static double lastDiff { get; set; }
-        // aktualni zmena mezi 2 obrazky
+        // Current difference between two images
         public static double actualDiff { get; set; }
-        // pocet pruchodu, kdy se v obrazku nic nehybe
+        // number of frames without any motion detection
         public static int peaceCounter { get; set; }
-        // pokud true, v obrazku se nic nehybe
+        // if true, there is no motion in the camera
         public static bool isInPeace { get; set; }
-        // pocet pruchodu, kdy se v obrazku neco hybe
+        // number of frames the camera is capturing a motion
         public static int unpeaceCounter { get; set; }
 
+        /// <summary>
+        /// Calculates a difference descriptor between two images in order to detect motion
+        /// </summary>
         private static void CalculateDiff(Image<Bgr, byte> originalFrame, Image<Bgr,byte> lastFrame)
         {
             Image<Gray, Byte> frameG = originalFrame.Convert<Gray, Byte>();
             Image<Gray, Byte> lastFrameG = lastFrame.Convert<Gray, Byte>();
 
-          
             // Perform thresholding to remove noise and boost "new introductions"
             Image<Gray, Byte> threshOrig = new Image<Gray, byte>(originalFrame.Width, originalFrame.Height);
             CvInvoke.cvThreshold(frameG, threshOrig, 20, 255, THRESH.CV_THRESH_BINARY);
@@ -123,29 +118,22 @@ namespace InteractiveTable.Managers
             Image<Gray, Byte> erodedLast = new Image<Gray, byte>(lastFrame.Width, lastFrame.Height);
             CvInvoke.cvErode(threshLast, erodedLast, IntPtr.Zero, 2);
 
-
             double l2_norm = (erodedOrig - erodedLast).Norm;
-            Console.WriteLine(l2_norm);
             lastDiff = actualDiff;
-            actualDiff = l2_norm;
-
-            
+            actualDiff = l2_norm;            
 
             if (l2_norm < 2000 || Math.Abs(actualDiff - lastDiff) > CaptureSettings.Instance().MOTION_TOLERANCE)
             {
-                Console.WriteLine("UNPEACE");
                 isInPeace = false;
                 unpeaceCounter++;
                 peaceCounter = -1;
             }
             else
             {
-                Console.WriteLine("PEACE");
                 isInPeace = true;
                 unpeaceCounter = -1;
                 peaceCounter++;
             }
-
         }
     }
 }

@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using InteractiveTable.Controls;
 using InteractiveTable.Settings;
 using InteractiveTable.Core.Data.Capture;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Xml;
-using System.Windows;
 using InteractiveTable.GUI.Other;
 using System.Xml.Serialization;
 
 namespace InteractiveTable.Managers
 {
     /// <summary>
-    /// Manazer vsech oken
+    /// Manager of all windows
     /// </summary>
     public class WindowManager
     {
@@ -39,18 +36,18 @@ namespace InteractiveTable.Managers
         }
 
         /// <summary>
-        /// Inicializuje VSECHNY model-view-managery a controllery
+        /// Initializes all MVCs
         /// </summary>
         public void ManageMainWindow()
         {
 
-            // nastaveni kontroleru hlavniho okna
+            // main window
             MainMenuController ctrl = new MainMenuController(); 
             ctrl.MainWindow = myWindow;
             ctrl.MainManager = this;
             ctrl.SetHandlers();
 
-            // nastaveni kontroleru a manazeru tabulky
+            // table window
             TableController ctrl2 = new TableController();
             TableManager tableMgr = new TableManager();
             this.tableManager = tableMgr;
@@ -59,7 +56,7 @@ namespace InteractiveTable.Managers
             ctrl2.TableManager = tableMgr;
             ctrl2.SetHandlers();
 
-            // nastaveni kontroleru nastaveni tabulky
+            // table settings
             TableSettingsController ctrl3 = new TableSettingsController();
             ctrl3.TableSetPanel = myWindow.tablePanel.tableSettingsPanel;
             ctrl3.TableManager = tableMgr;
@@ -70,7 +67,7 @@ namespace InteractiveTable.Managers
         }
 
         /// <summary>
-        /// Nacte veskere defaultni hodnoty ulozene v konfiguracnim souboru vcetne serializovanych objektu
+        /// Loads all default values
         /// </summary>
         public void LoadDefaultValues()
         {
@@ -80,22 +77,19 @@ namespace InteractiveTable.Managers
         }
 
         /// <summary>
-        /// Nacteni uzivatelskeho nastaveni z konfiguracniho souboru
+        /// Loads user settings from config file
         /// </summary>
         private void LoadUserSettings()
         {
-            // tohle je tady jen s historickych duvodu
+            // this is here from historical reasons
             CommonAttribService.ACTUAL_OUTPUT_WIDTH = Properties.Settings.Default.DEFAULT_OUTPUT_DEPENDENT_WIDTH;
         }
-
-        /// <summary>
-        /// Nacteni sablon
-        /// </summary>
+        
         private void LoadTemplates()
         {
             if (CaptureSettings.Instance().DEFAULT_TEMPLATE_PATH == "")
             {
-                System.Windows.MessageBox.Show("Není nastavena cesta k šablonám. Než budete sestavovat stůl, je třeba vytvořit kontury viz nápověda");
+                System.Windows.MessageBox.Show("No template path configured!");
             }
             else
             {
@@ -104,21 +98,21 @@ namespace InteractiveTable.Managers
                 {
                     if (!File.Exists(fileName))
                     {
-                        System.Windows.MessageBox.Show("Není vytvořen soubor se šablonami kamenů!");
+                        System.Windows.MessageBox.Show("There is no file with templates for stones! Create one in contour settings!");
                     }
                     else using (FileStream fs = new FileStream(fileName, FileMode.Open))
                             CommonAttribService.DEFAULT_TEMPLATES = (Templates)new BinaryFormatter().Deserialize(fs);
                 }
                 catch
                 {
-                    System.Windows.MessageBox.Show("Došlo k chybě při pokusu o načtení templates");
+                    System.Windows.MessageBox.Show("An error ocurred during template initialization");
                 }
 
             }
         }
 
         /// <summary>
-        /// Nacteni prechodovych barev pro vykreslovani barev u castic
+        /// Loads gradient colors
         /// </summary>
         private void LoadFadeColors()
         {
@@ -134,7 +128,7 @@ namespace InteractiveTable.Managers
                 XmlSerializer serializer = new XmlSerializer(typeof(HashSet<FadeColor>), new Type[] { typeof(FadeColor) });
                 StreamReader reader = new StreamReader(fadeName);
 
-                // teď to musime seradit, protoze v XML mame HashSet (linkedlist se totiz neda serializovat)
+                // we need to order the colors as they are not serialized in order
                 LinkedList<FadeColor> output = new LinkedList<FadeColor>();
                 HashSet<FadeColor> temp = (HashSet<FadeColor>)serializer.Deserialize(reader);
                 foreach (FadeColor fade in temp.OrderBy(fadec => fadec.position)) output.AddLast(fade);
@@ -143,9 +137,8 @@ namespace InteractiveTable.Managers
             }
             catch
             {
-                System.Windows.MessageBox.Show("Došlo k chybě při pokusu o načtení barevného nastavení");
+                System.Windows.MessageBox.Show("An error ocurred during loading of color gradients");
             }
         }
-
     }
 }

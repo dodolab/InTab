@@ -1,63 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
 using InteractiveTable.Accessories;
 using InteractiveTable.Settings;
 
 namespace InteractiveTable.Core.Data.TableObjects.SettingsObjects
 {
     /// <summary>
-    /// Obecne nastaveni pro stul
+    /// General settings for the table
     /// </summary>
      [Serializable]
     public class TableSettings : A_TableObjectSettings
     {
          /// <summary>
-         /// Pokud true, budou se objekty od stolu odrazet
+         /// Flag for collision with borders of the table
          /// </summary>
         public  Boolean interaction;
-         /// <summary>
-         /// Pokud true, bude povolena gravitace
-         /// </summary>
         public  Boolean gravity_allowed; 
          /// <summary>
-         /// Gravitace stolu
+         /// Table gravity
          /// </summary>
         public  FVector gravity; 
-         /// <summary>
-         /// Rychlost ztraty energie
-         /// </summary>
         public double energy_loosing_speed = -1; 
-         /// <summary>
-         /// Pokud true, bude ztracet energii
-         /// </summary>
         public Boolean energy_loosing = false;
-        /// <summary>
-        /// Obecne nastaveni pro cernou diru
-        /// </summary>
+
         public BlackHoleSettings blackHoleSettings;
-         /// <summary>
-         /// Obecne nastaveni pro generatory
-         /// </summary>
         public GeneratorSettings generatorSettings;
-         /// <summary>
-         /// Obecne nastaveni pro gravitony
-         /// </summary>
         public GravitonSettings gravitonSettings;
-         /// <summary>
-         /// Obecne nastaveni pro magnetony
-         /// </summary>
         public MagnetonSettings magnetonSettings;
-         /// <summary>
-         /// Obecne nastaveni pro castice
-         /// </summary>
         public ParticleSettings particleSettings;
 
-         /// <summary>
-         /// Konstruktor, nacte vsechny defaultni atributy
-         /// </summary>
         public TableSettings()
         {
             energy_loosing = PhysicSettings.Instance().DEFAULT_ENERGY_TABLE_LOOSING;

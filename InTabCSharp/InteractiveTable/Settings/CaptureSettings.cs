@@ -17,11 +17,11 @@ namespace InteractiveTable.Settings
             return instance;
         }
 
-        // defaultni kamera
+        // default camera index
         public int DEFAULT_CAMERA_INDEX;
 
         //====================================
-        // NASTAVENI PRO ZPRACOVANI KONTUR
+        // CONTOUR SETTINGS
         //====================================
 
         public string DEFAULT_TEMPLATE_PATH = "";
@@ -62,10 +62,10 @@ namespace InteractiveTable.Settings
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Vznikla chyba při načítání capture nastavení");
+                    MessageBox.Show("An error ocurred during loading of capture settings");
                 }
             }
-            else // soubor neexistuje
+            else // file doesn't exist
             {
                 Restart();
             }
@@ -82,7 +82,7 @@ namespace InteractiveTable.Settings
             }
             catch
             {
-                MessageBox.Show("Vznikla chyba při ukládání capture nastavení");
+                MessageBox.Show("An error ocurred during saving of capture settings");
             }
         }
 

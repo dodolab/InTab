@@ -10,45 +10,45 @@ namespace InteractiveTable.Core.Data.TableObjects.SettingsObjects
     public enum GenerationMode { STANDARD, STRANGE }
 
     /// <summary>
-    /// Nastaveni pro generator
+    /// Generator settings
     /// </summary>
     [Serializable]
     public class GeneratorSettings : A_RockSettings
     {
         /// <summary>
-        /// Pokud true, bude se generovat pravidelne
+        /// Indicator whether or not the generating is regular
         /// </summary>
         public Boolean Regular_generating = false;
         /// <summary>
-        /// Rychlost generovani castic
+        /// Particle generating speed
         /// </summary>
         public double generatingSpeed = PhysicSettings.Instance().DEFAULT_GENERATING_SPEED;
         /// <summary>
-        /// Offset pro uhel generovani
+        /// Generating angle offset
         /// </summary>
         public double angle_offset = PhysicSettings.Instance().DEFAULT_GENERATOR_ANGLE_OFFSET;
         /// <summary>
-        /// Maximalni uhel generovani
+        /// Max generating angle
         /// </summary>
         public double angle_maximum = PhysicSettings.Instance().DEFAULT_GENERATOR_ANGLE_MAX;
         /// <summary>
-        /// Minimalni rychlost generovanych castic
+        /// Min velocity of generated particles
         /// </summary>
         public double particle_minimum_speed = PhysicSettings.Instance().DEFAULT_MIN_GENERATING_VELOCITY;
         /// <summary>
-        /// Maximalni rychlost generovanych castic
+        /// Max velocity of generated particles
         /// </summary>
         public double particle_maximum_speed = PhysicSettings.Instance().DEFAULT_MAX_GENERATING_VELOCITY;
         /// <summary>
-        /// Mod generovani
+        /// Generating mode
         /// </summary>
         public GenerationMode generationMode = PhysicSettings.Instance().DEFAULT_GENERATION_MODE;
         /// <summary>
-        /// Minimalni velikost castic pro generovani
+        /// Min particles size for generating
         /// </summary>
         public double particle_minimum_size = PhysicSettings.Instance().DEFAULT_PARTICLE_SIZE;
         /// <summary>
-        /// Maximalni velikost castic pro generovani
+        /// Max particles size for generating
         /// </summary>
         public double particle_maximum_size = PhysicSettings.Instance().DEFAULT_PARTICLE_SIZE;
 

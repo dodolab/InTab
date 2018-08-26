@@ -18,21 +18,13 @@ namespace InteractiveTable.Settings
             return instance;
         }
 
-        // kalibracni body A a C
         public Point CALIBRATION_POINT_A;
         public Point CALIBRATION_POINT_C;
 
-        // kalibracni body pro InTab2
-        public Point CALIBRATION_LETTER_A;
-        public Point CALIBRATION_LETTER_C;
-
-        // perspektivni zkresleni
+        // perspective distortion
         public double CALIBRATION_PERSPECTIVE;
-
-        //rotace dopisu pro intab2
-        public int CALIBRATION_LETTER_ROTATION;
-
-        // rotace obrazku
+        
+        // image rotation
         public int CALIBRATION_ROTATION;
 
 
@@ -50,10 +42,10 @@ namespace InteractiveTable.Settings
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Vznikla chyba při načítání kalibračního nastavení");
+                    MessageBox.Show("An error ocurred during loading of calibration settings!");
                 }
             }
-            else // soubor neexistuje
+            else // file doesn't exist
             {
                 Restart();
             }
@@ -70,7 +62,7 @@ namespace InteractiveTable.Settings
             }
             catch
             {
-                MessageBox.Show("Vznikla chyba při ukládání kalibračního nastavení");
+                MessageBox.Show("An error ocurred during saving of calibration settings");
             }
         }
 
@@ -78,11 +70,8 @@ namespace InteractiveTable.Settings
         {
          CALIBRATION_POINT_A = new Point(0,0);
          CALIBRATION_POINT_C = new Point(200,200);
-         CALIBRATION_LETTER_A = new Point(0, 0);
-         CALIBRATION_LETTER_C = new Point(200, 200);
          CALIBRATION_PERSPECTIVE = 0;
          CALIBRATION_ROTATION = 0;
-         CALIBRATION_LETTER_ROTATION = 0;
         }
     
     }

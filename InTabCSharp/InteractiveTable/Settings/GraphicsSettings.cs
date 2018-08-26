@@ -11,7 +11,7 @@ namespace InteractiveTable.Settings
     public enum ParticleColorMode { GRAVITY, VELOCITY, WEIGH, SIZE }
 
     /// <summary>
-    /// Nastaveni pro graficky vystup
+    /// Settings for graphical output
     /// </summary>
     public class GraphicsSettings
     {
@@ -29,23 +29,20 @@ namespace InteractiveTable.Settings
             return instance;
         }
 
-        // pokud true, bude zobrazovat mrizku
+     
         public bool DEFAULT_GRID_ENABLED = false;
 
-        // pokud true, budou se ve vystupnim okne  zobrazovat kameny
+        // if true, stones will be rendered in the output window
         public bool DEFAULT_OUTPUT_ROCK_DISPLAY = false;
 
-
-        // defaultni mod zmeny barvy castic
         public ParticleColorMode DEFAULT_PARTICLE_COLOR_MODE = ParticleColorMode.VELOCITY;
 
-        // pokud true, budou se menit barvy casticim
         public bool DEFAULT_PARTICLE_COLOR_ALLOWED = true;
         
-        // pokud true, bude velikost vystupu primo zavisla na velikosti stolu
+        // if true, the size of the output window will depend on the size of the table
         public bool OUTPUT_TABLE_SIZE_DEPENDENT = true;
 
-        // defaultni barva castic (RGB)
+        // default particle color
         public  byte DEFAULT_PARTICLE_COLOR_R = 20;
         public  byte DEFAULT_PARTICLE_COLOR_G = 200;
         public  byte DEFAULT_PARTICLE_COLOR_B = 150;
@@ -65,10 +62,10 @@ namespace InteractiveTable.Settings
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Vznikla chyba při načítání grafického nastavení");
+                    MessageBox.Show("An error ocurred during loading of graphical settings");
                 }
             }
-            else // soubor neexistuje
+            else // file doesn't exist
             {
                 Restart();
             }
@@ -85,7 +82,7 @@ namespace InteractiveTable.Settings
             }
             catch
             {
-                MessageBox.Show("Vznikla chyba při ukládání grafického nastavení");
+                MessageBox.Show("An error ocurred during saving of graphical settings");
             }
         }
 

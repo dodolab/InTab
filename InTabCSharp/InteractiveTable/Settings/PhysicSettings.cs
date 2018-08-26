@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using InteractiveTable.Accessories;
 using InteractiveTable.Core.Physics.System;
 using InteractiveTable.Core.Data.TableObjects.SettingsObjects;
@@ -11,6 +8,9 @@ using System.Windows.Forms;
 
 namespace InteractiveTable.Settings
 {
+    /// <summary>
+    /// Settings for physics
+    /// </summary>
     public class PhysicSettings
     {
 
@@ -26,72 +26,50 @@ namespace InteractiveTable.Settings
         }
 
 
-        // maximalni generovatelny uhel
+        
         public double DEFAULT_GENERATOR_ANGLE_MAX;
-        // defaultni offset uhlu generovanych castic
         public double DEFAULT_GENERATOR_ANGLE_OFFSET;
-        // pravidelne generovani
         public Boolean DEFAULT_GENERATING_REGULAR;
-        // defaultni rychlost pro generovani castic (rychlost generovani)
         public double DEFAULT_GENERATING_SPEED ;
-        // minimalni rychlost pro castici letici z generatoru
         public int DEFAULT_MIN_GENERATING_VELOCITY;
-        // maximalni ryclhost pro castici letici z generatoru
         public int DEFAULT_MAX_GENERATING_VELOCITY;
-        // defaultni polomer kamene
         public double DEFAULT_GRAVITON_RADIUS;
-        // defaultni vaha kamene
         public double DEFAULT_GRAVITON_WEIGH;
-        // defaultni polomer magnetonu
         public double DEFAULT_MAGNETON_RADIUS;
-        // defaultni sila magnetonu
         public double DEFAULT_MAGNETON_FORCE;
-        // defaultni polomer cerne diry
         public double DEFAULT_BLACKHOLE_RADIUS;
-        // defaultni vaha cerne diry
         public double DEFAULT_BLACKHOLE_WEIGH;
-        // defaultni kapacity cerne diry
         public int DEFAULT_BLACKHOLE_CAPACITY;
 
-        // defaultni poloha objektu
         public FPoint DEFAULT_TABLEOBJECT_POINT ;
-        // defaultni velikost vektoru
         public FVector DEFAULT_TABLEOBJECT_VELOCITY;
-        // defaultni vaha castice
         public double DEFAULT_PARTICLE_WEIGH;
-        // defaultni gravitacni konstanta (mensi nez obvykle, protoze tu mame mala telesa
         public double DEFAULT_GRAVITY_CONSTANT;
-        // defaultni magneticka konstanta
         public double DEFAULT_MAGNETON_CONSTANT;
-
-        // defaultni tolerance, kde castice muze byt, napr. 3 = max 3x dale nez je velikost stolu
+        
+        // default toleration of particle position if it goes beyond the borders of the table
         public double DEFAULT_PARTICLE_DISTANCE_TOLERATION;
-
-        // defaultni velikost trajektorie, ktera se bude ukladat
+        
+        // default size of a trajectory that will be memoized
         public int DEFAULT_TRAJECTORY_SIZE;
 
-        // pokud true, bude mit stul vlastni gravitaci
+        // if true, the table will have its own gravity
         public Boolean DEFAULT_TABLE_GRAVITY;
-        // defaultni gravitace stolu
+        
         public FVector DEFAULT_TABLE_GRAVITY_VECTOR;
-        // pokud true, budou se castice odrazet od sten
+        // if true, particle will collide with the borders of the table
         public Boolean DEFAULT_INTERACTION_ALLOWED;
 
-        // ztrata energie obecne platna pro stul
         public Boolean DEFAULT_ENERGY_TABLE_LOOSING;
-        // rychlost ztraty energie obecne platne pro stul
         public double DEFAULT_ENERGY_TABLE_LOOSING_SPEED;
-        // maximalni rychlost ztraty energie obecne platne pro stul
         public double DEFAULT_ENERGY_TABLE_LOOSING_SPEED_MAX ;
 
-
-        // pokud true, muzou castice menit velikost
+        // if true, particles may change their size
         public Boolean DEFAULT_PARTICLE_SIZING_ENABLED;
-        // defaultni velikost castice
+        // default sizes of particles
         public double DEFAULT_PARTICLE_SIZE;
 
-
-        // pulsovani jednotlivych kamenu:
+        // pulsing of stones
         public Boolean DEFAULT_ENERGY_TABLE_PULSING;
         public double DEFAULT_ENERGY_TABLE_PULSING_SPEED;
         public Boolean DEFAULT_ENERGY_GRAVITON_PULSING;
@@ -99,7 +77,7 @@ namespace InteractiveTable.Settings
         public Boolean DEFAULT_ENERGY_MAGNETON_PULSING;
         public double DEFAULT_ENERGY_MAGNETON_PULSING_SPEED;
 
-        // povoleni jednotlivych kamenu:::
+        // we can also disable particular stone types
         public Boolean DEFAULT_TABLE_ENABLED;
         public Boolean DEFAULT_GENERATOR_ENABLED;
         public Boolean DEFAULT_GRAVITON_ENABLED;
@@ -108,15 +86,10 @@ namespace InteractiveTable.Settings
         public Boolean DEFAULT_BLACKHOLE_ENABLED;
 
 
-        // defaultni typ gravitacniho pusobeni
         public GravitationMode DEFAULT_GRAVITATION_MODE = GravitationMode.ADITIVE;
-        // defaultni typ magnetickeho pusobeni
         public MagnetismMode DEFAULT_MAGNETISM_MODE = MagnetismMode.ADITIVE;
-        // defaultni zpusob zvetsovani castic
         public ParticleSizeMode DEFAULT_PARTICLE_SIZE_MODE = ParticleSizeMode.VELOCITY;
-        // defaultni zpusob generovani
         public GenerationMode DEFAULT_GENERATION_MODE = GenerationMode.STANDARD;
-        // defaultni zpusob pohlcovani
         public AbsorptionMode DEFAULT_ABSORPTION_MODE = AbsorptionMode.BLACKHOLE;
 
 
@@ -134,10 +107,10 @@ namespace InteractiveTable.Settings
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Vznikla chyba při načítání fyzikálního nastavení");
+                    MessageBox.Show("An error ocurred during loading physics settings");
                 }
             }
-            else // soubor neexistuje
+            else // file doesn't exist
             {
                 Restart();
             }
@@ -154,7 +127,7 @@ namespace InteractiveTable.Settings
             }
             catch
             {
-                MessageBox.Show("Vznikla chyba při ukládání fyzikálního nastavení");
+                MessageBox.Show("An error ocurred during saving of physical settings");
             }
         }
 

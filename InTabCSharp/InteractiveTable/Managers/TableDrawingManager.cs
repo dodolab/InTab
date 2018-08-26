@@ -1,38 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using InteractiveTable.Core.Data.Deposit;
 using InteractiveTable.Settings;
 using InteractiveTable.Core.Data.TableObjects.FunctionObjects;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
-using System.Windows;
 using InteractiveTable.GUI.Other;
-using InteractiveTable.Core.Physics.System;
 using InteractiveTable.Accessories;
-using System.IO;
 
 namespace InteractiveTable.Managers
 {
 
     /// <summary>
-    /// Trida starajici se o vykreslovani celeho systemu
+    /// Manager that renders the whole system
     /// </summary>
     public class TableDrawingManager
     {
-        public FVector actual_size; // aktualni velikost obrazovky
-        private UInt32[] pixelData; // pixelovy buffer
-        private double ratioX; // pomer velikosti stolu : velikost obrazku
-        private double ratioY; // pomer velikosti stolu : velikost obrazku
-        private uint color_graviton = 0xFF00FF00; // defaultni barva gravitonoveho bodu (pokud ma byt vykreslen)
-        private uint color_generator = 0xFF0000FF; // defaultni barva generatoroveho bodu
-        private uint color_magneton = 0xFFFFFF00; // def. barva mag. bodu
-        private uint color_blackHole = 0xFFFF0000; // def. barva blackhole bodu
-        private uint color_particle = 0xFFDDFFFF; // meni se pri kazdem behu (reinicializovano)
-        private Dictionary<double, uint> colorParamDict = new Dictionary<double, uint>(); // vzornik barev 
-        public static bool color_changed = false; // okno s nastavenim barev pouziva tuto promennou pro reinicializaci vzorniku
-        private int renderCounter; // pocitadlo renderu, pouziva se pro Garbage collector
+        public FVector actual_size; // current window size
+        private UInt32[] pixelData; // pixel buffer
+        private double ratioX; // ration between the width of the table and the width of the picture
+        private double ratioY; // ration between the height of the table and the height of the picture
+        private uint color_graviton = 0xFF00FF00; // default color for gravitons
+        private uint color_generator = 0xFF0000FF; // default color for generators
+        private uint color_magneton = 0xFFFFFF00; // default color for magnetons
+        private uint color_blackHole = 0xFFFF0000; // default color for black holes
+        private uint color_particle = 0xFFDDFFFF; // default color for particles
+        private Dictionary<double, uint> colorParamDict = new Dictionary<double, uint>(); // lookup table for colors
+        public static bool color_changed = false; // flag for refreshing lookup table for colors
+        private int renderCounter; // number of rendered images
 
 
         public TableDrawingManager()
@@ -42,7 +37,7 @@ namespace InteractiveTable.Managers
         }
 
         /// <summary>
-        /// Vykresli barvu na danou pozici v poli 
+        /// Renders a color in a 2D pixel array
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -59,16 +54,14 @@ namespace InteractiveTable.Managers
         }
 
         /// <summary>
-        /// Vrati barvu na zaklade rychlosti castice
+        /// Returns a color based on a velocity of a particle
         /// </summary>
-        /// <param name="param"></param>
         /// <returns></returns>
         private uint ColorVelocity(double param)
         {
-            // zaokrouhlime parametr na 3 desetinna mista, muzeme tedy dostat
-            // maximalne 999 barev a to nam staci!!
+            // round to 3 -> 999 colors should be enough
             param = Math.Round(param,3);
-            if (param <= 0) param = 0.001; // osetreni mezi
+            if (param <= 0) param = 0.001; 
             if (param >= 1) param = 0.999;
 
             if (color_changed)
@@ -76,15 +69,15 @@ namespace InteractiveTable.Managers
                 color_changed = false;
                 colorParamDict.Clear();
             }
-            // memoizace:: pamatujeme si drive vypoctene hodnoty ze slovniku
+            
+            // remember previously calculated values
             if (colorParamDict.ContainsKey(param))
             {
                 return colorParamDict[param];
             }
             else
             {
-                // vypocteme jednotlive barevne slozky
-
+                // calculate particular colors
                 LinkedListNode<FadeColor> first = CommonAttribService.DEFAULT_FADE_COLORS.First;
                 while (first.Value.position < param) first = first.Next;
                 if (first.Previous == null) colorParamDict[param] = 0x00000000 + (uint)((first.Value.r << 8) + (first.Value.g << 4) + first.Value.b << 2 + first.Value.a);
@@ -100,8 +93,7 @@ namespace InteractiveTable.Managers
                     uint g = (uint)(first.Previous.Value.g + maxG * diff);
                     uint b = (uint)(first.Previous.Value.b + maxB * diff);
                     uint a = (uint)(first.Previous.Value.a + maxA * diff);
-                    colorParamDict[param] = 0x00000000 + (uint)(a << 24 | r << 16 | g << 8 | b);
- 
+                    colorParamDict[param] = 0x00000000 + (uint)(a << 24 | r << 16 | g << 8 | b); 
                 }
 
                 return colorParamDict[param];
@@ -109,10 +101,8 @@ namespace InteractiveTable.Managers
         }
 
         /// <summary>
-        /// Zmeni rozliseni barevneho pole (a stolu)
+        /// Resizes the table
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
         public void Resize(int x, int y)
         {
             pixelData = new UInt32[x*y];
@@ -121,7 +111,7 @@ namespace InteractiveTable.Managers
         }
 
         /// <summary>
-        /// Vykresli castici, pouzivano hlavni metodou pro vykresleni
+        /// Renders a particle
         /// </summary>
         /// <param name="part"></param>
         private void DrawParticle(Particle part)
@@ -139,7 +129,7 @@ namespace InteractiveTable.Managers
             }
             else
             {
-                // rozliseni jednotlivych nastaveni 
+                // distinguish among various settings 
                 if (GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_MODE == ParticleColorMode.GRAVITY)
                 {
                     DrawCircle((int)position.X, (int)position.Y, (int)part.Settings.size, ColorVelocity(part.Vector_Acceleration.Size() / 5.0));
@@ -162,19 +152,17 @@ namespace InteractiveTable.Managers
     
 
         /// <summary>
-        /// Vytvori obrazek soustavy
+        /// Creates an image of a table system
         /// </summary>
-        /// <param name="objects"></param>
-        /// <param name="isTableSized"></param>
         /// <returns></returns>
         public BitmapSource CreateBitmap(TableDepositor objects, Boolean isTableSized)
         {
             try
             {
-                renderCounter++; // pouzito prouze pro GC collect
+                renderCounter++; // used for garbage collector
 
-                // pravidelne mazani pameti
-                if (renderCounter > 10)
+                // invoke GC
+                if (renderCounter > 30)
                 {
                     renderCounter = 0;
                     GC.Collect();
@@ -183,9 +171,10 @@ namespace InteractiveTable.Managers
                 ratioX = actual_size.X/CommonAttribService.ACTUAL_TABLE_WIDTH;
                 ratioY = actual_size.Y/CommonAttribService.ACTUAL_TABLE_HEIGHT;
 
-                color_particle = 0x00000000 + (uint)(255 << 24 | GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_R << 16 | GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_G << 8 | GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_B);
+                color_particle = 0x00000000 + (uint)(255 << 24 | GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_R << 16 
+                    | GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_G << 8 | GraphicsSettings.Instance().DEFAULT_PARTICLE_COLOR_B);
 
-                // pokud se zmeni velikost stolu ,musi se obrazek zmensit na nejmensi moznou velikost
+                // check resizing
                 if (isTableSized)
                 {
                          if (pixelData.Length != (int)(CommonAttribService.ACTUAL_TABLE_HEIGHT * CommonAttribService.ACTUAL_TABLE_WIDTH))
@@ -196,46 +185,43 @@ namespace InteractiveTable.Managers
                          }
                 }
 
-                // vymazani bufferu
+                // remove pixel buffer
                 for (int i = 0; i < pixelData.Length; i++) pixelData[i] = 0xFF000000;
       
-                if(GraphicsSettings.Instance().DEFAULT_GRID_ENABLED) DrawLines(objects); // vykresli mrizku
+                if(GraphicsSettings.Instance().DEFAULT_GRID_ENABLED) DrawLines(objects); // draw grid
 
-                // pro vsechny castice zjisti, jestli uz je na plose a prip. uprav jeji pozici,
-                // jinak vytvor novy obrazek
+                // draw particles
                 foreach (Particle part in objects.particles)
                 {
                     DrawParticle(part);
                 }
 
+                // draw stones
                 if (GraphicsSettings.Instance().DEFAULT_OUTPUT_ROCK_DISPLAY)
                 {
 
                     DrawRocks(objects);
                 }
 
-                // vytvorime bitmapu z pole pixelu a ulozime ji
+                // create a bitmap for pixel array
                 BitmapSource bmp = BitmapSource.Create((int)actual_size.X, (int)actual_size.Y, 96, 96, PixelFormats.Bgra32, null, pixelData, ((((int)actual_size.X * 32 + 31) & ~31) / 8));
-                
-                //ulozime posledni vygenerovanou bitmapu -> pouziva se, aby se negenerovalo 2x pro simulacni a vystupni okno
                 CommonAttribService.LAST_BITMAP = bmp;
                 return bmp;
                 
             }
             catch {
-                Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!!!! VYJIMKA PRI VYKRESLOVANI");
+                // no-op here
             }
 
             return null;
         }
 
         /// <summary>
-        /// Vykresli kameny jako male ctverecky (pro debugovaci ucely)
+        /// Renders stones as tiny squares (mainly for debugging and polishing)
         /// </summary>
         /// <param name="objects"></param>
         private void DrawRocks(TableDepositor objects)
         {
-            // pro vsechny gravitony:::
             foreach (Graviton grv in objects.gravitons)
             {
                 FPoint pos = new FPoint(grv.Position.X + CommonAttribService.ACTUAL_TABLE_WIDTH / 2, grv.Position.Y + CommonAttribService.ACTUAL_TABLE_HEIGHT / 2);
@@ -244,7 +230,6 @@ namespace InteractiveTable.Managers
                 DrawSquare((int)pos.X, (int)pos.Y, 5, color_graviton);
             }
 
-            // pro vsechny magnetony:::
             foreach (Magneton grv in objects.magnetons)
             {
                 FPoint pos = new FPoint(grv.Position.X + CommonAttribService.ACTUAL_TABLE_WIDTH / 2, grv.Position.Y + CommonAttribService.ACTUAL_TABLE_HEIGHT / 2);
@@ -253,7 +238,6 @@ namespace InteractiveTable.Managers
                 DrawSquare((int)pos.X, (int)pos.Y, 5, color_magneton);
             }
 
-            // pro vsechny cerme diry:::
             foreach (BlackHole grv in objects.blackHoles)
             {
                 FPoint pos = new FPoint(grv.Position.X + CommonAttribService.ACTUAL_TABLE_WIDTH / 2, grv.Position.Y + CommonAttribService.ACTUAL_TABLE_HEIGHT / 2);
@@ -262,7 +246,6 @@ namespace InteractiveTable.Managers
                 DrawSquare((int)pos.X, (int)pos.Y, 8, color_blackHole);
             }
 
-            // pro vsechny generatory:::
             foreach (Generator grv in objects.generators)
             {
                 FPoint pos = new FPoint(grv.Position.X + CommonAttribService.ACTUAL_TABLE_WIDTH / 2, grv.Position.Y + CommonAttribService.ACTUAL_TABLE_HEIGHT / 2);
@@ -273,12 +256,8 @@ namespace InteractiveTable.Managers
         }
 
         /// <summary>
-        /// Nakresli ctverec o velikosti size a barve color
+        /// Draws a square of given size
         /// </summary>
-        /// <param name="x">souradnice X</param>
-        /// <param name="y">souradnice Y</param>
-        /// <param name="size">velikost ctverce</param>
-        /// <param name="color">barva ctverce</param>
         private void DrawSquare(int x, int y, int size, uint color)
         {
             size = (int)(size * ratioX);
@@ -295,12 +274,8 @@ namespace InteractiveTable.Managers
         }
 
         /// <summary>
-        /// Nakresli kruh o velikosti size a barve color
+        /// Draw a circle of given size and color
         /// </summary>
-        /// <param name="x">Souradnice X</param>
-        /// <param name="y">Souradnice Y</param>
-        /// <param name="size">velikost kruhu</param>
-        /// <param name="color">barva kruhu</param>
         private void DrawCircle(int x, int y, int size, uint color)
         {
             size = (int)(size * ratioX);
@@ -313,8 +288,7 @@ namespace InteractiveTable.Managers
 
             if (size == 3)
             {
-                // pro velikost 3 nebudeme nic pocitat, dame to takhle rovnou
-                // kvuli slozitosti
+                // if the size is 3, skip the calculation and draw it directly in order to increase performance
                 FillArray(x, y, color);
                 FillArray(x + 1, y - 1, color & (0x00FFFFFF | (color/4)));
                 FillArray(x + 1, y, color & (0x00FFFFFF | (color / 2)));
@@ -326,6 +300,8 @@ namespace InteractiveTable.Managers
                 FillArray(x - 1, y + 1, color & (0x00FFFFFF | (color / 4)));
                 return;
             }
+
+            // max size is 40
             if (size > 40) size = 40;
 
                 for (int i = 0; i < size; i++)
@@ -340,17 +316,11 @@ namespace InteractiveTable.Managers
                         }
                     }
                 }
-            
         }
 
         /// <summary>
-        /// Nakresli obdelnik o velikosti width x height a barve color
+        /// Draws a rectangle of given size and color
         /// </summary>
-        /// <param name="x">souradnice v ose X</param>
-        /// <param name="y">souradnice v ose Y</param>
-        /// <param name="width">sirka obdelnika</param>
-        /// <param name="height">vyska obdelnika</param>
-        /// <param name="color">barva obdelnika</param>
         private void DrawRectangle(int x, int y, int width, int height, uint color)
         {
             width = (int)(width * ratioX);
@@ -366,7 +336,7 @@ namespace InteractiveTable.Managers
         }
 
         /// <summary>
-        /// Vykresli mrizku s gravitacnim pusobeni, experimentalni metoda!!
+        /// Draws a grid that determines gravity force
         /// </summary>
         /// <param name="objects"></param>
         private void DrawLines(TableDepositor objects)
@@ -384,7 +354,7 @@ namespace InteractiveTable.Managers
                     int orig_col = j;
                     int orig_row = i;
 
-                    // originalni pozice bodu
+                    // original position of the point
                     int orig_position_x = orig_col - ((int)(ratioX * CommonAttribService.ACTUAL_TABLE_WIDTH)) / 2;
                     int orig_position_y = orig_row - ((int)(ratioY*CommonAttribService.ACTUAL_TABLE_HEIGHT)) / 2;
 
@@ -395,20 +365,17 @@ namespace InteractiveTable.Managers
                     double shift_x = 0;
                     double shift_y = 0;
 
-                    // pro kazdy graviton::
                     foreach (Graviton gr in objects.gravitons)
                     {
-                        // vypocti delku mezi castici a gravitonem
+                        // calc distance between the original point and the graviton
                         double length = Math.Sqrt((temp_position_x - gr.Position.X) * (temp_position_x - gr.Position.X) +
                                         (temp_position_y - gr.Position.Y) * (temp_position_y - gr.Position.Y));
 
-                        double length_x = (orig_position_x - gr.Position.X);
-                        double length_y = (orig_position_y - gr.Position.Y);
-
-                        // z delky mezi castici a gravitonem spocti potencial
+                        
+                        // calculate potential
                         double acc = (PhysicSettings.Instance().DEFAULT_GRAVITY_CONSTANT * gr.Settings.weigh) / ((length * length / 100 + 10));
 
-                        // posun castici
+                        // shift the grid point
                         shift_x += acc * (gr.Position.X - temp_position_x) / (0.1 * gr.Settings.weigh);
                         shift_y += acc * (gr.Position.Y - temp_position_y) / (0.1 * gr.Settings.weigh);
 
@@ -416,58 +383,41 @@ namespace InteractiveTable.Managers
                         temp_position_y = orig_position_y + shift_y;
 
                     }
-
-                    // pro kazdy magneton::
+                    
                     foreach (Magneton mg in objects.magnetons)
                     {
-                        // vypocti delku mezi castici a gravitonem
                         double length = Math.Sqrt((temp_position_x - mg.Position.X) * (temp_position_x - mg.Position.X) +
                                         (temp_position_y - mg.Position.Y) * (temp_position_y - mg.Position.Y));
 
-                        double length_x = (orig_position_x - mg.Position.X);
-                        double length_y = (orig_position_y - mg.Position.Y);
-
-                        // z delky mezi castici a gravitonem spocti potencial
                         double acc = (PhysicSettings.Instance().DEFAULT_GRAVITY_CONSTANT * mg.Settings.force) / ((length * length / 100 + 10));
 
-                        // posun castici
                         shift_x -= acc * (mg.Position.X - temp_position_x);
                         shift_y -= acc * (mg.Position.Y - temp_position_y);
 
                         temp_position_x = orig_position_x + shift_x;
                         temp_position_y = orig_position_y + shift_y;
-
                     }
 
-
-                    // pro kazdou cernou diru::
+                    
                     foreach (BlackHole mg in objects.blackHoles)
                     {
-                        // vypocti delku mezi castici a gravitonem
                         double length = Math.Sqrt((temp_position_x - mg.Position.X) * (temp_position_x - mg.Position.X) +
                                         (temp_position_y - mg.Position.Y) * (temp_position_y - mg.Position.Y));
 
-                        double length_x = (orig_position_x - mg.Position.X);
-                        double length_y = (orig_position_y - mg.Position.Y);
-
-                        // z delky mezi castici a gravitonem spocti potencial
                         double acc = (PhysicSettings.Instance().DEFAULT_GRAVITY_CONSTANT * 80) / ((length * length / 100 + 10));
 
-                        // posun castici
                         shift_x += acc * (mg.Position.X - temp_position_x);
                         shift_y += acc * (mg.Position.Y - temp_position_y);
 
                         temp_position_x = orig_position_x + shift_x;
                         temp_position_y = orig_position_y + shift_y;
-
                     }
 
 
-                    // posunuta pozice bodu
+                    // shift the position of the grid point
                     int other_position_x = (int)(orig_col + shift_x);
                     int other_position_y = (int)(orig_row + shift_y);
 
-                    int position = (int)((int)other_position_x + ((int)(ratioX * CommonAttribService.ACTUAL_TABLE_WIDTH)) * (((int)(ratioY * CommonAttribService.ACTUAL_TABLE_HEIGHT)) - (int)other_position_y));
                     int posX = (int)other_position_x;
                     int posY = (int)other_position_y;
                     DrawRectangle((int)posX, (int)posY, 1, 3, 0xFF333333);
@@ -475,7 +425,5 @@ namespace InteractiveTable.Managers
                 }
             }
         }
-
- 
     }
 }
