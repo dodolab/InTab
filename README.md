@@ -1,5 +1,6 @@
-
-![logo](Docs/images/intab.jpg)
+InTab
+===================
+---
 
 ## What's the InTab?
 
