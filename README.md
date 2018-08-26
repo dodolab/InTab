@@ -9,11 +9,12 @@
 
 InTab projects a finely configurable particle system onto a surface (a wall or a table). Emitted particles interact with stones that contain symbols, recognizable by simple ICF/ACF algorithms. The table is captured on a camera thanks to which the application can process captured images and provide a feedback to the particle system.
 
-The application can be used also without any setup - it contains a simulation window into which all stones can be placed manually.
+<a href="https://www.youtube.com/watch?v=Gx1UshgQTR0" target="_blank">**Demonstration video**</a>
+
+
+The application can be used also without any setup - it contains a simulation window into which all stones can be placed manually. 
 
 ![setup](Docs/images/setup.jpg)
-
-<a href="https://www.youtube.com/watch?v=Gx1UshgQTR0" target="_blank">**Demonstration video**</a>
 
 ## Platforms
 Windows - .NET 3.5
@@ -30,7 +31,7 @@ The project was written in C# as a .NET WPF application in 2012. Althought it do
 ![example3](Docs/images/example3.jpg)
 ![example3](Docs/images/example4.jpg)
 ![example3](Docs/images/example5.jpg)
-![example3](Docs/images/example2.jpg)
+![example3](Docs/images/example6.jpg)
 
 ## LICENSE and ATTRIBUTIONS
 
