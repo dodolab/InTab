@@ -1,5 +1,3 @@
-InTab
-===================
 
 ![logo](Docs/images/intab.jpg)
 
@@ -15,7 +13,6 @@ The application can be used also without any setup - it contains a simulation wi
 
 ![setup](Docs/images/setup.jpg)
 
-
 <a href="https://www.youtube.com/watch?v=Gx1UshgQTR0" target="_blank">**Demonstration video**</a>
 
 ## Platforms
@@ -28,6 +25,7 @@ The project was written in C# as a .NET WPF application in 2012. Althought it do
 ## How to use it
 [Tutorial](Docs/install.md) - getting started
 
+---
 
 ![example3](Docs/images/example3.jpg)
 ![example3](Docs/images/example4.jpg)
