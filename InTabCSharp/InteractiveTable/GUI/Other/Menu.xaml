@@ -20,7 +20,5 @@
             <MenuItem Name="tableCalibrationItem" Header="Table calibration"/>
             <MenuItem Name="contourSubItem" Header="Contour settings" />
         </MenuItem>
-        <MenuItem Name="help" Header="Help">
-        </MenuItem>
     </Menu>
 </UserControl>

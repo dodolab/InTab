@@ -1,7 +1,7 @@
 ﻿<Window x:Class="InteractiveTable.GUI.CaptureSet.ContourSetWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Přiřazení kontur" Width="300" SizeToContent="Height"
+        Title="Assign contours" Width="300" SizeToContent="Height"
         ResizeMode="NoResize">
     <Grid>
         <StackPanel Orientation="Vertical">

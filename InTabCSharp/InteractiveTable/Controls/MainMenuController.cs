@@ -58,7 +58,6 @@ namespace InteractiveTable.Controls
             mainWindow.mainMenu.tableCalibrationItem.Click += new System.Windows.RoutedEventHandler(tableCalibrationItem_Click);
             mainWindow.mainMenu.systemLoad.Click += new System.Windows.RoutedEventHandler(systemLoad_Click);
             mainWindow.mainMenu.systemSave.Click += new System.Windows.RoutedEventHandler(systemSave_Click);
-            mainWindow.mainMenu.help.Click += new System.Windows.RoutedEventHandler(help_Click);
             mainWindow.mainMenu.endApp.Click += new System.Windows.RoutedEventHandler(endApp_Click);
             mainWindow.Closed += new EventHandler(mainWindow_Closed);
         }
@@ -74,21 +73,6 @@ namespace InteractiveTable.Controls
         private void endApp_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             CommonAttribService.mainWindow.Close();
-        }
-
-        /// <summary>
-        /// Displays a help file
-        /// </summary>
-        private void help_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            try
-            {
-                System.Diagnostics.Process.Start("Help.chm");
-            }
-            catch
-            {
-                MessageBox.Show("I cannot find a help file!");
-            }
         }
 
         /// <summary>
