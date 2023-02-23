@@ -79,7 +79,7 @@ namespace InteractiveTable.Managers
             {
                 // calculate particular colors
                 LinkedListNode<FadeColor> first = CommonAttribService.DEFAULT_FADE_COLORS.First;
-                while (first.Value.position < param) first = first.Next;
+                while (first.Value.position < param && first.Next != null) first = first.Next;
                 if (first.Previous == null) colorParamDict[param] = 0x00000000 + (uint)((first.Value.r << 8) + (first.Value.g << 4) + first.Value.b << 2 + first.Value.a);
                 else
                 {

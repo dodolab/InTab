@@ -1,7 +1,7 @@
 ﻿<Window x:Class="InteractiveTable.GUI.Table.TableOutput"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        
-        Title="Opengl rendering window" Height="350" Width="525">
+        Title="Opengl rendering window" Height="700" Width="1050">
     <Grid Name="tableGrid"
            RenderOptions.BitmapScalingMode="HighQuality"
            RenderOptions.EdgeMode="Aliased">

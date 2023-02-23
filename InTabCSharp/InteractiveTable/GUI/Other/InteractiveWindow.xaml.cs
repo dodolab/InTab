@@ -12,8 +12,8 @@ namespace InteractiveTable.GUI.Other
     /// </summary>
     public partial class InteractiveWindow : Window
     {
-        private double width = 400; // size for dispatcher
-        private double height = 300;
+        private double width = 800; // size for dispatcher
+        private double height = 600;
 
         public InteractiveWindow()
         {

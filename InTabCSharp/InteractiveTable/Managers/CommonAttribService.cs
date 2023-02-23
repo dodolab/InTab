@@ -24,8 +24,8 @@ namespace InteractiveTable.Managers
         
         public static Random apiRandom = new Random();
 
-        public const int DEFAULT_TABLE_WIDTH = 500;
-        public const int DEFAULT_TABLE_HEIGHT = 300;
+        public const int DEFAULT_TABLE_WIDTH = 1000;
+        public const int DEFAULT_TABLE_HEIGHT = 600;
 
         // max perspective distortion for calibration
         public const int DEFAULT_CALIBRATION_MINIMUM = 20;
@@ -37,7 +37,7 @@ namespace InteractiveTable.Managers
         // difference toleration for stone detection
         public const double DEFAULT_TOLERATION_ROCK_LENGTH = 3;
         // max number of memorized iterations
-        public const int DEFAULT_ITERATION_MEMORY = 5;
+        public const int DEFAULT_ITERATION_MEMORY = 2;
         
         public static MainWindow mainWindow;
 

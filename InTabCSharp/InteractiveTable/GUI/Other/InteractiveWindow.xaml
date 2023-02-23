@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:rc="clr-namespace:Emgu.CV.UI;assembly=Emgu.CV.UI"
-        Title="Interactive window" Height="300" Width="400"
+        Title="Interactive window" Height="600" Width="800"
       ResizeMode="NoResize">
     <Grid Name="mainGrid">
         <WindowsFormsHost 

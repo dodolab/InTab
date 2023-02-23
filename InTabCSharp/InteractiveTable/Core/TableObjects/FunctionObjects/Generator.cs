@@ -4,6 +4,7 @@ using InteractiveTable.Core.Data.TableObjects.SettingsObjects;
 using InteractiveTable.Accessories;
 using InteractiveTable.Core.Data.Deposit;
 using InteractiveTable.Managers;
+using InteractiveTable.Core.Data.TableObjects.Shapes;
 
 namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
 {
@@ -25,6 +26,7 @@ namespace InteractiveTable.Core.Data.TableObjects.FunctionObjects
 
         public Generator()
         {
+            this.shape = new FCircle();
             settings = new GeneratorSettings();
             settings.generatingSpeed = PhysicSettings.Instance().DEFAULT_GENERATING_SPEED;
             baseSettings = new GeneratorSettings();

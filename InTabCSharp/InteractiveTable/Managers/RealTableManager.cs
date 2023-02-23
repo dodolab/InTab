@@ -172,7 +172,7 @@ namespace InteractiveTable.Managers
         {
             foreach (ContourRock rck in rocks)
             {
-                if (rck.foundRock != null && !rck.isMissing)
+                if (rck.foundRock != null && rck.rock.Shape != null && !rck.isMissing)
                 {
                     rck.rock.Position = rck.foundRock.position;
                     rck.rock.Angle = rck.foundRock.angle;
