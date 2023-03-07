@@ -79,7 +79,6 @@ namespace InteractiveTable.Controls
             tableSetPanel.tableGravityXTbx.Text = PhysicSettings.Instance().DEFAULT_TABLE_GRAVITY_VECTOR.X.ToString();
             tableSetPanel.tableGravityYTbx.Text = PhysicSettings.Instance().DEFAULT_TABLE_GRAVITY_VECTOR.Y.ToString();
 
-            tableSetPanel.pauseImage.MouseUp += new System.Windows.Input.MouseButtonEventHandler(pauseImage_MouseUp);
             tableSetPanel.playImage.MouseUp += new System.Windows.Input.MouseButtonEventHandler(playImage_MouseUp);
             tableSetPanel.stopImage.MouseUp += new System.Windows.Input.MouseButtonEventHandler(stopImage_MouseUp);
             tableSetPanel.cameraImage.MouseUp += new System.Windows.Input.MouseButtonEventHandler(cameraImage_MouseUp);
@@ -136,19 +135,20 @@ namespace InteractiveTable.Controls
         }
 
         /// <summary>
-        /// Click on PAUSE will pause the simulation
-        /// </summary>
-        private void pauseImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            tableManager.PauseThread();
-        }
-
-        /// <summary>
-        /// Click on PLAY will execute the simulation
+        /// Click on PLAY will execute or pause the simulation
         /// </summary>
         private void playImage_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            tableManager.RunThread();
+            if(tableManager.IsRunning)
+            {
+                tableManager.PauseThread();
+                tableSetPanel.playImage.Source = new BitmapImage(new Uri("/InteractiveTable;component/Template/images/tableIcons/play_play.png", UriKind.Relative));
+            }
+            else
+            {
+                tableManager.RunThread();
+                tableSetPanel.playImage.Source = new BitmapImage(new Uri("/InteractiveTable;component/Template/images/tableIcons/play_pause.png", UriKind.Relative));
+            }
         }
 
         /// <summary>

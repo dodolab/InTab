@@ -16,11 +16,6 @@
                     Margin="10,0,0,0"
                     Width="70"
                     Height="30" Click="resetBut_Click">RESET</Button>
-            <Button Name="frameBut"
-                    ToolTip="Load new image"
-                    Margin="10,0,0,0"
-                    Width="70"
-                    Height="30" Click="frameBut_Click">CAPTURE</Button>
             <Button Name="rotateBut3"
                     Margin="10,0,0,0"
                     ToolTip="Rotate by 3°"

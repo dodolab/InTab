@@ -20,7 +20,7 @@ using InteractiveTable.Settings;
 namespace InteractiveTable
 {
     /// <summary>
-    /// Logika hlavniho okna
+    /// Main window logic
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -41,7 +41,7 @@ namespace InteractiveTable
 
 
         /// <summary>
-        /// Inicializace hlavniho okna - zobrazi pouze loading window
+        /// Main window init - displays the loading window
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -59,54 +59,55 @@ namespace InteractiveTable
         }
 
         /// <summary>
-        /// Pokud dojde k nezname chybe, neprovede se nic
+        /// Unhandled exception handler for the dispatcher
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-          // sem se dostane vlakno pote, co bude vyhozena vyjimka do nejvyssiho predka
+            Console.Write(e.Exception.StackTrace);
         }
 
         /// <summary>
-        /// Zpracovani neodchytnutych vyjimek
+        /// Unhandled exception handler
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            // sem se dostane vyjimka, kterou nikdo neodchytnul
+            Console.Write(e.ExceptionObject.ToString());
         }
 
         /// <summary>
-        /// Loading timer tick, po 3 vterinach vypne loading okno
+        /// Loading timer tick, disables loading window after ~3 seconds
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void loadingTimer_Tick(object sender, EventArgs e)
         {
-            // vypni loading window pouze pokud uz je hlavni okno nacteno,
-            // v kazdem pripade vypni loading timer
-            if(this.IsLoaded) loadingWindow.Close();
+            if (this.IsLoaded)
+            {
+                loadingWindow.Close();
+            }
             IsEnabled = true;
             loadingTimer.Stop();
         }
 
         /// <summary>
-        /// Po nacteni hlavniho okna se inicializuje hlavni manazer, ktery se postara
-        /// o zbytek inicializace; take se inicializuje manazer kamery
+        /// Once the main window has been initialized, initialize the manager that will
+        /// take care of the rest of the init process
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // pokud loading timer uz nebezi, zrus loading okno
+            // if there is no loading timer, cancel the loading window
             if (!loadingTimer.Enabled)
             {
                 loadingWindow.Close();
             }
 
-            // nacteni veskereho nastaveni z XML souboru
+            // Load all settings from XML
             CalibrationSettings.Instance().Load();
             CaptureSettings.Instance().Load();
             GraphicsSettings.Instance().Load();
@@ -115,7 +116,7 @@ namespace InteractiveTable
 
             CommonAttribService.mainWindow = this;
 
-            // vytvoreni manazeru, ktery propoji funkcionalitu VSEM hlavnim modelum
+            // connect the main manager with all other models
             myManager = new WindowManager();
             myManager.MyWindow = this;
             myManager.LoadDefaultValues();
@@ -125,7 +126,7 @@ namespace InteractiveTable
         }
 
         /// <summary>
-        /// Zmena velikosti okna
+        /// Window size change
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

@@ -18,7 +18,7 @@ namespace InteractiveTable.Managers
        private System.Windows.Forms.Timer threadTimer; // timer for main window
        private TableDepositor tableDepositor;
        private InputManager inputManager;
-       private Boolean timer_running = true; 
+       private Boolean timer_running = false; 
        private DateTime last_render = DateTime.Now; // time of the last render
 
        public TableManager()
@@ -63,16 +63,14 @@ namespace InteractiveTable.Managers
            {
                timer_running = true;
            }
-           else
-           {
-               if (threadTimer == null)
-               {
-                   threadTimer = new System.Windows.Forms.Timer();
-                   threadTimer.Interval = 7;
-                   threadTimer.Tick += new EventHandler(Render);
-                   threadTimer.Start();
-               }
-           }
+
+            if (threadTimer == null)
+            {
+                threadTimer = new System.Windows.Forms.Timer();
+                threadTimer.Interval = 7;
+                threadTimer.Tick += new EventHandler(Render);
+                threadTimer.Start();
+            }
        }
 
         
@@ -110,12 +108,7 @@ namespace InteractiveTable.Managers
        {
            get { return timer_running; }
        }
-        
-       // a helper flag used for sending a picture only once if a change occured
-       private bool sentImage = false;
-
-       private DateTime lastSendTime = DateTime.Now;
-
+      
 
 
        /// <summary>

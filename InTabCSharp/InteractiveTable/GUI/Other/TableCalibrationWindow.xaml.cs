@@ -18,6 +18,7 @@ namespace InteractiveTable.GUI.Other
     /// </summary>
     public partial class TableCalibrationWindow : Window
     {
+        private System.Windows.Forms.Timer captureTimer;
 
         private System.Drawing.Image frame; // image from camera as System.Drawing.Image
         private Image UIFrame; // image from camera as UIComponent
@@ -39,9 +40,26 @@ namespace InteractiveTable.GUI.Other
         public TableCalibrationWindow()
         {
             InitializeComponent();
+
+            // capture image every second
+            captureTimer = new System.Windows.Forms.Timer();
+            captureTimer.Tick += new EventHandler(captureTimer_Tick);
+            captureTimer.Interval = 1000;
+            captureTimer.Start();
         }
 
         #region functions
+
+        /// <summary>
+        /// Capture timer tick, loads camera image every second
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void captureTimer_Tick(object sender, EventArgs e)
+        {
+            CaptureImage();
+        }
+
 
         /// <summary>
         /// Loads calibration settings
@@ -112,10 +130,10 @@ namespace InteractiveTable.GUI.Other
         {
             if ((calibrationPoints[1].X <= calibrationPoints[0].X) || (calibrationPoints[1].Y >= calibrationPoints[0].Y))
             {
-                // we must draw the points from left to right
-                MessageBox.Show("Anchor points must be created from left to right and from bottom to top!");
-                resetBut_Click(null, null);
-                return;
+                // flip the points so that the first is at the bottomleft corner
+                var temp = calibrationPoints[0];
+                calibrationPoints[0] = calibrationPoints[1];
+                calibrationPoints[1] = temp;
             }
 
             Point p1 = calibrationPoints[0];
@@ -382,6 +400,7 @@ namespace InteractiveTable.GUI.Other
                     if (pointCounter == 2)
                     {
                         // if there are more than 2 points, create a rectangle
+                        RepaintValues();
                     }
                 }
             }
@@ -450,7 +469,7 @@ namespace InteractiveTable.GUI.Other
         
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
+            captureTimer.Stop();
         }
 
         /// <summary>
@@ -473,16 +492,7 @@ namespace InteractiveTable.GUI.Other
             {
                 SaveValues();
             }
-            // if the SHIFT is pressed, we will not close the window (WTF??)
-            if(!Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.RightShift))  this.Close();
-        }
-
-        /// <summary>
-        /// Click on CAPTURE will capture a new image
-        /// </summary>
-        private void frameBut_Click(object sender, RoutedEventArgs e)
-        {
-            CaptureImage();
+            this.Close();
         }
 
         /// <summary>

@@ -29,11 +29,6 @@
                    Height="32" 
                    Margin="2" 
                    Source="/InteractiveTable;component/Template/images/tableIcons/play_camera_gaussian.png" Width="27"></Image>
-            <Image Name="pauseImage" 
-                   ToolTip="Pause"
-                   Height="32"
-                   Margin="2" 
-                   Source="/InteractiveTable;component/Template/images/tableIcons/play_pause.png" Width="30"></Image>
             <Image Name="playImage"
                    ToolTip="Play"
                    Height="32"
