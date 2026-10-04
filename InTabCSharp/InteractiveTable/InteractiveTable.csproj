@@ -74,7 +74,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Apex">
-      <HintPath>C:\Users\Adam Švec\Downloads\SHARP_GL\SharpGL_2.0_Binaries\SharpGL Binaries\Debug\Apex.dll</HintPath>
+      <HintPath>C:\Users\Adam Vesecky\Downloads\SHARP_GL\SharpGL_2.0_Binaries\SharpGL Binaries\Debug\Apex.dll</HintPath>
     </Reference>
     <Reference Include="DirectShowLib-2005">
       <HintPath>Binaries\DirectShowLib-2005.dll</HintPath>
